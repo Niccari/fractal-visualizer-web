@@ -1,5 +1,5 @@
 import { draw } from "../visualizer/action";
-
+import simulate from "./simulate";
 let iterator: NodeJS.Timeout | null = null;
 
 type RefreshIterator = () => void;
@@ -17,10 +17,8 @@ const resume: Resume = (framerate = 50) => {
   _refreshIterator();
   const refreshMs = 1000 / framerate;
   iterator = setInterval(() => {
-    draw({
-      elapsedMs: 0,
-      charts: [],
-    });
+    const calcResult = simulate();
+    draw(calcResult);
   }, refreshMs);
 };
 

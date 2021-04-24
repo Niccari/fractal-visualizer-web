@@ -1,21 +1,28 @@
 // sample data type
 type Point = {
+  id: number;
   x: number;
   y: number;
 };
-type Order = {
+type Style = {
   type: string;
-  targetPoints: [number];
-  drawStyles: Record<string, unknown>;
+  color: string;
+  thickness?: number;
+};
+type Order = {
+  id: number;
+  link: number[];
+  style: Style;
 };
 type Chart = {
-  points: [Point];
-  orders: [Order];
+  points: Point[];
+  orders: Order[];
   elevation: number;
+  kind: string;
 };
 type CalcResult = {
   elapsedMs: number;
-  charts: [Chart?];
+  charts: Chart[];
 };
 
 export type { CalcResult };
