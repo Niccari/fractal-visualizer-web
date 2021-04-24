@@ -1,19 +1,18 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
+import Canvas from "./components/Canvas";
+import { setContext } from "./modules/visualizer/action";
+import { resume } from "./modules/simulator/actions";
 
 function App(): JSX.Element {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
+      <Canvas
+        onCanvasReady={(context: CanvasRenderingContext2D) => {
+          setContext(context);
+          resume();
+        }}
+      />
     </div>
   );
 }
