@@ -1,12 +1,14 @@
-import { CalcResult } from "../simulator";
+import { Chart } from "../simulator";
+
+type SetContext = (_: CanvasRenderingContext2D) => void;
 
 let context: CanvasRenderingContext2D | null = null;
-const setContext: (_: CanvasRenderingContext2D) => void = (_context: CanvasRenderingContext2D) => {
+const setContext: SetContext = (_context: CanvasRenderingContext2D) => {
   context = _context;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const draw: (_: CalcResult) => void = (result: CalcResult) => {
+type Draw = (_: Chart[]) => void;
+const draw: Draw = (charts: Chart[]) => {
   if (context !== null) {
     const screen_width = context.canvas.width;
     const screen_height = context.canvas.height;
@@ -14,15 +16,14 @@ const draw: (_: CalcResult) => void = (result: CalcResult) => {
     context.fillStyle = "rgb(0, 0, 0)";
     context.fillRect(0, 0, screen_width, screen_height);
 
-    const charts = result.charts.sort((chart) => chart.elevation);
     for (const chart of charts) {
       const points = chart.points.map((point) => {
         return { x: point.x * screen_width, y: point.y * screen_height };
       });
-      const orders = chart.orders;
-      for (const order of orders) {
+      for (let index = 0; index < chart.orders.length; index++) {
+        const order = chart.orders[index];
+        const style = chart.styles[index];
         const link = order.link;
-        const style = order.style;
 
         context.lineWidth = style.thickness || 1;
         context.strokeStyle = style.color;
