@@ -1,33 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import Canvas from "./components/Canvas";
 import { setContext } from "./modules/visualizer/action";
-import { resume } from "./modules/simulator/actions";
+import { createSimulators, toggleRunning } from "./modules/simulator/actions";
 import { EventType, Menu } from "./components/Menu";
 
 function App(): JSX.Element {
+  const [isRunning, setIsRunning] = useState(true);
   return (
     <div className="App">
       <Canvas
         onCanvasReady={(context: CanvasRenderingContext2D) => {
           setContext(context);
-          resume();
+          createSimulators();
+          toggleRunning();
         }}
       />
       <Menu
+        isRunning={isRunning}
         onClick={(eventType) => {
           switch (eventType) {
-            case EventType.ADD_SHAPE:
-              console.log("add shape button tapped");
+            case EventType.REFRESH:
+              createSimulators();
               break;
-            case EventType.EDIT_SHAPE:
-              console.log("edit shape button tapped");
-              break;
-            case EventType.EDIT_STYLE:
-              console.log("edit style button tapped");
-              break;
-            case EventType.MISC:
-              console.log("misc button tapped");
+            case EventType.RESUME_STOP:
+              setIsRunning(toggleRunning());
               break;
             default:
               throw Error("Unsupported button type!!");

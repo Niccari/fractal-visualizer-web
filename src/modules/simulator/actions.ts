@@ -1,10 +1,12 @@
 import { draw } from "../visualizer/action";
-import simulate from "./simulate";
+import { createSimulators, simulate } from "./simulate";
 let iterator: NodeJS.Timeout | null = null;
 
 type RefreshIterator = () => void;
 type Resume = (framerate?: number) => void;
 type Stop = () => void;
+
+type ToggleRunning = () => boolean;
 
 const _refreshIterator: RefreshIterator = () => {
   if (iterator !== null) {
@@ -13,7 +15,7 @@ const _refreshIterator: RefreshIterator = () => {
   }
 };
 
-const resume: Resume = (framerate = 50) => {
+const _resume: Resume = (framerate = 50) => {
   _refreshIterator();
   const refreshMs = 1000 / framerate;
   iterator = setInterval(() => {
@@ -22,8 +24,18 @@ const resume: Resume = (framerate = 50) => {
   }, refreshMs);
 };
 
-const stop: Stop = () => {
+const _stop: Stop = () => {
   _refreshIterator();
 };
 
-export { resume, stop };
+const toggleRunning: ToggleRunning = () => {
+  if (iterator !== null) {
+    _stop();
+    return false;
+  } else {
+    _resume();
+    return true;
+  }
+};
+
+export { createSimulators, toggleRunning };

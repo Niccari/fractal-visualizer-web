@@ -7,8 +7,8 @@ interface Props {
 const Canvas: React.FC<Props> = ({ onCanvasReady }: Props) => {
   function adjustCanvas(context: CanvasRenderingContext2D): void {
     const scale = window.devicePixelRatio;
-    context.canvas.width = context.canvas.width * scale;
-    context.canvas.height = context.canvas.height * scale;
+    context.canvas.width = context.canvas.width * scale * 2;
+    context.canvas.height = context.canvas.height * scale * 2;
   }
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const Canvas: React.FC<Props> = ({ onCanvasReady }: Props) => {
         onCanvasReady(context);
       }
     }
-  });
+  }, []);
 
   return <canvas className="canvas" id="canvas" style={{ width: "100%", height: "100%" }} />;
 };

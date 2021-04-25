@@ -1,50 +1,34 @@
 import React from "react";
 
 enum EventType {
-  ADD_SHAPE = "add_shape",
-  EDIT_SHAPE = "edit_shape",
-  EDIT_STYLE = "edit_style",
-  MISC = "misc",
+  REFRESH = "refresh",
+  RESUME_STOP = "resume_stop",
 }
 
 interface Props {
+  isRunning: boolean;
   onClick: (eventType: EventType) => void;
 }
 
-const Menu: React.FC<Props> = ({ onClick }: Props) => {
+const Menu: React.FC<Props> = ({ isRunning, onClick }: Props) => {
   return (
     <div>
       <button
-        id="add_graph"
+        id="refresh"
+        disabled={!isRunning}
         onClick={() => {
-          onClick(EventType.ADD_SHAPE);
+          onClick(EventType.REFRESH);
         }}
       >
-        {"図形を追加する"}
+        {"次の図形を見る"}
       </button>
       <button
-        id="edit_graph"
+        id="resume_stop"
         onClick={() => {
-          onClick(EventType.EDIT_SHAPE);
+          onClick(EventType.RESUME_STOP);
         }}
       >
-        {"図形を編集する"}
-      </button>
-      <button
-        id="edit_style"
-        onClick={() => {
-          onClick(EventType.EDIT_STYLE);
-        }}
-      >
-        {"見え方を変える"}
-      </button>
-      <button
-        id="misc"
-        onClick={() => {
-          onClick(EventType.MISC);
-        }}
-      >
-        {"設定"}
+        {isRunning ? "とめる" : "うごかす"}
       </button>
     </div>
   );

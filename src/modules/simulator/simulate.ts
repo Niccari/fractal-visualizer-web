@@ -1,19 +1,23 @@
 import { Chart, ChartSimulator } from "./index";
 
 type Simulate = () => Chart[];
+type CreateSimulators = () => void;
 
 const simulators: ChartSimulator[] = [];
 
-simulators.push(new ChartSimulator(3));
-simulators.push(new ChartSimulator(5));
-simulators.push(new ChartSimulator(100));
-simulators.map((chart) => {
-  chart.allocatePoints();
-});
+const createSimulators: CreateSimulators = () => {
+  simulators.length = 0;
+  simulators.push(new ChartSimulator(3));
+  simulators.push(new ChartSimulator(5));
+  simulators.push(new ChartSimulator(100));
+  simulators.map((chart) => {
+    chart.allocatePoints();
+  });
+};
 
 const simulate: Simulate = () => {
   simulators.forEach((s) => s.simulate());
   return simulators.map((s) => s.getChart());
 };
 
-export default simulate;
+export { createSimulators, simulate };
