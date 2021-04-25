@@ -1,4 +1,5 @@
-.gitignore.DS_STORE
+.gitignore
+.DS_Store
 node_modules
 scripts/flow/*/.flowconfig
 .flowconfig
