@@ -124,8 +124,8 @@ class ColorGenerator implements IColorGenerator {
   }
 }
 
-class ChartSimulator implements IChartSimulator {
-  private _chart: MutableChart = {
+export class ChartSimulator implements IChartSimulator {
+  protected _chart: MutableChart = {
     basePoints: [],
     complexity: 1,
     center: { id: -1, x: Math.random(), y: Math.random() },
@@ -138,7 +138,9 @@ class ChartSimulator implements IChartSimulator {
   };
   constructor(complexity: DefaultComplexity) {
     this._chart.complexity = complexity;
-    this.allocatePoints();
+    this.allocate();
+    this.setBasePoints();
+    this.setOrders();
   }
   getChart(): Chart {
     return this._chart;
@@ -165,25 +167,18 @@ class ChartSimulator implements IChartSimulator {
     type: this.colorType,
     transientSpeed: 1,
   });
-
-  allocatePoints(): void {
+  pointLength(): number {
+    return this._chart.complexity;
+  }
+  allocate(): void {
     const chart = this._chart;
     chart.basePoints = [];
     chart.orders = [];
     chart.styles = [];
-    const complexity = chart.complexity;
-    for (let i = 0; i < complexity; i++) {
-      const radian = (2 * Math.PI * i) / complexity;
-      const x = 0.1 * Math.sin(radian);
-      const y = 0.1 * Math.cos(radian);
-      chart.basePoints.push({ id: i, x, y });
+    const pointLength = this.pointLength();
+    for (let i = 0; i < pointLength; i++) {
+      chart.basePoints.push({ id: i, x: -1, y: -1 });
       chart.points.push({ id: i, x: -1, y: -1 });
-    }
-    for (let i = 0; i < complexity; i++) {
-      chart.orders.push({
-        id: i,
-        link: [i, (i + 1) % complexity],
-      });
       chart.styles.push({
         type: StyleType.LINE,
         color: "#ffffff",
@@ -191,10 +186,30 @@ class ChartSimulator implements IChartSimulator {
       });
     }
   }
+  setBasePoints(): void {
+    const chart = this._chart;
+    const pointLength = this.pointLength();
+    for (let i = 0; i < pointLength; i++) {
+      const radian = (2 * Math.PI * i) / pointLength;
+      const x = 0.1 * Math.sin(radian);
+      const y = 0.1 * Math.cos(radian);
+      chart.basePoints[i] = { id: i, x, y };
+    }
+  }
+  setOrders(): void {
+    const chart = this._chart;
+    const pointLength = this.pointLength();
+    for (let i = 0; i < pointLength; i++) {
+      chart.orders.push({
+        id: i,
+        link: [i, (i + 1) % pointLength],
+      });
+    }
+  }
   simulate(): void {
     const chart = this._chart;
-    chart.points = [];
-    for (let i = 0; i < chart.basePoints.length; i++) {
+    const pointLength = this.pointLength();
+    for (let i = 0; i < pointLength; i++) {
       const translateX = chart.basePoints[i].x * chart.scale;
       const translateY = chart.basePoints[i].y * chart.scale;
       const sin = Math.sin(chart.angle);
@@ -224,5 +239,76 @@ class ChartSimulator implements IChartSimulator {
   }
 }
 
+class Circle extends ChartSimulator {}
+class Star extends ChartSimulator {
+  setOrders(): void {
+    const chart = this._chart;
+    const pointLength = this.pointLength();
+    for (let i = 0; i < pointLength; i++) {
+      const start = (2 * i) % pointLength;
+      const end = (2 * i + 2) % pointLength;
+      chart.orders.push({
+        id: i,
+        link: [start, end],
+      });
+    }
+  }
+}
+
+class Sunrise extends ChartSimulator {
+  setOrders(): void {
+    const chart = this._chart;
+    const pointLength = this.pointLength();
+    for (let i = 0; i < pointLength; i++) {
+      const start = i;
+      const end = (2 * i + 2) % pointLength;
+      chart.orders.push({
+        id: i,
+        link: [start, end],
+      });
+    }
+  }
+}
+
+class Clover extends ChartSimulator {
+  pointLength(): number {
+    return this._chart.complexity * 40;
+  }
+  setBasePoints(): void {
+    for (let i = 0; i < this.pointLength(); i++) {
+      const sinA = Math.sin((2 * Math.PI * this._chart.complexity * i) / this.pointLength());
+      this._chart.basePoints[i] = {
+        id: i,
+        x: 0.1 * sinA * Math.cos((2 * Math.PI * i) / this.pointLength() - Math.PI),
+        y: 0.1 * sinA * Math.sin((2 * Math.PI * i) / this.pointLength() - Math.PI),
+      };
+    }
+  }
+}
+
+class Starmine extends ChartSimulator {
+  pointLength(): number {
+    return this._chart.complexity * 2;
+  }
+  setBasePoints(): void {
+    for (let i = 0; i < this.pointLength(); i++) {
+      const angle = (2 * Math.PI * i) / this.pointLength() - Math.PI;
+      if (i % 2 === 0) {
+        this._chart.basePoints[i] = {
+          id: i,
+          x: 0.1 * Math.cos(angle),
+          y: 0.1 * Math.sin(angle),
+        };
+      } else {
+        this._chart.basePoints[i] = {
+          id: i,
+          x: (0.1 * Math.cos(angle)) / 4,
+          y: (0.1 * Math.sin(angle)) / 4,
+        };
+      }
+    }
+  }
+}
+
 export type { Chart };
-export { ChartSimulator };
+export { Circle, Clover, Star, Starmine, Sunrise };

@@ -32,7 +32,10 @@ type DefaultComplexity = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 100;
 
 interface IChartSimulator {
   getChart(): Chart;
-  allocatePoints(): void;
+  pointLength(): number;
+  allocate(): void;
+  setBasePoints(): void;
+  setOrders(): void;
   simulate(): void;
 }
 

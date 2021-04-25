@@ -5,6 +5,11 @@ type SetContext = (_: CanvasRenderingContext2D) => void;
 let context: CanvasRenderingContext2D | null = null;
 const setContext: SetContext = (_context: CanvasRenderingContext2D) => {
   context = _context;
+
+  const screen_width = context.canvas.width;
+  const screen_height = context.canvas.height;
+  context.fillStyle = "rgb(0, 0, 0)";
+  context.fillRect(0, 0, screen_width, screen_height);
 };
 
 type Draw = (_: Chart[]) => void;
@@ -13,7 +18,7 @@ const draw: Draw = (charts: Chart[]) => {
     const screen_width = context.canvas.width;
     const screen_height = context.canvas.height;
 
-    context.fillStyle = "rgb(0, 0, 0)";
+    context.fillStyle = "rgba(0, 0, 0, 0.05)";
     context.fillRect(0, 0, screen_width, screen_height);
 
     for (const chart of charts) {
