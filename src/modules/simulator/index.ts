@@ -310,5 +310,18 @@ class Starmine extends ChartSimulator {
   }
 }
 
+class Random extends ChartSimulator {
+  simulate(): void {
+    const chart = this._chart;
+    const pointLength = this.pointLength();
+    for (let i = 0; i < pointLength; i++) {
+      const x = 0.1 * (Math.random() - 0.5);
+      const y = 0.1 * (Math.random() - 0.5);
+      chart.basePoints[i] = { id: i, x, y };
+    }
+    super.simulate();
+  }
+}
+
 export type { Chart };
-export { Circle, Clover, Star, Starmine, Sunrise };
+export { Circle, Clover, Random, Star, Starmine, Sunrise };
