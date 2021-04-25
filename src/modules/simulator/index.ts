@@ -31,6 +31,30 @@ class ColorGenerator implements IColorGenerator {
     { position: 223, red: 255, green: 0, blue: 255 },
     { position: 255, red: 255, green: 0, blue: 0 },
   ];
+  private readonly gradientWarm: ColorGradientItem[] = [
+    { position: 0, red: 255, green: 0, blue: 0 },
+    { position: 128, red: 255, green: 255, blue: 0 },
+    { position: 255, red: 255, green: 0, blue: 0 },
+  ];
+  private readonly gradientForest: ColorGradientItem[] = [
+    { position: 0, red: 255, green: 255, blue: 0 },
+    { position: 128, red: 0, green: 255, blue: 0 },
+    { position: 255, red: 255, green: 255, blue: 0 },
+  ];
+  private readonly gradientCool: ColorGradientItem[] = [
+    { position: 0, red: 0, green: 0, blue: 255 },
+    { position: 128, red: 0, green: 255, blue: 255 },
+    { position: 255, red: 0, green: 0, blue: 255 },
+  ];
+  private readonly gradientHeat: ColorGradientItem[] = [
+    { position: 0, red: 255, green: 255, blue: 0 },
+    { position: 43, red: 255, green: 0, blue: 0 },
+    { position: 85, red: 0, green: 0, blue: 255 },
+    { position: 128, red: 0, green: 0, blue: 0 },
+    { position: 171, red: 0, green: 0, blue: 255 },
+    { position: 223, red: 255, green: 0, blue: 0 },
+    { position: 255, red: 255, green: 255, blue: 0 },
+  ];
   private readonly gradientMonochrome: ColorGradientItem[] = [
     { position: 0, red: 0, green: 0, blue: 0 },
     { position: 128, red: 255, green: 255, blue: 255 },
@@ -56,6 +80,14 @@ class ColorGenerator implements IColorGenerator {
       switch (config.type) {
         case ColorType.RAINBOW:
           return this.gradientRainbows;
+        case ColorType.WARM:
+          return this.gradientWarm;
+        case ColorType.FOREST:
+          return this.gradientForest;
+        case ColorType.COOL:
+          return this.gradientCool;
+        case ColorType.HEAT:
+          return this.gradientHeat;
         case ColorType.MONOCHROME:
           return this.gradientMonochrome;
         case ColorType.PASTEL:
@@ -113,9 +145,17 @@ class ChartSimulator implements IChartSimulator {
   }
   private readonly colorType = (() => {
     const p = Math.random();
-    if (p > 0.666) {
+    if (p > 0.86) {
       return ColorType.RAINBOW;
-    } else if (p > 0.333) {
+    } else if (p > 0.71) {
+      return ColorType.WARM;
+    } else if (p > 0.57) {
+      return ColorType.FOREST;
+    } else if (p > 0.43) {
+      return ColorType.HEAT;
+    } else if (p > 0.29) {
+      return ColorType.COOL;
+    } else if (p > 0.14) {
       return ColorType.PASTEL;
     } else {
       return ColorType.MONOCHROME;

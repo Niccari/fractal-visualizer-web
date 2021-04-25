@@ -1,10 +1,8 @@
 enum ColorType {
   RAINBOW = "rainbow",
-  FIRE = "fire",
+  WARM = "warm",
   FOREST = "forest",
   COOL = "cool",
-  DAWN = "dawn",
-  DARK_SEA = "dark_sea",
   HEAT = "heat",
   MONOCHROME = "monochrome",
   PASTEL = "pastel",
