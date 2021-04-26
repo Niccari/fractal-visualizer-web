@@ -29,6 +29,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint --fix --ext=ts,tsx src"
   },
+  "homepage": ".",
   "keywords": [
     "Fractal",
     "Visualization-of-equations"
