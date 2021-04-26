@@ -137,6 +137,10 @@ export class ChartSimulator implements IChartSimulator {
     styles: [],
   };
   constructor(complexity: DefaultComplexity) {
+    this.reset(complexity);
+  }
+
+  reset(complexity: DefaultComplexity): void {
     this._chart.complexity = complexity;
     this.allocate();
     this.setBasePoints();
@@ -323,5 +327,155 @@ class Random extends ChartSimulator {
   }
 }
 
+class KochCurve extends ChartSimulator {
+  length0 = 1.0;
+  angle0 = (60 * Math.PI) / 180;
+  mutationSize = 1.0;
+  mutationAngle = 1.0;
+
+  constructor(complexity: DefaultComplexity) {
+    super(1);
+
+    const _complexity = (() => {
+      if (complexity < 3) {
+        return 3;
+      } else if (complexity > 5) {
+        return 5;
+      } else {
+        return complexity;
+      }
+    })();
+    this.reset(_complexity);
+  }
+  pointLength(): number {
+    const complexity = this._chart.complexity;
+    return Math.pow(2, 2 * (complexity - 1)) + 1;
+  }
+  allocate(): void {
+    const chart = this._chart;
+    chart.basePoints = [];
+    chart.orders = [];
+    chart.styles = [];
+    const pointLength = this.pointLength();
+
+    chart.basePoints.push({ id: 0, x: -0.1, y: 0.0 });
+    chart.basePoints.push({ id: 1, x: 0.1, y: 0.0 });
+    for (let i = 0; i < pointLength; i++) {
+      chart.points.push({ id: i, x: -1, y: -1 });
+    }
+    for (let i = 0; i < pointLength - 1; i++) {
+      chart.styles.push({
+        type: StyleType.LINE,
+        color: "#ffffff",
+        thickness: 3,
+      });
+    }
+  }
+  setBasePoints(): void {
+    this.divideBasePoints(1, this.length0, this.angle0);
+  }
+  protected divideBasePoints(depth: number, parentLength: number, parentAngle: number): void {
+    const length = parentLength * this.mutationSize;
+    const angle = parentAngle * this.mutationAngle;
+    if (depth >= this._chart.complexity) {
+      return;
+    }
+    const sin = Math.sin(angle);
+    const cos = Math.cos(angle);
+    const iterateLength = Math.pow(2, 2 * depth);
+    for (let i = 0; i < iterateLength; i++) {
+      const mod4 = i % 4;
+      if (mod4 <= 1) {
+        const start = this._chart.basePoints[i];
+        const end = this._chart.basePoints[i + 1];
+        const vectorX = end.x - start.x;
+        const vectorY = end.y - start.y;
+        this._chart.basePoints.splice(i + 1, 0, {
+          id: i + 1,
+          x: start.x + (vectorX * length) / (3 - mod4),
+          y: start.y + (vectorY * length) / (3 - mod4),
+        });
+      } else if (mod4 == 2) {
+        const start = this._chart.basePoints[i - 1];
+        const end = this._chart.basePoints[i];
+        const vectorX = end.x - start.x;
+        const vectorY = end.y - start.y;
+        this._chart.basePoints.splice(i, 0, {
+          id: i,
+          x: start.x + length * (cos * vectorX - sin * vectorY),
+          y: start.y + length * (sin * vectorX + cos * vectorY),
+        });
+      }
+    }
+    this.divideBasePoints(depth + 1, length, angle);
+  }
+  setOrders(): void {
+    for (let i = 0; i < this.pointLength() - 1; i++) {
+      this._chart.orders[i] = {
+        id: i,
+        link: [i, i + 1],
+      };
+    }
+  }
+}
+
+class KochTriangle extends KochCurve {
+  isInner = false;
+
+  constructor(complexity: DefaultComplexity, isInner: boolean) {
+    super(1);
+
+    this.isInner = isInner;
+    this.reset(complexity);
+  }
+  pointLength(): number {
+    const complexity = this._chart.complexity;
+    return 3 * (Math.pow(2, 2 * (complexity - 1)) + 1);
+  }
+  setBasePoints(): void {
+    this.divideBasePoints(1, this.length0, this.angle0);
+
+    const sin120 = -Math.sin((120 * Math.PI) / 180);
+    const cos120 = Math.cos((120 * Math.PI) / 180);
+
+    const pointLength = this.pointLength();
+    if (this.isInner) {
+      for (let i = 0; i < pointLength / 3; i++) {
+        this._chart.basePoints[i].y = -this._chart.basePoints[i].y;
+      }
+    }
+    for (let i = 0; i < pointLength / 3; i++) {
+      this._chart.basePoints[i].y += 0.1 / Math.sqrt(3);
+    }
+    for (let i = 0; i < pointLength / 3; i++) {
+      const baseX = this._chart.basePoints[i].x;
+      const baseY = this._chart.basePoints[i].y;
+      this._chart.basePoints.push({
+        id: i,
+        x: baseX * cos120 - baseY * sin120,
+        y: baseX * sin120 + baseY * cos120,
+      });
+    }
+    for (let i = 0; i < pointLength / 3; i++) {
+      const baseX = this._chart.basePoints[i + pointLength / 3].x;
+      const baseY = this._chart.basePoints[i + pointLength / 3].y;
+      this._chart.basePoints.push({
+        id: i,
+        x: baseX * cos120 - baseY * sin120,
+        y: baseX * sin120 + baseY * cos120,
+      });
+    }
+  }
+  setOrders(): void {
+    const pointLength = this.pointLength();
+    for (let i = 0; i < pointLength - 1; i++) {
+      this._chart.orders[i] = {
+        id: i,
+        link: [i, i + 1],
+      };
+    }
+  }
+}
+
 export type { Chart };
-export { Circle, Clover, Random, Star, Starmine, Sunrise };
+export { Circle, Clover, KochCurve, KochTriangle, Random, Star, Starmine, Sunrise };
