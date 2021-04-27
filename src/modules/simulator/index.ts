@@ -136,11 +136,12 @@ export class ChartSimulator implements IChartSimulator {
     orders: [],
     styles: [],
   };
-  constructor(complexity: DefaultComplexity) {
-    this.reset(complexity);
+  constructor(complexity: DefaultComplexity, globalY: number) {
+    this.reset(complexity, globalY);
   }
 
-  reset(complexity: DefaultComplexity): void {
+  reset(complexity: DefaultComplexity, globalY: number): void {
+    this._chart.center.y = globalY;
     this._chart.complexity = complexity;
     this.allocate();
     this.setBasePoints();
@@ -333,8 +334,8 @@ class KochCurve extends ChartSimulator {
   mutationSize = 1.0;
   mutationAngle = 1.0;
 
-  constructor(complexity: DefaultComplexity) {
-    super(1);
+  constructor(complexity: DefaultComplexity, globalY: number) {
+    super(1, globalY);
 
     const _complexity = (() => {
       if (complexity < 3) {
@@ -345,7 +346,7 @@ class KochCurve extends ChartSimulator {
         return complexity;
       }
     })();
-    this.reset(_complexity);
+    this.reset(_complexity, globalY);
   }
   pointLength(): number {
     const complexity = this._chart.complexity;
@@ -422,11 +423,11 @@ class KochCurve extends ChartSimulator {
 class KochTriangle extends KochCurve {
   isInner = false;
 
-  constructor(complexity: DefaultComplexity, isInner: boolean) {
-    super(1);
+  constructor(complexity: DefaultComplexity, globalY: number, isInner: boolean) {
+    super(1, globalY);
 
     this.isInner = isInner;
-    this.reset(complexity);
+    this.reset(complexity, globalY);
   }
   pointLength(): number {
     const complexity = this._chart.complexity;

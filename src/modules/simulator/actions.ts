@@ -1,41 +1,19 @@
 import { draw } from "../visualizer/action";
-import { createSimulators, simulate } from "./simulate";
-let iterator: NodeJS.Timeout | null = null;
+import { createSimulators, simulate, scroll } from "./simulate";
 
-type RefreshIterator = () => void;
-type Resume = (framerate?: number) => void;
-type Stop = () => void;
+type Start = (framerate?: number) => void;
+type OnScroll = (deltaY: number) => void;
 
-type ToggleRunning = () => boolean;
-
-const _refreshIterator: RefreshIterator = () => {
-  if (iterator !== null) {
-    clearInterval(iterator);
-    iterator = null;
-  }
-};
-
-const _resume: Resume = (framerate = 50) => {
-  _refreshIterator();
+const start: Start = (framerate = 50) => {
   const refreshMs = 1000 / framerate;
-  iterator = setInterval(() => {
+  setInterval(() => {
     const calcResult = simulate();
     draw(calcResult);
   }, refreshMs);
 };
 
-const _stop: Stop = () => {
-  _refreshIterator();
+const onScroll: OnScroll = (deltaY) => {
+  scroll(deltaY);
 };
 
-const toggleRunning: ToggleRunning = () => {
-  if (iterator !== null) {
-    _stop();
-    return false;
-  } else {
-    _resume();
-    return true;
-  }
-};
-
-export { createSimulators, toggleRunning };
+export { createSimulators, start, onScroll };

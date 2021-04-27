@@ -31,7 +31,7 @@ interface Chart {
 type DefaultComplexity = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 100;
 
 interface IChartSimulator {
-  reset(complexity: DefaultComplexity): void;
+  reset(complexity: DefaultComplexity, globalY: number): void;
   getChart(): Chart;
   pointLength(): number;
   allocate(): void;
