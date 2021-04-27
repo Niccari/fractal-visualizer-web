@@ -6,6 +6,8 @@ interface Props {
 }
 
 const Canvas: React.FC<Props> = ({ onCanvasReady, onScroll }: Props) => {
+  let orgY = 0;
+
   function adjustCanvas(canvas: HTMLCanvasElement): void {
     const scale = window.devicePixelRatio;
     canvas.width = window.innerWidth * scale * 2;
@@ -15,9 +17,25 @@ const Canvas: React.FC<Props> = ({ onCanvasReady, onScroll }: Props) => {
   useEffect(() => {
     const canvas = document.getElementById("canvas");
     if (canvas instanceof HTMLCanvasElement) {
-      canvas.onwheel = (e: WheelEvent) => {
-        onScroll(e.deltaY);
-      };
+      if ("ontouchstart" in window) {
+        const onTouchStartEvent = ((e: TouchEvent) => {
+          e.preventDefault();
+          orgY = e.touches[0].pageY;
+        }) as EventListener;
+        const onTouchMoveEvent = ((e: TouchEvent) => {
+          e.preventDefault();
+          const newY = e.touches[0].pageY;
+          onScroll(newY - orgY);
+        }) as EventListener;
+        canvas.addEventListener("touchstart", onTouchStartEvent, { passive: false });
+        canvas.addEventListener("touchend", onTouchStartEvent, { passive: false });
+        canvas.addEventListener("touchcancel", onTouchStartEvent, { passive: false });
+        canvas.addEventListener("touchmove", onTouchMoveEvent, { passive: false });
+      } else {
+        canvas.onwheel = (e: WheelEvent) => {
+          onScroll(e.deltaY);
+        };
+      }
       window.onresize = () => {
         adjustCanvas(canvas);
       };

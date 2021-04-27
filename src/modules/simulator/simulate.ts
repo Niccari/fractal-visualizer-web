@@ -36,7 +36,8 @@ const createSimulators: CreateSimulators = () => {
 const simulate: Simulate = () => {
   scrollEndCount--;
   if (scrollEndCount === 0) {
-    window.history.replaceState(null, "Fractal-Visualizer depth: + scrollY", "/?depth=" + scrollY);
+    const url = window.location.pathname + "?depth=" + scrollY;
+    window.history.replaceState(null, "Fractal-Visualizer depth: + scrollY", url);
   }
   simulators.forEach((s) => s.simulate());
   return simulators.map((s) => {
