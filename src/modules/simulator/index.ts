@@ -679,8 +679,89 @@ class TriCurve extends ChartSimulator {
   }
 }
 
+class BinaryTree extends ChartSimulator {
+  mutationSize = 1.0;
+  mutationAngle = 1.0;
+
+  constructor(complexity: DefaultComplexity, globalY: number) {
+    super(1, globalY);
+
+    const _complexity = (() => {
+      if (complexity < 2) {
+        return 2;
+      } else if (complexity > 10) {
+        return 10;
+      } else {
+        return complexity;
+      }
+    })();
+    this.reset(_complexity, globalY);
+  }
+  pointLength(): number {
+    const complexity = this._chart.complexity;
+    return Math.pow(2, complexity + 1) + 1;
+  }
+  setBasePoints(): void {
+    const chart = this._chart;
+    chart.basePoints[0] = { id: 0, x: 0.0, y: -0.1 };
+    chart.basePoints[1] = { id: 1, x: 0.0, y: 0.0 };
+    this.divideBasePoints(1, 0.85, (45 * Math.PI) / 180);
+  }
+  protected divideBasePoints(depth: number, parentLength: number, parentAngle: number): void {
+    const length = parentLength * this.mutationSize;
+    const angle = parentAngle * this.mutationAngle;
+    if (depth >= Math.floor(this.pointLength() / 2)) {
+      return;
+    }
+    const start = this._chart.basePoints[Math.floor(depth / 2)];
+    const end = this._chart.basePoints[depth];
+    const vectorX = end.x - start.x;
+    const vectorY = end.y - start.y;
+
+    const sin = Math.sin(angle);
+    const cos = Math.cos(angle);
+    this._chart.basePoints[2 * depth] = {
+      id: 2 * depth,
+      x: end.x + length * (cos * vectorX - sin * vectorY),
+      y: end.y + length * (sin * vectorX + cos * vectorY),
+    };
+    this._chart.basePoints[2 * depth + 1] = {
+      id: 2 * depth + 1,
+      x: end.x + length * (cos * vectorX + sin * vectorY),
+      y: end.y + length * (-sin * vectorX + cos * vectorY),
+    };
+    this.divideBasePoints(2 * depth, length, angle);
+    this.divideBasePoints(2 * depth + 1, length, angle);
+  }
+  setOrders(): void {
+    this._chart.orders[0] = {
+      id: 0,
+      link: [0, 1],
+    };
+    this.setOrdersRecursive(1, 1);
+  }
+  setOrdersRecursive(base: number, src: number): void {
+    if (base >= this.pointLength() / 2 - 1) {
+      return;
+    }
+    const dstLeft = 2 * base;
+    const dstRight = 2 * base + 1;
+    this._chart.orders[dstLeft - 1] = {
+      id: dstLeft - 1,
+      link: [src, dstLeft],
+    };
+    this._chart.orders[dstRight - 1] = {
+      id: dstRight - 1,
+      link: [src, dstRight],
+    };
+    this.setOrdersRecursive(dstLeft, dstLeft);
+    this.setOrdersRecursive(dstRight, dstRight);
+  }
+}
+
 export type { Chart };
 export {
+  BinaryTree,
   Circle,
   Clover,
   FoldCurve,

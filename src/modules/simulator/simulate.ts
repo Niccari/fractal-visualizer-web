@@ -1,4 +1,5 @@
 import {
+  BinaryTree,
   Chart,
   ChartSimulator,
   Circle,
@@ -40,6 +41,7 @@ const createSimulators: CreateSimulators = () => {
   simulators.push(new FoldCurve(9, 9.0, FoldCurveType.CCURVE));
   simulators.push(new TriCurve(4, 10.0, TriCurveType.CIS));
   simulators.push(new TriCurve(5, 11.0, TriCurveType.TRANS));
+  simulators.push(new BinaryTree(7, 12.0));
 };
 
 const simulate: Simulate = () => {
