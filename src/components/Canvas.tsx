@@ -25,7 +25,7 @@ const Canvas: React.FC<Props> = ({ onCanvasReady, onScroll }: Props) => {
         const onTouchMoveEvent = ((e: TouchEvent) => {
           e.preventDefault();
           const newY = e.touches[0].pageY;
-          onScroll(newY - orgY);
+          onScroll(-(newY - orgY));
         }) as EventListener;
         canvas.addEventListener("touchstart", onTouchStartEvent, { passive: false });
         canvas.addEventListener("touchend", onTouchStartEvent, { passive: false });
