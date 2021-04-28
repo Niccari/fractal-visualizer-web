@@ -478,5 +478,115 @@ class KochTriangle extends KochCurve {
   }
 }
 
+enum FoldCurveType {
+  DRAGON = "dragon",
+  TRIANGLE = "triangle",
+  CCURVE = "ccurve",
+}
+
+class FoldCurve extends ChartSimulator {
+  arm0 = Math.sqrt(2) / 2;
+  angle0 = (45 * Math.PI) / 180;
+  curveType = FoldCurveType.DRAGON;
+  mutationSize = 1.0;
+  mutationAngle = 1.0;
+
+  constructor(complexity: DefaultComplexity, globalY: number, curveType: FoldCurveType) {
+    super(1, globalY);
+    this.curveType = curveType;
+    const _complexity = (() => {
+      if (complexity < 3) {
+        return 3;
+      } else if (complexity > 9) {
+        return 9;
+      } else {
+        return complexity;
+      }
+    })();
+    this.reset(_complexity, globalY);
+  }
+  pointLength(): number {
+    const complexity = this._chart.complexity;
+    return Math.pow(2, complexity - 1) + 1;
+  }
+  allocate(): void {
+    const chart = this._chart;
+    chart.basePoints = [];
+    chart.orders = [];
+    chart.styles = [];
+    const pointLength = this.pointLength();
+
+    for (let i = 0; i < pointLength; i++) {
+      chart.points.push({ id: i, x: -1, y: -1 });
+    }
+    for (let i = 0; i < pointLength - 1; i++) {
+      chart.styles.push({
+        type: StyleType.LINE,
+        color: "#ffffff",
+        thickness: 3,
+      });
+    }
+  }
+  setBasePoints(): void {
+    const chart = this._chart;
+    chart.basePoints.push({ id: 0, x: -0.1, y: 0.0 });
+    chart.basePoints.push({ id: 1, x: 0.1, y: 0.0 });
+    this.divideBasePoints(1, this.arm0, this.angle0);
+  }
+  protected divideBasePoints(depth: number, parentLength: number, parentAngle: number): void {
+    const length = parentLength * this.mutationSize;
+    const angle = parentAngle * this.mutationAngle;
+    if (depth >= this._chart.complexity) {
+      return;
+    }
+    const sin = Math.sin(angle);
+    const cos = Math.cos(angle);
+    const iterateLength = Math.pow(2, depth - 1);
+    for (let i = iterateLength; i > 0; i--) {
+      const start = this._chart.basePoints[i];
+      const end = this._chart.basePoints[i - 1];
+      const vectorX = end.x - start.x;
+      const vectorY = end.y - start.y;
+      const newPoint = (() => {
+        if (this.isLeftFold(i, depth)) {
+          return {
+            id: i,
+            x: start.x + length * (cos * vectorX - sin * vectorY),
+            y: start.y + length * (sin * vectorX + cos * vectorY),
+          };
+        } else {
+          return {
+            id: i,
+            x: start.x + length * (cos * vectorX + sin * vectorY),
+            y: start.y + length * (-sin * vectorX + cos * vectorY),
+          };
+        }
+      })();
+      this._chart.basePoints.splice(i, 0, newPoint);
+    }
+    this.divideBasePoints(depth + 1, length, angle);
+  }
+  private isLeftFold(i: number, depth: number): boolean {
+    switch (this.curveType) {
+      case FoldCurveType.DRAGON:
+        return i % 2 == 0;
+      case FoldCurveType.TRIANGLE:
+        return (i + depth) % 2 == 0;
+      case FoldCurveType.CCURVE:
+        return true;
+      default:
+        throw new Error("Unsupported CurveType!");
+    }
+  }
+  setOrders(): void {
+    for (let i = 0; i < this.pointLength() - 1; i++) {
+      this._chart.orders[i] = {
+        id: i,
+        link: [i, i + 1],
+      };
+    }
+  }
+}
+
 export type { Chart };
-export { Circle, Clover, KochCurve, KochTriangle, Random, Star, Starmine, Sunrise };
+export { Circle, Clover, FoldCurve, FoldCurveType, KochCurve, KochTriangle, Random, Star, Starmine, Sunrise };

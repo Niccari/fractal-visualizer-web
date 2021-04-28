@@ -3,6 +3,8 @@ import {
   ChartSimulator,
   Circle,
   Clover,
+  FoldCurve,
+  FoldCurveType,
   KochCurve,
   KochTriangle,
   Random,
@@ -31,6 +33,9 @@ const createSimulators: CreateSimulators = () => {
   simulators.push(new Star(7, 3.0));
   simulators.push(new Sunrise(100, 5.0));
   simulators.push(new KochCurve(4, 6.0));
+  simulators.push(new FoldCurve(10, 7.0, FoldCurveType.DRAGON));
+  simulators.push(new FoldCurve(6, 8.0, FoldCurveType.TRIANGLE));
+  simulators.push(new FoldCurve(9, 9.0, FoldCurveType.CCURVE));
 };
 
 const simulate: Simulate = () => {
