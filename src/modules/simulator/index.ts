@@ -588,5 +588,109 @@ class FoldCurve extends ChartSimulator {
   }
 }
 
+enum TriCurveType {
+  CIS = "cis",
+  TRANS = "trans",
+}
+
+class TriCurve extends ChartSimulator {
+  curveType = TriCurveType.CIS;
+  mutationSize = 1.0;
+  mutationAngle = 1.0;
+
+  constructor(complexity: DefaultComplexity, globalY: number, curveType: TriCurveType) {
+    super(1, globalY);
+    this.curveType = curveType;
+    const _complexity = (() => {
+      if (complexity > 7) {
+        return 7;
+      } else {
+        return complexity;
+      }
+    })();
+    this.reset(_complexity, globalY);
+  }
+
+  pointLength(): number {
+    const complexity = this._chart.complexity;
+    return Math.pow(4, complexity) + 1;
+  }
+
+  allocate(): void {
+    super.allocate();
+    this._chart.basePoints = [];
+  }
+
+  setBasePoints(): void {
+    const chart = this._chart;
+    chart.basePoints.push({ id: 0, x: -0.1, y: 0.0 });
+    chart.basePoints.push({ id: 1, x: 0.1, y: 0.0 });
+    this.divideBasePoints(1, 1.0, (90 * Math.PI) / 180);
+  }
+
+  protected divideBasePoints(depth: number, parentLength: number, parentAngle: number): void {
+    const length = parentLength * this.mutationSize;
+    const angle = parentAngle * this.mutationAngle;
+    if (depth > this._chart.complexity) {
+      return;
+    }
+    const sin = Math.sin(angle);
+    const cos = Math.cos(angle);
+    const iterateLength = Math.pow(4, depth - 1);
+    for (let i = iterateLength; i > 0; i--) {
+      const start = this._chart.basePoints[i];
+      const end = this._chart.basePoints[i - 1];
+      const midX = (end.x + start.x) / 2;
+      const midY = (end.y + start.y) / 2;
+      const startMidX = midX - start.x;
+      const startMidY = midY - start.y;
+      const midEndX = end.x - midX;
+      const midEndY = end.y - midY;
+      const midPoint = {
+        id: i,
+        x: midX,
+        y: midY,
+      };
+
+      const length_signed = this.curveType == TriCurveType.CIS ? -length : length;
+      const sin_signed = this.curveType == TriCurveType.TRANS && i % 2 == 0 ? sin : -sin;
+      this._chart.basePoints.splice(i, 0, {
+        id: i,
+        x: start.x + length_signed * (cos * startMidX + sin_signed * startMidY),
+        y: start.y + length_signed * (-sin_signed * startMidX + cos * startMidY),
+      });
+      this._chart.basePoints.splice(i, 0, midPoint);
+      this._chart.basePoints.splice(i, 0, {
+        id: i,
+        x: end.x - length_signed * (cos * midEndX - sin_signed * midEndY),
+        y: end.y - length_signed * (sin_signed * midEndX + cos * midEndY),
+      });
+    }
+    this.divideBasePoints(depth + 1, length, angle);
+  }
+
+  setOrders(): void {
+    for (let i = 0; i < this.pointLength() - 1; i++) {
+      this._chart.orders[i] = {
+        id: i,
+        link: [i, i + 1],
+      };
+    }
+  }
+}
+
 export type { Chart };
-export { Circle, Clover, FoldCurve, FoldCurveType, KochCurve, KochTriangle, Random, Star, Starmine, Sunrise };
+export {
+  Circle,
+  Clover,
+  FoldCurve,
+  FoldCurveType,
+  KochCurve,
+  KochTriangle,
+  Random,
+  Star,
+  Starmine,
+  Sunrise,
+  TriCurve,
+  TriCurveType,
+};

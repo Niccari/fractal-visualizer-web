@@ -11,6 +11,8 @@ import {
   Star,
   Starmine,
   Sunrise,
+  TriCurve,
+  TriCurveType,
 } from "./index";
 
 type Simulate = () => Chart[];
@@ -36,6 +38,8 @@ const createSimulators: CreateSimulators = () => {
   simulators.push(new FoldCurve(10, 7.0, FoldCurveType.DRAGON));
   simulators.push(new FoldCurve(6, 8.0, FoldCurveType.TRIANGLE));
   simulators.push(new FoldCurve(9, 9.0, FoldCurveType.CCURVE));
+  simulators.push(new TriCurve(4, 10.0, TriCurveType.CIS));
+  simulators.push(new TriCurve(5, 11.0, TriCurveType.TRANS));
 };
 
 const simulate: Simulate = () => {
