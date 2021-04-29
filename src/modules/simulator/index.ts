@@ -134,16 +134,14 @@ export class ChartSimulator implements IChartSimulator {
     rotationSpeed: Math.PI / 180.0,
     points: [],
     orders: [],
-    styles: [],
+    style: { type: StyleType.LINE, thickness: 1 },
+    colors: [],
   };
   constructor(complexity: DefaultComplexity, globalY: number) {
-    this.reset(complexity, globalY);
-  }
-
-  reset(complexity: DefaultComplexity, globalY: number): void {
     this._chart.center.y = globalY;
     this._chart.complexity = complexity;
-    this.allocate();
+  }
+  reset(): void {
     this.setBasePoints();
     this.setOrders();
   }
@@ -175,24 +173,9 @@ export class ChartSimulator implements IChartSimulator {
   pointLength(): number {
     return this._chart.complexity;
   }
-  allocate(): void {
-    const chart = this._chart;
-    chart.basePoints = [];
-    chart.orders = [];
-    chart.styles = [];
-    const pointLength = this.pointLength();
-    for (let i = 0; i < pointLength; i++) {
-      chart.basePoints.push({ id: i, x: -1, y: -1 });
-      chart.points.push({ id: i, x: -1, y: -1 });
-      chart.styles.push({
-        type: StyleType.LINE,
-        color: "#ffffff",
-        thickness: 3,
-      });
-    }
-  }
   setBasePoints(): void {
     const chart = this._chart;
+    chart.basePoints = [];
     const pointLength = this.pointLength();
     for (let i = 0; i < pointLength; i++) {
       const radian = (2 * Math.PI * i) / pointLength;
@@ -234,11 +217,7 @@ export class ChartSimulator implements IChartSimulator {
     }
 
     for (let index = 0; index < chart.orders.length; index++) {
-      chart.styles[index] = {
-        type: StyleType.LINE,
-        color: this._colorGenerator.next(),
-        thickness: 3,
-      };
+      chart.colors[index] = this._colorGenerator.next();
     }
     this._colorGenerator.endIteration();
   }
@@ -337,7 +316,7 @@ class KochCurve extends ChartSimulator {
   constructor(complexity: DefaultComplexity, globalY: number) {
     super(1, globalY);
 
-    const _complexity = (() => {
+    this._chart.complexity = (() => {
       if (complexity < 3) {
         return 3;
       } else if (complexity > 5) {
@@ -346,33 +325,15 @@ class KochCurve extends ChartSimulator {
         return complexity;
       }
     })();
-    this.reset(_complexity, globalY);
   }
   pointLength(): number {
     const complexity = this._chart.complexity;
     return Math.pow(2, 2 * (complexity - 1)) + 1;
   }
-  allocate(): void {
-    const chart = this._chart;
-    chart.basePoints = [];
-    chart.orders = [];
-    chart.styles = [];
-    const pointLength = this.pointLength();
-
-    chart.basePoints.push({ id: 0, x: -0.1, y: 0.0 });
-    chart.basePoints.push({ id: 1, x: 0.1, y: 0.0 });
-    for (let i = 0; i < pointLength; i++) {
-      chart.points.push({ id: i, x: -1, y: -1 });
-    }
-    for (let i = 0; i < pointLength - 1; i++) {
-      chart.styles.push({
-        type: StyleType.LINE,
-        color: "#ffffff",
-        thickness: 3,
-      });
-    }
-  }
   setBasePoints(): void {
+    this._chart.basePoints = [];
+    this._chart.basePoints.push({ id: 0, x: -0.1, y: 0.0 });
+    this._chart.basePoints.push({ id: 1, x: 0.1, y: 0.0 });
     this.divideBasePoints(1, this.length0, this.angle0);
   }
   protected divideBasePoints(depth: number, parentLength: number, parentAngle: number): void {
@@ -425,15 +386,17 @@ class KochTriangle extends KochCurve {
 
   constructor(complexity: DefaultComplexity, globalY: number, isInner: boolean) {
     super(1, globalY);
-
     this.isInner = isInner;
-    this.reset(complexity, globalY);
+    this._chart.complexity = complexity;
   }
   pointLength(): number {
     const complexity = this._chart.complexity;
     return 3 * (Math.pow(2, 2 * (complexity - 1)) + 1);
   }
   setBasePoints(): void {
+    this._chart.basePoints = [];
+    this._chart.basePoints.push({ id: 0, x: -0.1, y: 0.0 });
+    this._chart.basePoints.push({ id: 1, x: 0.1, y: 0.0 });
     this.divideBasePoints(1, this.length0, this.angle0);
 
     const sin120 = -Math.sin((120 * Math.PI) / 180);
@@ -494,7 +457,7 @@ class FoldCurve extends ChartSimulator {
   constructor(complexity: DefaultComplexity, globalY: number, curveType: FoldCurveType) {
     super(1, globalY);
     this.curveType = curveType;
-    const _complexity = (() => {
+    this._chart.complexity = (() => {
       if (complexity < 3) {
         return 3;
       } else if (complexity > 9) {
@@ -503,29 +466,10 @@ class FoldCurve extends ChartSimulator {
         return complexity;
       }
     })();
-    this.reset(_complexity, globalY);
   }
   pointLength(): number {
     const complexity = this._chart.complexity;
     return Math.pow(2, complexity - 1) + 1;
-  }
-  allocate(): void {
-    const chart = this._chart;
-    chart.basePoints = [];
-    chart.orders = [];
-    chart.styles = [];
-    const pointLength = this.pointLength();
-
-    for (let i = 0; i < pointLength; i++) {
-      chart.points.push({ id: i, x: -1, y: -1 });
-    }
-    for (let i = 0; i < pointLength - 1; i++) {
-      chart.styles.push({
-        type: StyleType.LINE,
-        color: "#ffffff",
-        thickness: 3,
-      });
-    }
   }
   setBasePoints(): void {
     const chart = this._chart;
@@ -601,14 +545,13 @@ class TriCurve extends ChartSimulator {
   constructor(complexity: DefaultComplexity, globalY: number, curveType: TriCurveType) {
     super(1, globalY);
     this.curveType = curveType;
-    const _complexity = (() => {
+    this._chart.complexity = (() => {
       if (complexity > 7) {
         return 7;
       } else {
         return complexity;
       }
     })();
-    this.reset(_complexity, globalY);
   }
 
   pointLength(): number {
@@ -616,13 +559,9 @@ class TriCurve extends ChartSimulator {
     return Math.pow(4, complexity) + 1;
   }
 
-  allocate(): void {
-    super.allocate();
-    this._chart.basePoints = [];
-  }
-
   setBasePoints(): void {
     const chart = this._chart;
+    chart.basePoints = [];
     chart.basePoints.push({ id: 0, x: -0.1, y: 0.0 });
     chart.basePoints.push({ id: 1, x: 0.1, y: 0.0 });
     this.divideBasePoints(1, 1.0, (90 * Math.PI) / 180);
@@ -685,8 +624,7 @@ class BinaryTree extends ChartSimulator {
 
   constructor(complexity: DefaultComplexity, globalY: number) {
     super(1, globalY);
-
-    const _complexity = (() => {
+    this._chart.complexity = (() => {
       if (complexity < 2) {
         return 2;
       } else if (complexity > 10) {
@@ -695,11 +633,10 @@ class BinaryTree extends ChartSimulator {
         return complexity;
       }
     })();
-    this.reset(_complexity, globalY);
   }
   pointLength(): number {
     const complexity = this._chart.complexity;
-    return Math.pow(2, complexity + 1) + 1;
+    return Math.pow(2, complexity + 1);
   }
   setBasePoints(): void {
     const chart = this._chart;
@@ -741,7 +678,7 @@ class BinaryTree extends ChartSimulator {
     this.setOrdersRecursive(1, 1);
   }
   setOrdersRecursive(base: number, src: number): void {
-    if (base >= this.pointLength() / 2 - 1) {
+    if (base >= this.pointLength() / 2) {
       return;
     }
     const dstLeft = 2 * base;

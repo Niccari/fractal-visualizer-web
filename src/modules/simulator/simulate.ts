@@ -46,6 +46,7 @@ const createSimulators: CreateSimulators = () => {
   simulators.push(new TriCurve(4, 10.0, TriCurveType.CIS));
   simulators.push(new TriCurve(5, 11.0, TriCurveType.TRANS));
   simulators.push(new BinaryTree(7, 12.0));
+  simulators.forEach((simulator) => simulator.reset());
 };
 
 const simulate: Simulate = () => {

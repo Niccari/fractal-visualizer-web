@@ -18,23 +18,22 @@ enum StyleType {
 
 type Style = {
   type: StyleType;
-  color: string;
-  thickness?: number;
+  thickness: number;
 };
 
 interface Chart {
   points: Point[];
   orders: Order[];
-  styles: Style[];
+  style: Style;
+  colors: string[];
 }
 
 type DefaultComplexity = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 100;
 
 interface IChartSimulator {
-  reset(complexity: DefaultComplexity, globalY: number): void;
+  reset(): void;
   getChart(): Chart;
   pointLength(): number;
-  allocate(): void;
   setBasePoints(): void;
   setOrders(): void;
   simulate(): void;

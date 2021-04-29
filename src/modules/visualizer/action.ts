@@ -1,5 +1,5 @@
 import { Chart } from "../simulator";
-import { Point, Style, StyleType } from "../simulator/chart";
+import { Point, StyleType } from "../simulator/chart";
 
 type SetContext = (_: CanvasRenderingContext2D) => void;
 
@@ -14,14 +14,38 @@ const setContext: SetContext = (_context: CanvasRenderingContext2D) => {
 };
 
 type Draw = (_: Chart[]) => void;
-type DrawLine = (context: CanvasRenderingContext2D, start: Point, end: Point, style: Style) => void;
-type DrawTriangle = (context: CanvasRenderingContext2D, start: Point, end: Point, style: Style) => void;
-type DrawCircles = (context: CanvasRenderingContext2D, start: Point, end: Point, style: Style) => void;
-type DrawCurve = (context: CanvasRenderingContext2D, start: Point, end: Point, style: Style) => void;
+type DrawLine = (context: CanvasRenderingContext2D, start: Point, end: Point, thickness: number, color: string) => void;
+type DrawTriangle = (
+  context: CanvasRenderingContext2D,
+  start: Point,
+  end: Point,
+  thickness: number,
+  color: string
+) => void;
+type DrawCircles = (
+  context: CanvasRenderingContext2D,
+  start: Point,
+  end: Point,
+  thickness: number,
+  color: string
+) => void;
+type DrawCurve = (
+  context: CanvasRenderingContext2D,
+  start: Point,
+  end: Point,
+  thickness: number,
+  color: string
+) => void;
 
-const drawLine: DrawLine = (context: CanvasRenderingContext2D, start: Point, end: Point, style: Style) => {
-  context.lineWidth = style.thickness || 1;
-  context.strokeStyle = style.color;
+const drawLine: DrawLine = (
+  context: CanvasRenderingContext2D,
+  start: Point,
+  end: Point,
+  thickness: number,
+  color: string
+) => {
+  context.lineWidth = thickness;
+  context.strokeStyle = color;
 
   context.beginPath();
   context.moveTo(start.x, start.y);
@@ -30,15 +54,20 @@ const drawLine: DrawLine = (context: CanvasRenderingContext2D, start: Point, end
   context.stroke();
 };
 
-const drawTriangle: DrawTriangle = (context: CanvasRenderingContext2D, start: Point, end: Point, style: Style) => {
+const drawTriangle: DrawTriangle = (
+  context: CanvasRenderingContext2D,
+  start: Point,
+  end: Point,
+  thickness: number,
+  color: string
+) => {
   const diffX = end.x - start.x;
   const diffY = end.y - start.y;
   const norm = Math.sqrt(diffX * diffX + diffY * diffY);
   const eX = diffX / norm;
   const eY = diffY / norm;
-  const thickness = style.thickness || 1;
 
-  context.fillStyle = style.color;
+  context.fillStyle = color;
 
   context.beginPath();
   context.moveTo(end.x, end.y);
@@ -50,15 +79,21 @@ const drawTriangle: DrawTriangle = (context: CanvasRenderingContext2D, start: Po
 };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-const drawCircles: DrawCircles = (context: CanvasRenderingContext2D, start: Point, end: Point, style: Style) => {
-  const thickness = Math.log(style.thickness || 1 + 10);
+const drawCircles: DrawCircles = (
+  context: CanvasRenderingContext2D,
+  start: Point,
+  end: Point,
+  thickness: number,
+  color: string
+) => {
+  const width = Math.log(thickness || 1 + 10);
   const vectorX = end.x - start.x;
   const vectorY = end.y - start.y;
   const distance = Math.sqrt(vectorX * vectorX + vectorY * vectorY);
-  const baseRadius = thickness * distance;
+  const baseRadius = width * distance;
   const angle = 2 * Math.PI;
 
-  context.fillStyle = style.color;
+  context.fillStyle = color;
 
   context.beginPath();
   context.arc(start.x + vectorX * 0.3, start.y + vectorY * 0.3, baseRadius * 0.3, 0, angle);
@@ -68,8 +103,14 @@ const drawCircles: DrawCircles = (context: CanvasRenderingContext2D, start: Poin
   context.fill();
 };
 
-const drawCurve: DrawCurve = (context: CanvasRenderingContext2D, start: Point, end: Point, style: Style) => {
-  const thickness = 1.5 * (style.thickness || 1);
+const drawCurve: DrawCurve = (
+  context: CanvasRenderingContext2D,
+  start: Point,
+  end: Point,
+  thickness: number,
+  color: string
+) => {
+  const width = 1.5 * (thickness || 1);
   const diffX = end.x - start.x;
   const diffY = end.y - start.y;
   const norm = Math.sqrt(diffX * diffX + diffY * diffY);
@@ -78,9 +119,9 @@ const drawCurve: DrawCurve = (context: CanvasRenderingContext2D, start: Point, e
 
   const midBaseX = start.x + (end.x - start.x) / 2;
   const midBaseY = start.y + (end.y - start.y) / 2;
-  const baseWidthX = eY * thickness;
-  const baseWidthY = eX * thickness;
-  context.fillStyle = style.color;
+  const baseWidthX = eY * width;
+  const baseWidthY = eX * width;
+  context.fillStyle = color;
 
   context.beginPath();
   context.moveTo(start.x, start.y);
@@ -116,27 +157,29 @@ const draw: Draw = (charts: Chart[]) => {
       const points = chart.points.map((point) => {
         return { id: point.id, x: point.x * screen_width, y: point.y * screen_height };
       });
+      const style = chart.style;
+      const drawMethod = (() => {
+        switch (style.type) {
+          case StyleType.LINE:
+            return drawLine;
+          case StyleType.TRIANGLE:
+            return drawTriangle;
+          case StyleType.CIRCLES:
+            return drawCircles;
+          case StyleType.CURVE:
+            return drawCurve;
+          default:
+            throw new Error("Invalid style type!");
+        }
+      })();
       for (let index = 0; index < chart.orders.length; index++) {
         const order = chart.orders[index];
-        const style = chart.styles[index];
         const link = order.link;
+        const color = chart.colors[index];
 
         const start = points[link[0]];
         const end = points[link[1]];
-        switch (style.type) {
-          case StyleType.LINE:
-            drawLine(context, start, end, style);
-            break;
-          case StyleType.TRIANGLE:
-            drawTriangle(context, start, end, style);
-            break;
-          case StyleType.CIRCLES:
-            drawCircles(context, start, end, style);
-            break;
-          case StyleType.CURVE:
-            drawCurve(context, start, end, style);
-            break;
-        }
+        drawMethod(context, start, end, style.thickness, color);
       }
     }
   }
