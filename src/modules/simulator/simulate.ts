@@ -21,7 +21,11 @@ type CreateSimulators = () => void;
 type Scroll = (deltaY: number) => void;
 
 const simulators: ChartSimulator[] = [];
-let scrollY = 0;
+let scrollY = (() => {
+  const query = new URL(document.location.href).searchParams;
+  return parseInt(query.get("depth") || "0");
+})();
+
 let scrollEndCount = 0;
 
 const createSimulators: CreateSimulators = () => {
