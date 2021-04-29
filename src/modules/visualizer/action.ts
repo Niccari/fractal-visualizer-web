@@ -68,8 +68,41 @@ const drawCircles: DrawCircles = (context: CanvasRenderingContext2D, start: Poin
   context.fill();
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-const drawCurve: DrawCurve = (context: CanvasRenderingContext2D, start: Point, end: Point, style: Style) => {};
+const drawCurve: DrawCurve = (context: CanvasRenderingContext2D, start: Point, end: Point, style: Style) => {
+  const thickness = 1.5 * (style.thickness || 1);
+  const diffX = end.x - start.x;
+  const diffY = end.y - start.y;
+  const norm = Math.sqrt(diffX * diffX + diffY * diffY);
+  const eX = diffX / norm;
+  const eY = diffY / norm;
+
+  const midBaseX = start.x + (end.x - start.x) / 2;
+  const midBaseY = start.y + (end.y - start.y) / 2;
+  const baseWidthX = eY * thickness;
+  const baseWidthY = eX * thickness;
+  context.fillStyle = style.color;
+
+  context.beginPath();
+  context.moveTo(start.x, start.y);
+  context.bezierCurveTo(
+    midBaseX + 1.5 * baseWidthX,
+    midBaseY - 1.5 * baseWidthY,
+    midBaseX + 1.5 * baseWidthX,
+    midBaseY - 1.5 * baseWidthY,
+    end.x,
+    end.y
+  );
+  context.bezierCurveTo(
+    midBaseX + 2.0 * baseWidthX,
+    midBaseY - 2.0 * baseWidthY,
+    midBaseX + 2.0 * baseWidthX,
+    midBaseY - 2.0 * baseWidthY,
+    start.x,
+    start.y
+  );
+  context.closePath();
+  context.fill();
+};
 
 const draw: Draw = (charts: Chart[]) => {
   if (context !== null) {
