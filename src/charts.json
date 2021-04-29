@@ -1,0 +1,121 @@
+{
+    "charts": [
+        {
+            "kind": "koch_triangle_inner",
+            "complexity": 3,
+            "center": {
+                "x": 0.5,
+                "y": 1.2
+            },
+            "scale": {
+                "w": 3.0,
+                "h": 3.0
+            },
+            "rotation": {
+                "angle": 30,
+                "speed": 1
+            },
+            "mutation": {
+                "size": 1.0,
+                "angle": 1.0
+            },
+            "random": {
+                "size": {
+                    "amplify": 0.1,
+                    "seed": -90129041
+                },
+                "angle": {
+                    "amplify": 0.1,
+                    "seed": 124818419
+                }
+            },
+            "style": {
+                "type": "line",
+                "thickness": 10
+            },
+            "color": {
+                "type": "pastel",
+                "value": "#ffffff",
+                "speed": 0.5
+            }
+        },
+        {
+            "kind": "koch_triangle_outer",
+            "complexity": 4,
+            "center": {
+                "x": 0.2,
+                "y": 0.3
+            },
+            "scale": {
+                "w": 2.0,
+                "h": 2.0
+            },
+            "rotation": {
+                "angle": 30,
+                "speed": 1
+            },
+            "mutation": {
+                "size": 1.0,
+                "angle": 1.0
+            },
+            "random": {
+                "size": {
+                    "amplify": 0.1,
+                    "seed": -90129041
+                },
+                "angle": {
+                    "amplify": 0.1,
+                    "seed": 124818419
+                }
+            },
+            "style": {
+                "type": "line",
+                "thickness": 3
+            },
+            "color": {
+                "type": "pastel",
+                "value": "#ffffff",
+                "speed": 0.5
+            }
+        },
+        {
+            "kind": "fold_dragon",
+            "complexity": 8,
+            "center": {
+                "x": 0.5,
+                "y": 2.3
+            },
+            "scale": {
+                "w": 1.6,
+                "h": 2.2
+            },
+            "rotation": {
+                "angle": 30,
+                "speed": -0.2
+            },
+            "mutation": {
+                "size": 1.0,
+                "angle": 0.95
+            },
+            "random": {
+                "size": {
+                    "amplify": 0.1,
+                    "seed": -90129041
+                },
+                "angle": {
+                    "amplify": 0.1,
+                    "seed": 124818419
+                }
+            },
+            "style": {
+                "type": "circles",
+                "thickness": 3
+            },
+            "color": {
+                "type": "fire",
+                "value": "#ffffff",
+                "speed": 0.5
+            }
+        }
+    ]
+}

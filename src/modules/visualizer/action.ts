@@ -155,7 +155,7 @@ const draw: Draw = (charts: Chart[]) => {
 
     for (const chart of charts) {
       const points = chart.points.map((point) => {
-        return { id: point.id, x: point.x * screen_width, y: point.y * screen_height };
+        return { x: point.x * screen_width, y: point.y * screen_height };
       });
       const style = chart.style;
       const drawMethod = (() => {

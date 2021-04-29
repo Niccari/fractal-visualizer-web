@@ -1,13 +1,57 @@
 import { Chart, DefaultComplexity, IChartSimulator, Point, StyleType } from "./chart";
 import { ColorConfig, ColorType, IColorGenerator } from "./color";
+import newCharts from "../../charts.json";
+
+interface Scale {
+  w: number;
+  h: number;
+}
+
+interface Rotation {
+  angle: number;
+  speed: number;
+}
+
+interface Mutation {
+  size: number;
+  angle: number;
+}
+interface RandomItem {
+  amplify: number;
+  seed: number;
+}
+interface Randomizer {
+  size: RandomItem;
+  angle: RandomItem;
+}
+
+enum ChartType {
+  CIRCLE = "start",
+  STAR = "star",
+  CLOVER = "clover",
+  SUNRISE = "sunrise",
+  RANDOM = "random",
+  STARMINE = "starmine",
+  KOCH_CURVE = "koch_curve",
+  KOCH_TRIANGLE_INNER = "koch_triangle_inner",
+  KOCH_TRIANGLE_OUTER = "koch_triangle_outer",
+  FOLD_DRAGON = "fold_dragon",
+  FOLD_TRIANGLE = "fold_triangle",
+  FOLD_CCURVE = "fold_ccurve",
+  TRI_CIS = "tri_cis",
+  TRI_TRANS = "tri_trans",
+  BINARY_TREE = "binary_tree",
+}
 
 interface MutableChart extends Chart {
+  kind: ChartType;
   basePoints: Point[];
   complexity: DefaultComplexity;
   center: Point;
-  scale: number;
-  angle: number;
-  rotationSpeed: number;
+  scale: Scale;
+  rotation: Rotation;
+  mutation?: Mutation;
+  randomizer?: Randomizer;
 }
 
 type ColorGradientItem = {
@@ -125,21 +169,9 @@ class ColorGenerator implements IColorGenerator {
 }
 
 export class ChartSimulator implements IChartSimulator {
-  protected _chart: MutableChart = {
-    basePoints: [],
-    complexity: 1,
-    center: { id: -1, x: Math.random(), y: Math.random() },
-    scale: 2.0,
-    angle: 0.0,
-    rotationSpeed: Math.PI / 180.0,
-    points: [],
-    orders: [],
-    style: { type: StyleType.LINE, thickness: 1 },
-    colors: [],
-  };
-  constructor(complexity: DefaultComplexity, globalY: number) {
-    this._chart.center.y = globalY;
-    this._chart.complexity = complexity;
+  protected _chart: MutableChart;
+  constructor(chart: MutableChart) {
+    this._chart = chart;
   }
   reset(): void {
     this.setBasePoints();
@@ -181,7 +213,7 @@ export class ChartSimulator implements IChartSimulator {
       const radian = (2 * Math.PI * i) / pointLength;
       const x = 0.1 * Math.sin(radian);
       const y = 0.1 * Math.cos(radian);
-      chart.basePoints[i] = { id: i, x, y };
+      chart.basePoints[i] = { x, y };
     }
   }
   setOrders(): void {
@@ -189,7 +221,6 @@ export class ChartSimulator implements IChartSimulator {
     const pointLength = this.pointLength();
     for (let i = 0; i < pointLength; i++) {
       chart.orders.push({
-        id: i,
         link: [i, (i + 1) % pointLength],
       });
     }
@@ -198,22 +229,21 @@ export class ChartSimulator implements IChartSimulator {
     const chart = this._chart;
     const pointLength = this.pointLength();
     for (let i = 0; i < pointLength; i++) {
-      const translateX = chart.basePoints[i].x * chart.scale;
-      const translateY = chart.basePoints[i].y * chart.scale;
-      const sin = Math.sin(chart.angle);
-      const cos = Math.cos(chart.angle);
+      const translateX = chart.basePoints[i].x * chart.scale.w;
+      const translateY = chart.basePoints[i].y * chart.scale.h;
+      const sin = Math.sin(chart.rotation.angle);
+      const cos = Math.cos(chart.rotation.angle);
       chart.points[i] = {
-        id: i,
         x: chart.center.x + translateX * cos - translateY * sin,
         y: chart.center.y + translateX * sin + translateY * cos,
       };
     }
-    chart.angle += chart.rotationSpeed;
-    if (chart.angle > Math.PI) {
-      chart.angle -= 2 * Math.PI;
+    chart.rotation.angle += chart.rotation.speed;
+    if (chart.rotation.angle > Math.PI) {
+      chart.rotation.angle -= 2 * Math.PI;
     }
-    if (chart.angle < -Math.PI) {
-      chart.angle += 2 * Math.PI;
+    if (chart.rotation.angle < -Math.PI) {
+      chart.rotation.angle += 2 * Math.PI;
     }
 
     for (let index = 0; index < chart.orders.length; index++) {
@@ -232,7 +262,6 @@ class Star extends ChartSimulator {
       const start = (2 * i) % pointLength;
       const end = (2 * i + 2) % pointLength;
       chart.orders.push({
-        id: i,
         link: [start, end],
       });
     }
@@ -247,7 +276,6 @@ class Sunrise extends ChartSimulator {
       const start = i;
       const end = (2 * i + 2) % pointLength;
       chart.orders.push({
-        id: i,
         link: [start, end],
       });
     }
@@ -262,7 +290,6 @@ class Clover extends ChartSimulator {
     for (let i = 0; i < this.pointLength(); i++) {
       const sinA = Math.sin((2 * Math.PI * this._chart.complexity * i) / this.pointLength());
       this._chart.basePoints[i] = {
-        id: i,
         x: 0.1 * sinA * Math.cos((2 * Math.PI * i) / this.pointLength() - Math.PI),
         y: 0.1 * sinA * Math.sin((2 * Math.PI * i) / this.pointLength() - Math.PI),
       };
@@ -279,13 +306,11 @@ class Starmine extends ChartSimulator {
       const angle = (2 * Math.PI * i) / this.pointLength() - Math.PI;
       if (i % 2 === 0) {
         this._chart.basePoints[i] = {
-          id: i,
           x: 0.1 * Math.cos(angle),
           y: 0.1 * Math.sin(angle),
         };
       } else {
         this._chart.basePoints[i] = {
-          id: i,
           x: (0.1 * Math.cos(angle)) / 4,
           y: (0.1 * Math.sin(angle)) / 4,
         };
@@ -301,7 +326,7 @@ class Random extends ChartSimulator {
     for (let i = 0; i < pointLength; i++) {
       const x = 0.1 * (Math.random() - 0.5);
       const y = 0.1 * (Math.random() - 0.5);
-      chart.basePoints[i] = { id: i, x, y };
+      chart.basePoints[i] = { x, y };
     }
     super.simulate();
   }
@@ -310,19 +335,17 @@ class Random extends ChartSimulator {
 class KochCurve extends ChartSimulator {
   length0 = 1.0;
   angle0 = (60 * Math.PI) / 180;
-  mutationSize = 1.0;
-  mutationAngle = 1.0;
 
-  constructor(complexity: DefaultComplexity, globalY: number) {
-    super(1, globalY);
+  constructor(chart: MutableChart) {
+    super(chart);
 
     this._chart.complexity = (() => {
-      if (complexity < 3) {
+      if (chart.complexity < 3) {
         return 3;
-      } else if (complexity > 5) {
+      } else if (chart.complexity > 5) {
         return 5;
       } else {
-        return complexity;
+        return chart.complexity;
       }
     })();
   }
@@ -332,13 +355,13 @@ class KochCurve extends ChartSimulator {
   }
   setBasePoints(): void {
     this._chart.basePoints = [];
-    this._chart.basePoints.push({ id: 0, x: -0.1, y: 0.0 });
-    this._chart.basePoints.push({ id: 1, x: 0.1, y: 0.0 });
+    this._chart.basePoints.push({ x: -0.1, y: 0.0 });
+    this._chart.basePoints.push({ x: 0.1, y: 0.0 });
     this.divideBasePoints(1, this.length0, this.angle0);
   }
   protected divideBasePoints(depth: number, parentLength: number, parentAngle: number): void {
-    const length = parentLength * this.mutationSize;
-    const angle = parentAngle * this.mutationAngle;
+    const length = parentLength * (this._chart.mutation?.size || 1.0);
+    const angle = parentAngle * (this._chart.mutation?.angle || 1.0);
     if (depth >= this._chart.complexity) {
       return;
     }
@@ -353,7 +376,6 @@ class KochCurve extends ChartSimulator {
         const vectorX = end.x - start.x;
         const vectorY = end.y - start.y;
         this._chart.basePoints.splice(i + 1, 0, {
-          id: i + 1,
           x: start.x + (vectorX * length) / (3 - mod4),
           y: start.y + (vectorY * length) / (3 - mod4),
         });
@@ -363,7 +385,6 @@ class KochCurve extends ChartSimulator {
         const vectorX = end.x - start.x;
         const vectorY = end.y - start.y;
         this._chart.basePoints.splice(i, 0, {
-          id: i,
           x: start.x + length * (cos * vectorX - sin * vectorY),
           y: start.y + length * (sin * vectorX + cos * vectorY),
         });
@@ -374,7 +395,6 @@ class KochCurve extends ChartSimulator {
   setOrders(): void {
     for (let i = 0; i < this.pointLength() - 1; i++) {
       this._chart.orders[i] = {
-        id: i,
         link: [i, i + 1],
       };
     }
@@ -384,10 +404,10 @@ class KochCurve extends ChartSimulator {
 class KochTriangle extends KochCurve {
   isInner = false;
 
-  constructor(complexity: DefaultComplexity, globalY: number, isInner: boolean) {
-    super(1, globalY);
-    this.isInner = isInner;
-    this._chart.complexity = complexity;
+  constructor(_chart: MutableChart) {
+    super(_chart);
+    this.isInner = _chart.kind === ChartType.KOCH_TRIANGLE_INNER;
+    this._chart.complexity = _chart.complexity;
   }
   pointLength(): number {
     const complexity = this._chart.complexity;
@@ -395,8 +415,8 @@ class KochTriangle extends KochCurve {
   }
   setBasePoints(): void {
     this._chart.basePoints = [];
-    this._chart.basePoints.push({ id: 0, x: -0.1, y: 0.0 });
-    this._chart.basePoints.push({ id: 1, x: 0.1, y: 0.0 });
+    this._chart.basePoints.push({ x: -0.1, y: 0.0 });
+    this._chart.basePoints.push({ x: 0.1, y: 0.0 });
     this.divideBasePoints(1, this.length0, this.angle0);
 
     const sin120 = -Math.sin((120 * Math.PI) / 180);
@@ -415,7 +435,6 @@ class KochTriangle extends KochCurve {
       const baseX = this._chart.basePoints[i].x;
       const baseY = this._chart.basePoints[i].y;
       this._chart.basePoints.push({
-        id: i,
         x: baseX * cos120 - baseY * sin120,
         y: baseX * sin120 + baseY * cos120,
       });
@@ -424,7 +443,6 @@ class KochTriangle extends KochCurve {
       const baseX = this._chart.basePoints[i + pointLength / 3].x;
       const baseY = this._chart.basePoints[i + pointLength / 3].y;
       this._chart.basePoints.push({
-        id: i,
         x: baseX * cos120 - baseY * sin120,
         y: baseX * sin120 + baseY * cos120,
       });
@@ -434,7 +452,6 @@ class KochTriangle extends KochCurve {
     const pointLength = this.pointLength();
     for (let i = 0; i < pointLength - 1; i++) {
       this._chart.orders[i] = {
-        id: i,
         link: [i, i + 1],
       };
     }
@@ -451,19 +468,28 @@ class FoldCurve extends ChartSimulator {
   arm0 = Math.sqrt(2) / 2;
   angle0 = (45 * Math.PI) / 180;
   curveType = FoldCurveType.DRAGON;
-  mutationSize = 1.0;
-  mutationAngle = 1.0;
 
-  constructor(complexity: DefaultComplexity, globalY: number, curveType: FoldCurveType) {
-    super(1, globalY);
-    this.curveType = curveType;
+  constructor(_chart: MutableChart) {
+    super(_chart);
+    this.curveType = (() => {
+      switch (this._chart.kind) {
+        case ChartType.FOLD_CCURVE:
+          return FoldCurveType.CCURVE;
+        case ChartType.FOLD_TRIANGLE:
+          return FoldCurveType.TRIANGLE;
+        case ChartType.FOLD_DRAGON:
+          return FoldCurveType.DRAGON;
+        default:
+          throw new Error("Unsupported curve type!");
+      }
+    })();
     this._chart.complexity = (() => {
-      if (complexity < 3) {
+      if (_chart.complexity < 3) {
         return 3;
-      } else if (complexity > 9) {
+      } else if (_chart.complexity > 9) {
         return 9;
       } else {
-        return complexity;
+        return _chart.complexity;
       }
     })();
   }
@@ -473,13 +499,13 @@ class FoldCurve extends ChartSimulator {
   }
   setBasePoints(): void {
     const chart = this._chart;
-    chart.basePoints.push({ id: 0, x: -0.1, y: 0.0 });
-    chart.basePoints.push({ id: 1, x: 0.1, y: 0.0 });
+    chart.basePoints.push({ x: -0.1, y: 0.0 });
+    chart.basePoints.push({ x: 0.1, y: 0.0 });
     this.divideBasePoints(1, this.arm0, this.angle0);
   }
   protected divideBasePoints(depth: number, parentLength: number, parentAngle: number): void {
-    const length = parentLength * this.mutationSize;
-    const angle = parentAngle * this.mutationAngle;
+    const length = parentLength * (this._chart.mutation?.size || 1.0);
+    const angle = parentAngle * (this._chart.mutation?.angle || 1.0);
     if (depth >= this._chart.complexity) {
       return;
     }
@@ -494,13 +520,11 @@ class FoldCurve extends ChartSimulator {
       const newPoint = (() => {
         if (this.isLeftFold(i, depth)) {
           return {
-            id: i,
             x: start.x + length * (cos * vectorX - sin * vectorY),
             y: start.y + length * (sin * vectorX + cos * vectorY),
           };
         } else {
           return {
-            id: i,
             x: start.x + length * (cos * vectorX + sin * vectorY),
             y: start.y + length * (-sin * vectorX + cos * vectorY),
           };
@@ -525,7 +549,6 @@ class FoldCurve extends ChartSimulator {
   setOrders(): void {
     for (let i = 0; i < this.pointLength() - 1; i++) {
       this._chart.orders[i] = {
-        id: i,
         link: [i, i + 1],
       };
     }
@@ -539,17 +562,24 @@ enum TriCurveType {
 
 class TriCurve extends ChartSimulator {
   curveType = TriCurveType.CIS;
-  mutationSize = 1.0;
-  mutationAngle = 1.0;
 
-  constructor(complexity: DefaultComplexity, globalY: number, curveType: TriCurveType) {
-    super(1, globalY);
-    this.curveType = curveType;
+  constructor(_chart: MutableChart) {
+    super(_chart);
+    this.curveType = (() => {
+      switch (this._chart.kind) {
+        case ChartType.TRI_CIS:
+          return TriCurveType.CIS;
+        case ChartType.TRI_TRANS:
+          return TriCurveType.TRANS;
+        default:
+          throw new Error("Unsupported curve type!");
+      }
+    })();
     this._chart.complexity = (() => {
-      if (complexity > 7) {
+      if (_chart.complexity > 7) {
         return 7;
       } else {
-        return complexity;
+        return _chart.complexity;
       }
     })();
   }
@@ -562,14 +592,14 @@ class TriCurve extends ChartSimulator {
   setBasePoints(): void {
     const chart = this._chart;
     chart.basePoints = [];
-    chart.basePoints.push({ id: 0, x: -0.1, y: 0.0 });
-    chart.basePoints.push({ id: 1, x: 0.1, y: 0.0 });
+    chart.basePoints.push({ x: -0.1, y: 0.0 });
+    chart.basePoints.push({ x: 0.1, y: 0.0 });
     this.divideBasePoints(1, 1.0, (90 * Math.PI) / 180);
   }
 
   protected divideBasePoints(depth: number, parentLength: number, parentAngle: number): void {
-    const length = parentLength * this.mutationSize;
-    const angle = parentAngle * this.mutationAngle;
+    const length = parentLength * (this._chart.mutation?.size || 1.0);
+    const angle = parentAngle * (this._chart.mutation?.angle || 1.0);
     if (depth > this._chart.complexity) {
       return;
     }
@@ -586,7 +616,6 @@ class TriCurve extends ChartSimulator {
       const midEndX = end.x - midX;
       const midEndY = end.y - midY;
       const midPoint = {
-        id: i,
         x: midX,
         y: midY,
       };
@@ -594,13 +623,11 @@ class TriCurve extends ChartSimulator {
       const length_signed = this.curveType == TriCurveType.CIS ? -length : length;
       const sin_signed = this.curveType == TriCurveType.TRANS && i % 2 == 0 ? sin : -sin;
       this._chart.basePoints.splice(i, 0, {
-        id: i,
         x: start.x + length_signed * (cos * startMidX + sin_signed * startMidY),
         y: start.y + length_signed * (-sin_signed * startMidX + cos * startMidY),
       });
       this._chart.basePoints.splice(i, 0, midPoint);
       this._chart.basePoints.splice(i, 0, {
-        id: i,
         x: end.x - length_signed * (cos * midEndX - sin_signed * midEndY),
         y: end.y - length_signed * (sin_signed * midEndX + cos * midEndY),
       });
@@ -611,7 +638,6 @@ class TriCurve extends ChartSimulator {
   setOrders(): void {
     for (let i = 0; i < this.pointLength() - 1; i++) {
       this._chart.orders[i] = {
-        id: i,
         link: [i, i + 1],
       };
     }
@@ -619,18 +645,15 @@ class TriCurve extends ChartSimulator {
 }
 
 class BinaryTree extends ChartSimulator {
-  mutationSize = 1.0;
-  mutationAngle = 1.0;
-
-  constructor(complexity: DefaultComplexity, globalY: number) {
-    super(1, globalY);
+  constructor(_chart: MutableChart) {
+    super(_chart);
     this._chart.complexity = (() => {
-      if (complexity < 2) {
+      if (_chart.complexity < 2) {
         return 2;
-      } else if (complexity > 10) {
+      } else if (_chart.complexity > 10) {
         return 10;
       } else {
-        return complexity;
+        return _chart.complexity;
       }
     })();
   }
@@ -640,13 +663,13 @@ class BinaryTree extends ChartSimulator {
   }
   setBasePoints(): void {
     const chart = this._chart;
-    chart.basePoints[0] = { id: 0, x: 0.0, y: -0.1 };
-    chart.basePoints[1] = { id: 1, x: 0.0, y: 0.0 };
+    chart.basePoints[0] = { x: 0.0, y: -0.1 };
+    chart.basePoints[1] = { x: 0.0, y: 0.0 };
     this.divideBasePoints(1, 0.85, (45 * Math.PI) / 180);
   }
   protected divideBasePoints(depth: number, parentLength: number, parentAngle: number): void {
-    const length = parentLength * this.mutationSize;
-    const angle = parentAngle * this.mutationAngle;
+    const length = parentLength * (this._chart.mutation?.size || 1.0);
+    const angle = parentAngle * (this._chart.mutation?.angle || 1.0);
     if (depth >= Math.floor(this.pointLength() / 2)) {
       return;
     }
@@ -658,12 +681,10 @@ class BinaryTree extends ChartSimulator {
     const sin = Math.sin(angle);
     const cos = Math.cos(angle);
     this._chart.basePoints[2 * depth] = {
-      id: 2 * depth,
       x: end.x + length * (cos * vectorX - sin * vectorY),
       y: end.y + length * (sin * vectorX + cos * vectorY),
     };
     this._chart.basePoints[2 * depth + 1] = {
-      id: 2 * depth + 1,
       x: end.x + length * (cos * vectorX + sin * vectorY),
       y: end.y + length * (-sin * vectorX + cos * vectorY),
     };
@@ -672,7 +693,6 @@ class BinaryTree extends ChartSimulator {
   }
   setOrders(): void {
     this._chart.orders[0] = {
-      id: 0,
       link: [0, 1],
     };
     this.setOrdersRecursive(1, 1);
@@ -684,11 +704,9 @@ class BinaryTree extends ChartSimulator {
     const dstLeft = 2 * base;
     const dstRight = 2 * base + 1;
     this._chart.orders[dstLeft - 1] = {
-      id: dstLeft - 1,
       link: [src, dstLeft],
     };
     this._chart.orders[dstRight - 1] = {
-      id: dstRight - 1,
       link: [src, dstRight],
     };
     this.setOrdersRecursive(dstLeft, dstLeft);
@@ -696,19 +714,60 @@ class BinaryTree extends ChartSimulator {
   }
 }
 
-export type { Chart };
-export {
-  BinaryTree,
-  Circle,
-  Clover,
-  FoldCurve,
-  FoldCurveType,
-  KochCurve,
-  KochTriangle,
-  Random,
-  Star,
-  Starmine,
-  Sunrise,
-  TriCurve,
-  TriCurveType,
+type Load = () => ChartSimulator[];
+const load: Load = () => {
+  const simulators = newCharts.charts.map((chart) => {
+    const mutableChart: MutableChart = {
+      ...chart,
+      kind: chart.kind as ChartType,
+      style: {
+        ...chart.style,
+        type: chart.style.type as StyleType,
+      },
+      rotation: {
+        angle: (chart.rotation.angle * Math.PI) / 180,
+        speed: (chart.rotation.speed * Math.PI) / 180,
+      },
+      complexity: chart.complexity as DefaultComplexity,
+      basePoints: [],
+      points: [],
+      orders: [],
+      colors: [],
+    };
+    switch (chart.kind) {
+      case ChartType.STAR:
+        return new Star(mutableChart);
+      case ChartType.STARMINE:
+        return new Starmine(mutableChart);
+      case ChartType.SUNRISE:
+        return new Sunrise(mutableChart);
+      case ChartType.CIRCLE:
+        return new Circle(mutableChart);
+      case ChartType.CLOVER:
+        return new Clover(mutableChart);
+      case ChartType.RANDOM:
+        return new Random(mutableChart);
+      case ChartType.FOLD_CCURVE:
+      case ChartType.FOLD_TRIANGLE:
+      case ChartType.FOLD_DRAGON:
+        return new FoldCurve(mutableChart);
+      case ChartType.KOCH_CURVE:
+        return new KochCurve(mutableChart);
+      case ChartType.KOCH_TRIANGLE_INNER:
+      case ChartType.KOCH_TRIANGLE_OUTER:
+        return new KochTriangle(mutableChart);
+      case ChartType.TRI_CIS:
+      case ChartType.TRI_TRANS:
+        return new TriCurve(mutableChart);
+      case ChartType.BINARY_TREE:
+        return new BinaryTree(mutableChart);
+      default:
+        throw new Error("Unsupported chart type!");
+    }
+  });
+  simulators.map((simulator) => simulator.reset());
+  return simulators;
 };
+
+export type { Chart, MutableChart };
+export { load };

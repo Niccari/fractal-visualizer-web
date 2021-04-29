@@ -1,5 +1,5 @@
 import { draw } from "../visualizer/action";
-import { createSimulators, simulate, scroll } from "./simulate";
+import { simulate, scroll } from "./simulate";
 
 type Start = (framerate?: number) => void;
 type OnScroll = (deltaY: number) => void;
@@ -16,4 +16,4 @@ const onScroll: OnScroll = (deltaY) => {
   scroll(deltaY);
 };
 
-export { createSimulators, start, onScroll };
+export { start, onScroll };

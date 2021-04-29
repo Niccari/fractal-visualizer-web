@@ -1,11 +1,9 @@
 type Point = {
-  id: number;
   x: number;
   y: number;
 };
 
 type Order = {
-  id: number;
   link: number[];
 };
 
