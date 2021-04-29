@@ -50,7 +50,23 @@ const drawTriangle: DrawTriangle = (context: CanvasRenderingContext2D, start: Po
 };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-const drawCircles: DrawCircles = (context: CanvasRenderingContext2D, start: Point, end: Point, style: Style) => {};
+const drawCircles: DrawCircles = (context: CanvasRenderingContext2D, start: Point, end: Point, style: Style) => {
+  const thickness = Math.log(style.thickness || 1 + 10);
+  const vectorX = end.x - start.x;
+  const vectorY = end.y - start.y;
+  const distance = Math.sqrt(vectorX * vectorX + vectorY * vectorY);
+  const baseRadius = thickness * distance;
+  const angle = 2 * Math.PI;
+
+  context.fillStyle = style.color;
+
+  context.beginPath();
+  context.arc(start.x + vectorX * 0.3, start.y + vectorY * 0.3, baseRadius * 0.3, 0, angle);
+  context.fill();
+  context.beginPath();
+  context.arc(start.x + vectorX * 0.6, start.y + vectorY * 0.6, baseRadius * 0.15, 0, angle);
+  context.fill();
+};
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const drawCurve: DrawCurve = (context: CanvasRenderingContext2D, start: Point, end: Point, style: Style) => {};
