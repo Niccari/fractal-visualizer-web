@@ -40,5 +40,5 @@ interface IChartSimulator {
   simulate(): void;
 }
 
-export type { Chart, DefaultComplexity, IChartSimulator, Point };
+export type { Chart, DefaultComplexity, IChartSimulator, Point, Style };
 export { StyleType };
