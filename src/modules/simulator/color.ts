@@ -10,7 +10,8 @@ enum ColorType {
 
 type ColorConfig = {
   type: ColorType;
-  transientSpeed: number;
+  alpha: number;
+  speed: number;
 };
 
 interface IColorGenerator {

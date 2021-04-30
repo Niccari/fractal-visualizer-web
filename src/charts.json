@@ -34,9 +34,9 @@
                 "thickness": 3
             },
             "color": {
-                "type": "pastel",
-                "value": "#ffffff",
-                "speed": 0.5
+                "type": "cool",
+                "alpha": 0.9,
+                "speed": 1
             }
         },
         {
@@ -73,8 +73,8 @@
                 "thickness": 10
             },
             "color": {
-                "type": "pastel",
-                "value": "#ffffff",
+                "type": "warm",
+                "alpha": 0.9,
                 "speed": 0.5
             }
         },
@@ -113,46 +113,7 @@
             },
             "color": {
                 "type": "rainbow",
-                "value": "#ffffff",
-                "speed": 0.5
-            }
-        },
-        {
-            "kind": "fold_dragon",
-            "complexity": 10,
-            "center": {
-                "x": 0.5,
-                "y": 2.3
-            },
-            "scale": {
-                "w": 1.6,
-                "h": 2.2
-            },
-            "rotation": {
-                "angle": 30,
-                "speed": -0.2
-            },
-            "mutation": {
-                "size": 1.0,
-                "angle": 2.0
-            },
-            "randomizer": {
-                "size": {
-                    "amplify": 0.5,
-                    "seed": -90129041
-                },
-                "angle": {
-                    "amplify": 0.1,
-                    "seed": 124818419
-                }
-            },
-            "style": {
-                "type": "line",
-                "thickness": 5
-            },
-            "color": {
-                "type": "fire",
-                "value": "#ffffff",
+                "alpha": 0.9,
                 "speed": 0.5
             }
         },
@@ -190,8 +151,8 @@
                 "thickness": 3
             },
             "color": {
-                "type": "rainbow",
-                "value": "#ffffff",
+                "type": "heat",
+                "alpha": 0.9,
                 "speed": 0.5
             }
         },
@@ -215,8 +176,8 @@
                 "thickness": 3
             },
             "color": {
-                "type": "rainbow",
-                "value": "#ffffff",
+                "type": "warm",
+                "alpha": 0.9,
                 "speed": 0.5
             }
         },
@@ -240,8 +201,8 @@
                 "thickness": 3
             },
             "color": {
-                "type": "rainbow",
-                "value": "#ffffff",
+                "type": "forest",
+                "alpha": 0.9,
                 "speed": 0.5
             }
         },
@@ -265,8 +226,8 @@
                 "thickness": 3
             },
             "color": {
-                "type": "rainbow",
-                "value": "#ffffff",
+                "type": "cool",
+                "alpha": 0.9,
                 "speed": 0.5
             }
         },
@@ -290,8 +251,8 @@
                 "thickness": 3
             },
             "color": {
-                "type": "rainbow",
-                "value": "#ffffff",
+                "type": "monochrome",
+                "alpha": 0.9,
                 "speed": 0.5
             }
         },
@@ -315,8 +276,8 @@
                 "thickness": 4
             },
             "color": {
-                "type": "rainbow",
-                "value": "#ffffff",
+                "type": "heat",
+                "alpha": 0.9,
                 "speed": 0.5
             }
         },
@@ -354,8 +315,8 @@
                 "thickness": 5
             },
             "color": {
-                "type": "rainbow",
-                "value": "#ffffff",
+                "type": "pastel",
+                "alpha": 0.9,
                 "speed": 0.5
             }
         },
@@ -367,8 +328,8 @@
                 "y": 8.0
             },
             "scale": {
-                "w": 20.0,
-                "h": 20.0
+                "w": 30.0,
+                "h": 30.0
             },
             "rotation": {
                 "angle": 30,
@@ -390,11 +351,89 @@
             },
             "style": {
                 "type": "circles",
-                "thickness": 2
+                "thickness": 1.2
             },
             "color": {
-                "type": "rainbow",
-                "value": "#ffffff",
+                "type": "cool",
+                "alpha": 0.1,
+                "speed": 10
+            }
+        },
+        {
+            "kind": "random",
+            "complexity": 100,
+            "center": {
+                "x": 0.7,
+                "y": 9.5
+            },
+            "scale": {
+                "w": 30.0,
+                "h": 30.0
+            },
+            "rotation": {
+                "angle": 30,
+                "speed": 0
+            },
+            "mutation": {
+                "size": 1.0,
+                "angle": 1.5
+            },
+            "randomizer": {
+                "size": {
+                    "amplify": 0.1,
+                    "seed": 90129041
+                },
+                "angle": {
+                    "amplify": 0.1,
+                    "seed": 124818419
+                }
+            },
+            "style": {
+                "type": "circles",
+                "thickness": 1.2
+            },
+            "color": {
+                "type": "warm",
+                "alpha": 0.1,
+                "speed": 10
+            }
+        },
+        {
+            "kind": "fold_dragon",
+            "complexity": 10,
+            "center": {
+                "x": 0.5,
+                "y": 11.2
+            },
+            "scale": {
+                "w": 1.6,
+                "h": 2.2
+            },
+            "rotation": {
+                "angle": 30,
+                "speed": -0.2
+            },
+            "mutation": {
+                "size": 1.0,
+                "angle": 2.0
+            },
+            "randomizer": {
+                "size": {
+                    "amplify": 0.5,
+                    "seed": -90129041
+                },
+                "angle": {
+                    "amplify": 0.1,
+                    "seed": 124818419
+                }
+            },
+            "style": {
+                "type": "line",
+                "thickness": 5
+            },
+            "color": {
+                "type": "heat",
+                "alpha": 0.9,
                 "speed": 0.5
             }
         }

@@ -50,6 +50,7 @@ interface MutableChart extends Chart {
   complexity: DefaultComplexity;
   center: Point;
   scale: Scale;
+  color: ColorConfig;
   rotation: Rotation;
   mutation?: Mutation;
   randomizer?: Randomizer;
@@ -67,6 +68,8 @@ class ColorGenerator implements IColorGenerator {
   private colorStartIndex: number;
   private colorIterateIndex: number;
   private colorTable: string[] = [];
+  private readonly alphaHex: string;
+
   private readonly gradientRainbows: ColorGradientItem[] = [
     { position: 0, red: 255, green: 0, blue: 0 },
     { position: 43, red: 255, green: 255, blue: 0 },
@@ -121,8 +124,9 @@ class ColorGenerator implements IColorGenerator {
     this._config = config;
     this.colorStartIndex = 0;
     this.colorIterateIndex = 0;
+    this.alphaHex = this._colorToHex(Math.floor(255 * this._config.alpha));
     const gradient: ColorGradientItem[] = (() => {
-      switch (config.type) {
+      switch (config.type.toString()) {
         case ColorType.RAINBOW:
           return this.gradientRainbows;
         case ColorType.WARM:
@@ -150,7 +154,9 @@ class ColorGenerator implements IColorGenerator {
       const red = start.red + ratio * (end.red - start.red);
       const green = start.green + ratio * (end.green - start.green);
       const blue = start.blue + ratio * (end.blue - start.blue);
-      this.colorTable.push("#" + this._colorToHex(red) + this._colorToHex(green) + this._colorToHex(blue));
+      this.colorTable.push(
+        "#" + this._colorToHex(red) + this._colorToHex(green) + this._colorToHex(blue) + this.alphaHex
+      );
       if (end.position == i) {
         start = end;
         end = gradient[++endIndex];
@@ -160,7 +166,7 @@ class ColorGenerator implements IColorGenerator {
 
   next(): string {
     const color = this.colorTable[this.colorIterateIndex];
-    this.colorIterateIndex = (this.colorIterateIndex + 1) % 256;
+    this.colorIterateIndex = (this.colorIterateIndex + this._config.speed) % 256;
     return color;
   }
   endIteration() {
@@ -171,8 +177,10 @@ class ColorGenerator implements IColorGenerator {
 
 export class ChartSimulator implements IChartSimulator {
   protected _chart: MutableChart;
+  private readonly _colorGenerator;
   constructor(chart: MutableChart) {
     this._chart = chart;
+    this._colorGenerator = new ColorGenerator(this._chart.color);
   }
   reset(): void {
     this.setBasePoints();
@@ -181,28 +189,6 @@ export class ChartSimulator implements IChartSimulator {
   getChart(): Chart {
     return this._chart;
   }
-  private readonly colorType = (() => {
-    const p = Math.random();
-    if (p > 0.86) {
-      return ColorType.RAINBOW;
-    } else if (p > 0.71) {
-      return ColorType.WARM;
-    } else if (p > 0.57) {
-      return ColorType.FOREST;
-    } else if (p > 0.43) {
-      return ColorType.HEAT;
-    } else if (p > 0.29) {
-      return ColorType.COOL;
-    } else if (p > 0.14) {
-      return ColorType.PASTEL;
-    } else {
-      return ColorType.MONOCHROME;
-    }
-  })();
-  readonly _colorGenerator = new ColorGenerator({
-    type: this.colorType,
-    transientSpeed: 1,
-  });
   pointLength(): number {
     return this._chart.complexity;
   }
@@ -753,6 +739,10 @@ const load: Load = () => {
       style: {
         ...chart.style,
         type: chart.style.type as StyleType,
+      },
+      color: {
+        ...chart.color,
+        type: chart.color.type as ColorType,
       },
       rotation: {
         angle: (chart.rotation.angle * Math.PI) / 180,
