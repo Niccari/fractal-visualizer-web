@@ -334,8 +334,8 @@ class KochCurve extends ChartSimulator {
     this._chart.complexity = (() => {
       if (chart.complexity < 3) {
         return 3;
-      } else if (chart.complexity > 5) {
-        return 5;
+      } else if (chart.complexity > 10) {
+        return 10;
       } else {
         return chart.complexity;
       }
@@ -401,7 +401,6 @@ class KochTriangle extends KochCurve {
   constructor(_chart: MutableChart) {
     super(_chart);
     this.isInner = _chart.kind === ChartType.KOCH_TRIANGLE_INNER;
-    this._chart.complexity = _chart.complexity;
   }
   pointLength(): number {
     const complexity = this._chart.complexity;
@@ -485,8 +484,8 @@ class FoldCurve extends ChartSimulator {
     this._chart.complexity = (() => {
       if (_chart.complexity < 3) {
         return 3;
-      } else if (_chart.complexity > 9) {
-        return 9;
+      } else if (_chart.complexity > 12) {
+        return 12;
       } else {
         return _chart.complexity;
       }

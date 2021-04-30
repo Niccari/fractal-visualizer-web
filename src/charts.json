@@ -283,7 +283,7 @@
         },
         {
             "kind": "fold_ccurve",
-            "complexity": 10,
+            "complexity": 9,
             "center": {
                 "x": 0.4,
                 "y": 6.0
@@ -411,11 +411,11 @@
             },
             "rotation": {
                 "angle": 30,
-                "speed": -0.2
+                "speed": 0.1
             },
             "mutation": {
                 "size": 1.0,
-                "angle": 2.0
+                "angle": 3.0
             },
             "randomizer": {
                 "size": {
@@ -428,13 +428,13 @@
                 }
             },
             "style": {
-                "type": "line",
+                "type": "curve",
                 "thickness": 5
             },
             "color": {
-                "type": "heat",
-                "alpha": 0.9,
-                "speed": 0.5
+                "type": "rainbow",
+                "alpha": 0.4,
+                "speed": 2.0
             }
         }
     ]
