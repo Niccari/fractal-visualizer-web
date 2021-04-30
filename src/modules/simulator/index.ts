@@ -1,6 +1,7 @@
 import { Chart, DefaultComplexity, IChartSimulator, Point, StyleType } from "./chart";
 import { ColorConfig, ColorType, IColorGenerator } from "./color";
 import newCharts from "../../charts.json";
+import { RandomGenerator } from "./randomizer";
 
 interface Scale {
   w: number;
@@ -332,12 +333,17 @@ class Random extends ChartSimulator {
   }
 }
 
+// noinspection DuplicatedCode
 class KochCurve extends ChartSimulator {
-  length0 = 1.0;
-  angle0 = (60 * Math.PI) / 180;
+  protected readonly length0 = 1.0;
+  protected readonly angle0 = (60 * Math.PI) / 180;
+  private readonly lengthRandom: RandomGenerator;
+  private readonly angleRandom: RandomGenerator;
 
   constructor(chart: MutableChart) {
     super(chart);
+    this.lengthRandom = new RandomGenerator(chart.randomizer?.size?.seed || -1);
+    this.angleRandom = new RandomGenerator(chart.randomizer?.angle?.seed || -1);
 
     this._chart.complexity = (() => {
       if (chart.complexity < 3) {
@@ -360,8 +366,10 @@ class KochCurve extends ChartSimulator {
     this.divideBasePoints(1, this.length0, this.angle0);
   }
   protected divideBasePoints(depth: number, parentLength: number, parentAngle: number): void {
-    const length = parentLength * (this._chart.mutation?.size || 1.0);
-    const angle = parentAngle * (this._chart.mutation?.angle || 1.0);
+    const lengthRandom = (this._chart.randomizer?.size?.amplify || 0.0) * this.lengthRandom.generate();
+    const angleRandom = (this._chart.randomizer?.angle?.amplify || 0.0) * this.angleRandom.generate();
+    const length = parentLength * (lengthRandom + (this._chart.mutation?.size || 1.0));
+    const angle = parentAngle * (angleRandom + (this._chart.mutation?.angle || 1.0));
     if (depth >= this._chart.complexity) {
       return;
     }
@@ -464,13 +472,18 @@ enum FoldCurveType {
   CCURVE = "ccurve",
 }
 
+// noinspection DuplicatedCode
 class FoldCurve extends ChartSimulator {
-  arm0 = Math.sqrt(2) / 2;
-  angle0 = (45 * Math.PI) / 180;
-  curveType = FoldCurveType.DRAGON;
+  private readonly arm0 = Math.sqrt(2) / 2;
+  private readonly angle0 = (45 * Math.PI) / 180;
+  private readonly curveType: FoldCurveType;
+  private readonly lengthRandom: RandomGenerator;
+  private readonly angleRandom: RandomGenerator;
 
   constructor(_chart: MutableChart) {
     super(_chart);
+    this.lengthRandom = new RandomGenerator(_chart.randomizer?.size?.seed || -1);
+    this.angleRandom = new RandomGenerator(_chart.randomizer?.angle?.seed || -1);
     this.curveType = (() => {
       switch (this._chart.kind) {
         case ChartType.FOLD_CCURVE:
@@ -504,8 +517,10 @@ class FoldCurve extends ChartSimulator {
     this.divideBasePoints(1, this.arm0, this.angle0);
   }
   protected divideBasePoints(depth: number, parentLength: number, parentAngle: number): void {
-    const length = parentLength * (this._chart.mutation?.size || 1.0);
-    const angle = parentAngle * (this._chart.mutation?.angle || 1.0);
+    const lengthRandom = (this._chart.randomizer?.size?.amplify || 0.0) * this.lengthRandom.generate();
+    const angleRandom = (this._chart.randomizer?.angle?.amplify || 0.0) * this.angleRandom.generate();
+    const length = parentLength * (lengthRandom + (this._chart.mutation?.size || 1.0));
+    const angle = parentAngle * (angleRandom + (this._chart.mutation?.angle || 1.0));
     if (depth >= this._chart.complexity) {
       return;
     }
@@ -560,11 +575,16 @@ enum TriCurveType {
   TRANS = "trans",
 }
 
+// noinspection DuplicatedCode
 class TriCurve extends ChartSimulator {
-  curveType = TriCurveType.CIS;
+  private readonly curveType;
+  private readonly lengthRandom: RandomGenerator;
+  private readonly angleRandom: RandomGenerator;
 
   constructor(_chart: MutableChart) {
     super(_chart);
+    this.lengthRandom = new RandomGenerator(_chart.randomizer?.size?.seed || -1);
+    this.angleRandom = new RandomGenerator(_chart.randomizer?.angle?.seed || -1);
     this.curveType = (() => {
       switch (this._chart.kind) {
         case ChartType.TRI_CIS:
@@ -598,8 +618,10 @@ class TriCurve extends ChartSimulator {
   }
 
   protected divideBasePoints(depth: number, parentLength: number, parentAngle: number): void {
-    const length = parentLength * (this._chart.mutation?.size || 1.0);
-    const angle = parentAngle * (this._chart.mutation?.angle || 1.0);
+    const lengthRandom = (this._chart.randomizer?.size?.amplify || 0.0) * this.lengthRandom.generate();
+    const angleRandom = (this._chart.randomizer?.angle?.amplify || 0.0) * this.angleRandom.generate();
+    const length = parentLength * (lengthRandom + (this._chart.mutation?.size || 1.0));
+    const angle = parentAngle * (angleRandom + (this._chart.mutation?.angle || 1.0));
     if (depth > this._chart.complexity) {
       return;
     }
@@ -644,9 +666,15 @@ class TriCurve extends ChartSimulator {
   }
 }
 
+// noinspection DuplicatedCode
 class BinaryTree extends ChartSimulator {
+  private readonly lengthRandom: RandomGenerator;
+  private readonly angleRandom: RandomGenerator;
+
   constructor(_chart: MutableChart) {
     super(_chart);
+    this.lengthRandom = new RandomGenerator(_chart.randomizer?.size?.seed || -1);
+    this.angleRandom = new RandomGenerator(_chart.randomizer?.angle?.seed || -1);
     this._chart.complexity = (() => {
       if (_chart.complexity < 2) {
         return 2;
@@ -668,8 +696,10 @@ class BinaryTree extends ChartSimulator {
     this.divideBasePoints(1, 0.85, (45 * Math.PI) / 180);
   }
   protected divideBasePoints(depth: number, parentLength: number, parentAngle: number): void {
-    const length = parentLength * (this._chart.mutation?.size || 1.0);
-    const angle = parentAngle * (this._chart.mutation?.angle || 1.0);
+    const lengthRandom = (this._chart.randomizer?.size?.amplify || 0.0) * this.lengthRandom.generate();
+    const angleRandom = (this._chart.randomizer?.angle?.amplify || 0.0) * this.angleRandom.generate();
+    const length = parentLength * (lengthRandom + (this._chart.mutation?.size || 1.0));
+    const angle = parentAngle * (angleRandom + (this._chart.mutation?.angle || 1.0));
     if (depth >= Math.floor(this.pointLength() / 2)) {
       return;
     }

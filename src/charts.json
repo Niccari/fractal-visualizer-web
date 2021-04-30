@@ -1,45 +1,6 @@
 {
     "charts": [
         {
-            "kind": "koch_triangle_inner",
-            "complexity": 3,
-            "center": {
-                "x": 0.5,
-                "y": 1.2
-            },
-            "scale": {
-                "w": 3.0,
-                "h": 3.0
-            },
-            "rotation": {
-                "angle": 30,
-                "speed": 1
-            },
-            "mutation": {
-                "size": 1.0,
-                "angle": 1.0
-            },
-            "random": {
-                "size": {
-                    "amplify": 0.1,
-                    "seed": -90129041
-                },
-                "angle": {
-                    "amplify": 0.1,
-                    "seed": 124818419
-                }
-            },
-            "style": {
-                "type": "line",
-                "thickness": 10
-            },
-            "color": {
-                "type": "pastel",
-                "value": "#ffffff",
-                "speed": 0.5
-            }
-        },
-        {
             "kind": "koch_triangle_outer",
             "complexity": 4,
             "center": {
@@ -58,14 +19,14 @@
                 "size": 1.0,
                 "angle": 1.0
             },
-            "random": {
+            "randomizer": {
                 "size": {
-                    "amplify": 0.1,
+                    "amplify": 10.0,
                     "seed": -90129041
                 },
                 "angle": {
-                    "amplify": 0.1,
-                    "seed": 124818419
+                    "amplify": -2.4,
+                    "seed": 1124901342
                 }
             },
             "style": {
@@ -79,8 +40,86 @@
             }
         },
         {
-            "kind": "fold_dragon",
+            "kind": "koch_triangle_inner",
+            "complexity": 5,
+            "center": {
+                "x": 0.5,
+                "y": 1.2
+            },
+            "scale": {
+                "w": 3.0,
+                "h": 3.0
+            },
+            "rotation": {
+                "angle": 30,
+                "speed": 1
+            },
+            "mutation": {
+                "size": 1.0,
+                "angle": 5.0
+            },
+            "randomizer": {
+                "size": {
+                    "amplify": 0.0,
+                    "seed": 90129041
+                },
+                "angle": {
+                    "amplify": 0.0,
+                    "seed": 124818419
+                }
+            },
+            "style": {
+                "type": "line",
+                "thickness": 10
+            },
+            "color": {
+                "type": "pastel",
+                "value": "#ffffff",
+                "speed": 0.5
+            }
+        },
+        {
+            "kind": "binary_tree",
             "complexity": 8,
+            "center": {
+                "x": 0.5,
+                "y": 1.9
+            },
+            "scale": {
+                "w": 0.2,
+                "h": 0.2
+            },
+            "rotation": {
+                "angle": 10,
+                "speed": -0.2
+            },
+            "mutation": {
+                "size": 1.1,
+                "angle": 0.88
+            },
+            "randomizer": {
+                "size": {
+                    "amplify": 0.5,
+                    "seed": 90129041
+                },
+                "angle": {
+                    "amplify": -0.1,
+                    "seed": 124818419
+                }
+            },
+            "style": {
+                "type": "triangle",
+                "thickness": 10
+            },
+            "color": {
+                "type": "rainbow",
+                "value": "#ffffff",
+                "speed": 0.5
+            }
+        },
+        {
+            "kind": "fold_dragon",
+            "complexity": 10,
             "center": {
                 "x": 0.5,
                 "y": 2.3
@@ -95,11 +134,11 @@
             },
             "mutation": {
                 "size": 1.0,
-                "angle": 0.95
+                "angle": 2.0
             },
-            "random": {
+            "randomizer": {
                 "size": {
-                    "amplify": 0.1,
+                    "amplify": 0.5,
                     "seed": -90129041
                 },
                 "angle": {
@@ -108,11 +147,253 @@
                 }
             },
             "style": {
-                "type": "circles",
-                "thickness": 3
+                "type": "line",
+                "thickness": 5
             },
             "color": {
                 "type": "fire",
+                "value": "#ffffff",
+                "speed": 0.5
+            }
+        },
+        {
+            "kind": "tri_cis",
+            "complexity": 6,
+            "center": {
+                "x": 0.8,
+                "y": 3.3
+            },
+            "scale": {
+                "w": 3.0,
+                "h": 2.0
+            },
+            "rotation": {
+                "angle": 70,
+                "speed": 0
+            },
+            "mutation": {
+                "size": 1.05,
+                "angle": 0.75
+            },
+            "randomizer": {
+                "size": {
+                    "amplify": 1.0,
+                    "seed": 90129041
+                },
+                "angle": {
+                    "amplify": 0.1,
+                    "seed": 124818419
+                }
+            },
+            "style": {
+                "type": "line",
+                "thickness": 3
+            },
+            "color": {
+                "type": "rainbow",
+                "value": "#ffffff",
+                "speed": 0.5
+            }
+        },
+        {
+            "kind": "starmine",
+            "complexity": 10,
+            "center": {
+                "x": 0.2,
+                "y": 4.2
+            },
+            "scale": {
+                "w": 3.0,
+                "h": 3.0
+            },
+            "rotation": {
+                "angle": 20,
+                "speed": 0.5
+            },
+            "style": {
+                "type": "triangle",
+                "thickness": 3
+            },
+            "color": {
+                "type": "rainbow",
+                "value": "#ffffff",
+                "speed": 0.5
+            }
+        },
+        {
+            "kind": "starmine",
+            "complexity": 8,
+            "center": {
+                "x": 0.4,
+                "y": 4.3
+            },
+            "scale": {
+                "w": 2.5,
+                "h": 2.5
+            },
+            "rotation": {
+                "angle": 20,
+                "speed": 0.5
+            },
+            "style": {
+                "type": "triangle",
+                "thickness": 3
+            },
+            "color": {
+                "type": "rainbow",
+                "value": "#ffffff",
+                "speed": 0.5
+            }
+        },
+        {
+            "kind": "starmine",
+            "complexity": 8,
+            "center": {
+                "x": 0.6,
+                "y": 4.4
+            },
+            "scale": {
+                "w": 2.0,
+                "h": 2.0
+            },
+            "rotation": {
+                "angle": 20,
+                "speed": 0.5
+            },
+            "style": {
+                "type": "triangle",
+                "thickness": 3
+            },
+            "color": {
+                "type": "rainbow",
+                "value": "#ffffff",
+                "speed": 0.5
+            }
+        },
+        {
+            "kind": "starmine",
+            "complexity": 6,
+            "center": {
+                "x": 0.8,
+                "y": 4.5
+            },
+            "scale": {
+                "w": 1.5,
+                "h": 1.5
+            },
+            "rotation": {
+                "angle": 20,
+                "speed": 0.5
+            },
+            "style": {
+                "type": "triangle",
+                "thickness": 3
+            },
+            "color": {
+                "type": "rainbow",
+                "value": "#ffffff",
+                "speed": 0.5
+            }
+        },
+        {
+            "kind": "sunrise",
+            "complexity": 100,
+            "center": {
+                "x": 0.4,
+                "y": 5.1
+            },
+            "scale": {
+                "w": 3.0,
+                "h": 3.0
+            },
+            "rotation": {
+                "angle": -20,
+                "speed": 0.0
+            },
+            "style": {
+                "type": "curve",
+                "thickness": 4
+            },
+            "color": {
+                "type": "rainbow",
+                "value": "#ffffff",
+                "speed": 0.5
+            }
+        },
+        {
+            "kind": "fold_ccurve",
+            "complexity": 10,
+            "center": {
+                "x": 0.4,
+                "y": 6.0
+            },
+            "scale": {
+                "w": 1.5,
+                "h": 1.5
+            },
+            "rotation": {
+                "angle": 30,
+                "speed": 0
+            },
+            "mutation": {
+                "size": 1.0,
+                "angle": 1.5
+            },
+            "randomizer": {
+                "size": {
+                    "amplify": 0.1,
+                    "seed": 90129041
+                },
+                "angle": {
+                    "amplify": 0.1,
+                    "seed": 124818419
+                }
+            },
+            "style": {
+                "type": "line",
+                "thickness": 5
+            },
+            "color": {
+                "type": "rainbow",
+                "value": "#ffffff",
+                "speed": 0.5
+            }
+        },
+        {
+            "kind": "random",
+            "complexity": 100,
+            "center": {
+                "x": 0.7,
+                "y": 8.0
+            },
+            "scale": {
+                "w": 20.0,
+                "h": 20.0
+            },
+            "rotation": {
+                "angle": 30,
+                "speed": 0
+            },
+            "mutation": {
+                "size": 1.0,
+                "angle": 1.5
+            },
+            "randomizer": {
+                "size": {
+                    "amplify": 0.1,
+                    "seed": 90129041
+                },
+                "angle": {
+                    "amplify": 0.1,
+                    "seed": 124818419
+                }
+            },
+            "style": {
+                "type": "circles",
+                "thickness": 2
+            },
+            "color": {
+                "type": "rainbow",
                 "value": "#ffffff",
                 "speed": 0.5
             }
