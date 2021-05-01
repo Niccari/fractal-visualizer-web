@@ -16,6 +16,7 @@ type ColorConfig = {
 
 interface IColorGenerator {
   next(): string;
+  endIteration(): void;
 }
 
 export type { ColorConfig, IColorGenerator };

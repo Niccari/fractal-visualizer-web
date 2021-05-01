@@ -1,5 +1,5 @@
 import { draw } from "../visualizer/action";
-import { simulate, scroll, touchScroll } from "./simulate";
+import { simulate, scroll, touchScroll } from "./index";
 
 type Start = (framerate?: number) => void;
 type OnScroll = (deltaY: number) => void;

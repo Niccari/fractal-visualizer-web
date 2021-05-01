@@ -1,5 +1,4 @@
-import { Chart } from "../simulator";
-import { Point, StyleType } from "../simulator/chart";
+import { Chart, Point, StyleType } from "../simulator/chart/chart";
 
 type SetContext = (_: CanvasRenderingContext2D) => void;
 
