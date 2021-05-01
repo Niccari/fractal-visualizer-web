@@ -145,6 +145,13 @@ const drawCurve: DrawCurve = (
   context.fill();
 };
 
+const _shouldDrawChart = (chart: Chart) => {
+  const ys = chart.points.map((point) => point.y).sort();
+  const lower = Math.floor((ys.length * 2) / 10);
+  const upper = Math.floor((ys.length * 8) / 10);
+  return ys[lower] > -1.0 && ys[upper] < 2.0;
+};
+
 const draw: Draw = (charts: Chart[]) => {
   if (context !== null) {
     const screen_width = context.canvas.width;
@@ -154,6 +161,9 @@ const draw: Draw = (charts: Chart[]) => {
     context.fillRect(0, 0, screen_width, screen_height);
 
     for (const chart of charts) {
+      if (!_shouldDrawChart(chart)) {
+        continue;
+      }
       const points = chart.points.map((point) => {
         return { x: point.x * screen_width, y: point.y * screen_height };
       });
