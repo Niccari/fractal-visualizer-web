@@ -3,11 +3,10 @@ import React, { useEffect } from "react";
 interface Props {
   onCanvasReady: (_: CanvasRenderingContext2D) => void;
   onScroll: (_: number) => void;
+  onTouchScroll: (_: number) => void;
 }
 
-const Canvas: React.FC<Props> = ({ onCanvasReady, onScroll }: Props) => {
-  let orgY = 0;
-
+const Canvas: React.FC<Props> = ({ onCanvasReady, onScroll, onTouchScroll }: Props) => {
   function adjustCanvas(canvas: HTMLCanvasElement): void {
     const scale = window.devicePixelRatio;
     canvas.width = window.innerWidth * scale * 2;
@@ -20,12 +19,10 @@ const Canvas: React.FC<Props> = ({ onCanvasReady, onScroll }: Props) => {
       if ("ontouchstart" in window) {
         const onTouchStartEvent = ((e: TouchEvent) => {
           e.preventDefault();
-          orgY = e.touches[0].pageY;
         }) as EventListener;
         const onTouchMoveEvent = ((e: TouchEvent) => {
           e.preventDefault();
-          const newY = e.touches[0].pageY;
-          onScroll(-(newY - orgY));
+          onTouchScroll(e.touches[0].pageY);
         }) as EventListener;
         canvas.addEventListener("touchstart", onTouchStartEvent, { passive: false });
         canvas.addEventListener("touchend", onTouchStartEvent, { passive: false });
