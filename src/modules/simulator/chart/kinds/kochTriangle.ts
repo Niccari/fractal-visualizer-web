@@ -1,5 +1,4 @@
-import { MutableChart } from "..";
-import { ChartType } from "../chart";
+import { ChartType, MutableChart } from "../chart";
 import KochCurve from "./kochCurve";
 
 class KochTriangle extends KochCurve {

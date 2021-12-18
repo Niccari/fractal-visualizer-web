@@ -1,4 +1,4 @@
-import { ChartSimulator } from "..";
+import ChartSimulator from "..";
 
 class Random extends ChartSimulator {
   public simulate(): void {

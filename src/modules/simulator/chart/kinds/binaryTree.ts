@@ -1,5 +1,6 @@
-import { ChartSimulator, MutableChart } from "..";
+import ChartSimulator from "..";
 import RandomGenerator from "../../../randomizer";
+import { MutableChart } from "../chart";
 
 class BinaryTree extends ChartSimulator {
   private readonly lengthRandom: RandomGenerator;

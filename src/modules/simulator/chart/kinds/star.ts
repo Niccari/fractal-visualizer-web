@@ -1,4 +1,4 @@
-import { ChartSimulator } from "..";
+import ChartSimulator from "..";
 
 class Star extends ChartSimulator {
   public setOrders(): void {

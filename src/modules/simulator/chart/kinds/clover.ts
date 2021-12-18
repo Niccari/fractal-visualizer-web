@@ -1,4 +1,4 @@
-import { ChartSimulator } from "..";
+import ChartSimulator from "..";
 
 class Clover extends ChartSimulator {
   public pointLength(): number {

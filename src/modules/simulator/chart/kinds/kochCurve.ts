@@ -1,5 +1,6 @@
-import { ChartSimulator, MutableChart } from "..";
+import ChartSimulator from "..";
 import RandomGenerator from "../../../randomizer";
+import { MutableChart } from "../chart";
 
 class KochCurve extends ChartSimulator {
   protected readonly length0 = 1.0;

@@ -20,4 +20,11 @@ interface IColorGenerator {
   endIteration(): void;
 }
 
-export type { ColorConfig, IColorGenerator };
+type ColorGradientItem = {
+  position: number;
+  red: number;
+  green: number;
+  blue: number;
+};
+
+export type { ColorConfig, ColorGradientItem, IColorGenerator };

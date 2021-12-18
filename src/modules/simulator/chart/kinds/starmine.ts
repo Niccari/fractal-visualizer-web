@@ -1,4 +1,4 @@
-import { ChartSimulator } from "..";
+import ChartSimulator from "..";
 
 class Starmine extends ChartSimulator {
   public pointLength(): number {

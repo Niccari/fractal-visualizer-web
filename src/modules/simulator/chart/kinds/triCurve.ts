@@ -1,6 +1,6 @@
-import { ChartSimulator, MutableChart } from "..";
+import ChartSimulator from "..";
 import RandomGenerator from "../../../randomizer";
-import { ChartType } from "../chart";
+import { ChartType, MutableChart } from "../chart";
 
 export const TriCurveType = {
   CIS: "cis",

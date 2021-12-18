@@ -1,7 +1,7 @@
 import newCharts from "../../../charts.json";
 import { ChartType, DefaultComplexity, MutableChart, StyleType } from "./chart";
-import { ColorType } from "../color/color";
-import { ChartSimulator } from "./index";
+import { ColorType } from "../color/interface";
+import ChartSimulator from "./index";
 import BinaryTree from "./kinds/binaryTree";
 import Circle from "./kinds/circle";
 import Clover from "./kinds/clover";

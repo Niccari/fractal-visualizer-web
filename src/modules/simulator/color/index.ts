@@ -1,11 +1,4 @@
-import { ColorConfig, ColorType, IColorGenerator } from "./color";
-
-type ColorGradientItem = {
-  position: number;
-  red: number;
-  green: number;
-  blue: number;
-};
+import { ColorConfig, ColorGradientItem, ColorType, IColorGenerator } from "./interface";
 
 class ColorGenerator implements IColorGenerator {
   private readonly config: ColorConfig;

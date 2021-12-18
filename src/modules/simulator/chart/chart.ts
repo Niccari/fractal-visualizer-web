@@ -1,4 +1,4 @@
-import { ColorConfig } from "../color/color";
+import { ColorConfig } from "../color/interface";
 
 type Point = {
   x: number;

@@ -1,5 +1,6 @@
-import { Chart, ChartSimulator } from "./chart";
+import ChartSimulator from "./chart";
 import load from "./chart/action";
+import { Chart } from "./chart/chart";
 
 type Index = () => Chart[];
 type Scroll = (deltaY: number) => void;

@@ -1,7 +1,7 @@
 import { Chart, IChartSimulator, MutableChart } from "./chart";
 import ColorGenerator from "../color";
 
-export class ChartSimulator implements IChartSimulator {
+class ChartSimulator implements IChartSimulator {
   protected chart: MutableChart;
   private readonly colorGenerator;
   public constructor(chart: MutableChart) {
@@ -72,4 +72,4 @@ export class ChartSimulator implements IChartSimulator {
   }
 }
 
-export type { Chart, MutableChart };
+export default ChartSimulator;
