@@ -2,14 +2,14 @@ import { Chart, Point, StyleType } from "../simulator/chart/chart";
 
 type SetContext = (_: CanvasRenderingContext2D) => void;
 
-let context: CanvasRenderingContext2D | null = null;
-const setContext: SetContext = (_context: CanvasRenderingContext2D) => {
-  context = _context;
+let nullableContext: CanvasRenderingContext2D | null = null;
+const setContext: SetContext = (context: CanvasRenderingContext2D) => {
+  nullableContext = context;
 
-  const screen_width = context.canvas.width;
-  const screen_height = context.canvas.height;
+  const screenWidth = context.canvas.width;
+  const screenHeight = context.canvas.height;
   context.fillStyle = "rgb(0, 0, 0)";
-  context.fillRect(0, 0, screen_width, screen_height);
+  context.fillRect(0, 0, screenWidth, screenHeight);
 };
 
 type Draw = (_: Chart[]) => void;
@@ -144,53 +144,57 @@ const drawCurve: DrawCurve = (
   context.fill();
 };
 
-const _shouldDrawChart = (chart: Chart) => {
+const shouldDrawChart = (chart: Chart) => {
   const ys = chart.points.map((point) => point.y).sort();
   const lower = Math.floor((ys.length * 2) / 10);
   const upper = Math.floor((ys.length * 8) / 10);
   return ys[lower] > -1.0 && ys[upper] < 2.0;
 };
 
+const drawChart = (context: CanvasRenderingContext2D, chart: Chart, screenWidth: number, screenHeight: number) => {
+  const points = chart.points.map((point) => {
+    return { x: point.x * screenWidth, y: point.y * screenHeight };
+  });
+  const { style } = chart;
+  const drawMethod = (() => {
+    switch (style.type) {
+      case StyleType.LINE:
+        return drawLine;
+      case StyleType.TRIANGLE:
+        return drawTriangle;
+      case StyleType.CIRCLES:
+        return drawCircles;
+      case StyleType.CURVE:
+        return drawCurve;
+      default:
+        throw new Error("Invalid style type!");
+    }
+  })();
+  for (let index = 0; index < chart.orders.length; index += 1) {
+    const order = chart.orders[index];
+    const { link } = order;
+    const color = chart.colors[index];
+
+    const start = points[link[0]];
+    const end = points[link[1]];
+    drawMethod(context, start, end, style.thickness, color);
+  }
+};
+
 const draw: Draw = (charts: Chart[]) => {
+  const context = nullableContext;
   if (context !== null) {
-    const screen_width = context.canvas.width;
-    const screen_height = context.canvas.height;
+    const screenWidth = context.canvas.width;
+    const screenHeight = context.canvas.height;
 
     context.fillStyle = "rgba(0, 0, 0, 0.05)";
-    context.fillRect(0, 0, screen_width, screen_height);
+    context.fillRect(0, 0, screenWidth, screenHeight);
 
-    for (const chart of charts) {
-      if (!_shouldDrawChart(chart)) {
-        continue;
+    charts.forEach((chart) => {
+      if (shouldDrawChart(chart)) {
+        drawChart(context, chart, screenWidth, screenHeight);
       }
-      const points = chart.points.map((point) => {
-        return { x: point.x * screen_width, y: point.y * screen_height };
-      });
-      const style = chart.style;
-      const drawMethod = (() => {
-        switch (style.type) {
-          case StyleType.LINE:
-            return drawLine;
-          case StyleType.TRIANGLE:
-            return drawTriangle;
-          case StyleType.CIRCLES:
-            return drawCircles;
-          case StyleType.CURVE:
-            return drawCurve;
-          default:
-            throw new Error("Invalid style type!");
-        }
-      })();
-      for (let index = 0; index < chart.orders.length; index++) {
-        const order = chart.orders[index];
-        const link = order.link;
-        const color = chart.colors[index];
-
-        const start = points[link[0]];
-        const end = points[link[1]];
-        drawMethod(context, start, end, style.thickness, color);
-      }
-    }
+    });
   }
 };
 

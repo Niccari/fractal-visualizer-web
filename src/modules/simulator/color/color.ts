@@ -1,12 +1,13 @@
-enum ColorType {
-  RAINBOW = "rainbow",
-  WARM = "warm",
-  FOREST = "forest",
-  COOL = "cool",
-  HEAT = "heat",
-  MONOCHROME = "monochrome",
-  PASTEL = "pastel",
-}
+export const ColorType = {
+  RAINBOW: "rainbow",
+  WARM: "warm",
+  FOREST: "forest",
+  COOL: "cool",
+  HEAT: "heat",
+  MONOCHROME: "monochrome",
+  PASTEL: "pastel",
+} as const;
+export type ColorType = typeof ColorType[keyof typeof ColorType];
 
 type ColorConfig = {
   type: ColorType;
@@ -20,4 +21,3 @@ interface IColorGenerator {
 }
 
 export type { ColorConfig, IColorGenerator };
-export { ColorType };

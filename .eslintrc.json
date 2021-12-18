@@ -1,42 +1,106 @@
 {
-    "extends": [
-        "eslint:recommended",
-        "plugin:prettier/recommended",
-        "plugin:react/recommended",
-        "plugin:@typescript-eslint/recommended",
-        "prettier"
-    ],
-    "plugins": [
-        "react",
-        "@typescript-eslint"
-    ],
-    "env": { "browser": true, "es2021": true },
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaVersion": 12,
-        "sourceType": "module",
-        "project": "./tsconfig.json"
-    },
-    "settings": {
-      "react": {
-        "version": "detect"
-      }
-    },
-    "rules": {
-        "max-len": ["warn", {
-            "code": 120,
-            "ignoreUrls": true,
-            "ignoreComments": true
-        }],
-        "prettier/prettier": ["error", {
-            "printWidth": 120
-        }],
-        "indent": [ "error", 2, { "SwitchCase": 1 } ],
-        "linebreak-style": [ "error", "unix" ],
-        "quotes": [ "error", "double" ],
-        "semi": [ "error", "always" ],
-        "no-use-before-define": "off",
-        "@typescript-eslint/no-use-before-define": ["error"]
+  "extends": [
+    "eslint:recommended",
+    "airbnb",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
+    "prettier"
+  ],
+  "plugins": [
+    "react",
+    "import",
+    "jsx-a11y",
+    "@typescript-eslint",
+    "prefer-arrow"
+  ],
+  "env": { "node": true, "es6": true },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
     }
+  },
+  "rules": {
+    "@typescript-eslint/explicit-member-accessibility": ["error"],
+    "lines-between-class-members": [
+      "error",
+      "always",
+      {
+        "exceptAfterSingleLine": true
+      }
+    ],
+    "no-void": [
+      "error",
+      {
+        "allowAsStatement": true
+      }
+    ],
+    "react/react-in-jsx-scope": "off",
+    "prefer-arrow/prefer-arrow-functions": [
+      "error",
+      {
+        "disallowPrototype": true,
+        "singleReturnOnly": false,
+        "classPropertiesAllowed": false
+      }
+    ],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
+    "react/jsx-filename-extension": [
+      "error",
+      {
+        "extensions": [".jsx", ".tsx"]
+      }
+    ],
+    "max-len": ["warn", {
+      "code": 120,
+      "ignoreUrls": true,
+      "ignoreComments": true
+    }],
+    "prettier/prettier": ["error", {
+      "printWidth": 120
+    }],
+    "indent": [ "error", 2, { "SwitchCase": 1 } ],
+    "linebreak-style": [ "error", "unix" ],
+    "quotes": [ "error", "double" ],
+    "semi": [ "error", "always" ],
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": ["error"],
+    "react/function-component-definition": [
+      2,
+      {
+        "namedComponents": "arrow-function"
+      }
+    ],
+    "jsx-a11y/label-has-associated-control": ["error", {
+      "controlComponents": ["Field"],
+      "required": {
+        "some": [ "nesting" ]
+      }
+    }]
+  },
+  "overrides": [
+    {
+      "files": ["**/*.tsx"],
+      "rules": {
+        "react/prop-types": "off"
+      }
+    }
+  ]
 }
-

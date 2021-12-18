@@ -4,7 +4,7 @@ import Canvas from "./components/Canvas";
 import { setContext } from "./modules/visualizer/action";
 import { start, onScroll, onTouchScroll } from "./modules/simulator/actions";
 
-function App(): JSX.Element {
+const App = (): JSX.Element => {
   return (
     <div className="App">
       <Canvas
@@ -21,6 +21,6 @@ function App(): JSX.Element {
       />
     </div>
   );
-}
+};
 
 export default App;

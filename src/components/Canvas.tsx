@@ -7,11 +7,13 @@ interface Props {
 }
 
 const Canvas: React.FC<Props> = ({ onCanvasReady, onScroll, onTouchScroll }: Props) => {
-  function adjustCanvas(canvas: HTMLCanvasElement): void {
+  const adjustCanvas = (canvas: HTMLCanvasElement): void => {
     const scale = window.devicePixelRatio;
+    // eslint-disable-next-line no-param-reassign
     canvas.width = window.innerWidth * scale * 2;
+    // eslint-disable-next-line no-param-reassign
     canvas.height = window.innerHeight * scale * 2;
-  }
+  };
 
   useEffect(() => {
     const canvas = document.getElementById("canvas");

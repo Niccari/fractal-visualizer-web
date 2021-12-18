@@ -9,12 +9,13 @@ type Order = {
   link: number[];
 };
 
-enum StyleType {
-  LINE = "line",
-  TRIANGLE = "triangle",
-  CIRCLES = "circles",
-  CURVE = "curve",
-}
+export const StyleType = {
+  LINE: "line",
+  TRIANGLE: "triangle",
+  CIRCLES: "circles",
+  CURVE: "curve",
+} as const;
+export type StyleType = typeof StyleType[keyof typeof StyleType];
 
 type Style = {
   type: StyleType;
@@ -64,23 +65,24 @@ interface Randomizer {
   angle: RandomItem;
 }
 
-enum ChartType {
-  CIRCLE = "start",
-  STAR = "star",
-  CLOVER = "clover",
-  SUNRISE = "sunrise",
-  RANDOM = "random",
-  STARMINE = "starmine",
-  KOCH_CURVE = "koch_curve",
-  KOCH_TRIANGLE_INNER = "koch_triangle_inner",
-  KOCH_TRIANGLE_OUTER = "koch_triangle_outer",
-  FOLD_DRAGON = "fold_dragon",
-  FOLD_TRIANGLE = "fold_triangle",
-  FOLD_CCURVE = "fold_ccurve",
-  TRI_CIS = "tri_cis",
-  TRI_TRANS = "tri_trans",
-  BINARY_TREE = "binary_tree",
-}
+export const ChartType = {
+  CIRCLE: "start",
+  STAR: "star",
+  CLOVER: "clover",
+  SUNRISE: "sunrise",
+  RANDOM: "random",
+  STARMINE: "starmine",
+  KOCH_CURVE: "koch_curve",
+  KOCH_TRIANGLE_INNER: "koch_triangle_inner",
+  KOCH_TRIANGLE_OUTER: "koch_triangle_outer",
+  FOLD_DRAGON: "fold_dragon",
+  FOLD_TRIANGLE: "fold_triangle",
+  FOLD_CCURVE: "fold_ccurve",
+  TRI_CIS: "tri_cis",
+  TRI_TRANS: "tri_trans",
+  BINARY_TREE: "binary_tree",
+} as const;
+export type ChartType = typeof ChartType[keyof typeof ChartType];
 
 interface MutableChart extends Chart {
   kind: ChartType;
@@ -95,4 +97,3 @@ interface MutableChart extends Chart {
 }
 
 export type { Chart, DefaultComplexity, IChartSimulator, MutableChart, Point, Style };
-export { StyleType, ChartType };

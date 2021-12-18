@@ -1,5 +1,5 @@
 import { Chart, ChartSimulator } from "./chart";
-import { load } from "./chart/action";
+import load from "./chart/action";
 
 type Index = () => Chart[];
 type Scroll = (deltaY: number) => void;
@@ -7,17 +7,17 @@ type Scroll = (deltaY: number) => void;
 const simulators: ChartSimulator[] = load();
 let scrollY = (() => {
   const query = new URL(document.location.href).searchParams;
-  return parseInt(query.get("depth") || "0");
+  return parseInt(query.get("depth") || "0", 10);
 })();
 
 let scrollEndCount = 0;
 let touchScrollPrevY: number | null = null;
 
 const simulate: Index = () => {
-  scrollEndCount--;
+  scrollEndCount -= 1;
   if (scrollEndCount === 0) {
     touchScrollPrevY = null;
-    const url = window.location.pathname + "?depth=" + scrollY;
+    const url = `${window.location.pathname}?depth=${scrollY}`;
     window.history.replaceState(null, "Fractal-Visualizer depth: + scrollY", url);
   }
   simulators.forEach((s) => s.simulate());
