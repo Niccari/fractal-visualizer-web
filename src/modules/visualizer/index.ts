@@ -25,14 +25,14 @@ class Visualizer implements IVisualizer {
       context.fillRect(0, 0, screenWidth, screenHeight);
 
       charts.forEach((chart) => {
-        if (this.shouldDrawChart(chart)) {
-          this.drawChart(context, chart, screenWidth, screenHeight);
+        if (Visualizer.shouldDrawChart(chart)) {
+          Visualizer.drawChart(context, chart, screenWidth, screenHeight);
         }
       });
     }
   };
 
-  private drawLine: Draw = (
+  private static drawLine: Draw = (
     context: CanvasRenderingContext2D,
     start: Point,
     end: Point,
@@ -49,7 +49,7 @@ class Visualizer implements IVisualizer {
     context.stroke();
   };
 
-  private drawTriangle: Draw = (
+  private static drawTriangle: Draw = (
     context: CanvasRenderingContext2D,
     start: Point,
     end: Point,
@@ -73,7 +73,7 @@ class Visualizer implements IVisualizer {
     context.fill();
   };
 
-  private drawCircles: Draw = (
+  private static drawCircles: Draw = (
     context: CanvasRenderingContext2D,
     start: Point,
     end: Point,
@@ -97,7 +97,7 @@ class Visualizer implements IVisualizer {
     context.fill();
   };
 
-  private drawCurve: Draw = (
+  private static drawCurve: Draw = (
     context: CanvasRenderingContext2D,
     start: Point,
     end: Point,
@@ -139,14 +139,19 @@ class Visualizer implements IVisualizer {
     context.fill();
   };
 
-  private shouldDrawChart = (chart: Chart) => {
+  private static shouldDrawChart = (chart: Chart) => {
     const ys = chart.points.map((point) => point.y).sort();
     const lower = Math.floor((ys.length * 2) / 10);
     const upper = Math.floor((ys.length * 8) / 10);
     return ys[lower] > -1.0 && ys[upper] < 2.0;
   };
 
-  private drawChart = (context: CanvasRenderingContext2D, chart: Chart, screenWidth: number, screenHeight: number) => {
+  private static drawChart = (
+    context: CanvasRenderingContext2D,
+    chart: Chart,
+    screenWidth: number,
+    screenHeight: number
+  ) => {
     const points = chart.points.map((point) => {
       return { x: point.x * screenWidth, y: point.y * screenHeight };
     });
@@ -154,13 +159,13 @@ class Visualizer implements IVisualizer {
     const drawMethod: Draw = (() => {
       switch (style.type) {
         case StyleType.LINE:
-          return this.drawLine;
+          return Visualizer.drawLine;
         case StyleType.TRIANGLE:
-          return this.drawTriangle;
+          return Visualizer.drawTriangle;
         case StyleType.CIRCLES:
-          return this.drawCircles;
+          return Visualizer.drawCircles;
         case StyleType.CURVE:
-          return this.drawCurve;
+          return Visualizer.drawCurve;
         default:
           throw new Error("Invalid style type!");
       }

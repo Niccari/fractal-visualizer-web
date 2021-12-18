@@ -17,7 +17,7 @@ import { ColorType } from "../color/interface";
 import IChartLoader from "./interface";
 
 class ChartLoader implements IChartLoader {
-  private instantiateChart = (mutableChart: MutableChart): ChartSimulator => {
+  private static instantiateChart = (mutableChart: MutableChart): ChartSimulator => {
     switch (mutableChart.kind) {
       case ChartType.STAR:
         return new Star(mutableChart);
@@ -50,6 +50,7 @@ class ChartLoader implements IChartLoader {
     }
   };
 
+  // eslint-disable-next-line class-methods-use-this
   public load = (): ChartSimulator[] => {
     const simulators = newCharts.charts.map((chart) => {
       const mutableChart: MutableChart = {
@@ -73,7 +74,7 @@ class ChartLoader implements IChartLoader {
         orders: [],
         colors: [],
       };
-      return this.instantiateChart(mutableChart);
+      return ChartLoader.instantiateChart(mutableChart);
     });
     simulators.map((simulator) => simulator.reset());
     return simulators;

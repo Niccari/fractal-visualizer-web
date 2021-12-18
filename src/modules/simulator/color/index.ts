@@ -58,7 +58,7 @@ class ColorGenerator implements IColorGenerator {
     { position: 255, red: 255, green: 154, blue: 154 },
   ];
 
-  private colorToHex = (color: number) => {
+  private static colorToHex = (color: number) => {
     const hex = Math.round(color).toString(16);
     return hex.length === 1 ? `0${hex}` : hex;
   };
@@ -67,7 +67,7 @@ class ColorGenerator implements IColorGenerator {
     this.config = config;
     this.colorStartIndex = 0;
     this.colorIterateIndex = 0;
-    this.alphaHex = this.colorToHex(Math.floor(255 * this.config.alpha));
+    this.alphaHex = ColorGenerator.colorToHex(Math.floor(255 * this.config.alpha));
     const gradient: ColorGradientItem[] = (() => {
       switch (config.type.toString()) {
         case ColorType.RAINBOW:
@@ -97,7 +97,11 @@ class ColorGenerator implements IColorGenerator {
       const red = start.red + ratio * (end.red - start.red);
       const green = start.green + ratio * (end.green - start.green);
       const blue = start.blue + ratio * (end.blue - start.blue);
-      this.colorTable.push(`#${this.colorToHex(red)}${this.colorToHex(green)}${this.colorToHex(blue)}${this.alphaHex}`);
+      this.colorTable.push(
+        `#${ColorGenerator.colorToHex(red)}${ColorGenerator.colorToHex(green)}${ColorGenerator.colorToHex(blue)}${
+          this.alphaHex
+        }`
+      );
       if (end.position === i) {
         start = end;
         endIndex += 1;
