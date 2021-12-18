@@ -1,5 +1,6 @@
-import { Chart, IChartSimulator, MutableChart } from "./chart";
+import { Chart, MutableChart } from "./models";
 import ColorGenerator from "../color";
+import IChartSimulator from "./interface";
 
 class ChartSimulator implements IChartSimulator {
   protected chart: MutableChart;

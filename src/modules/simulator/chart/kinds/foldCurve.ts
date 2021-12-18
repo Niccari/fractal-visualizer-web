@@ -1,6 +1,6 @@
 import ChartSimulator from "..";
 import RandomGenerator from "../../../randomizer";
-import { ChartType, MutableChart } from "../chart";
+import { ChartType, MutableChart } from "../models";
 
 export const FoldCurveType = {
   DRAGON: "dragon",

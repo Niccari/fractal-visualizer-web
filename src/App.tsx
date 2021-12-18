@@ -1,21 +1,20 @@
 import "./App.css";
 import Canvas from "./components/Canvas";
-import { setContext } from "./modules/visualizer/action";
-import { start, onScroll, onTouchScroll } from "./modules/simulator/actions";
+import { simulator, visualizer } from "./container";
 
 const App = (): JSX.Element => {
   return (
     <div className="App">
       <Canvas
         onCanvasReady={(context: CanvasRenderingContext2D) => {
-          setContext(context);
-          start();
+          visualizer.setContext(context);
+          simulator.start(50);
         }}
         onScroll={(deltaY: number) => {
-          onScroll(deltaY);
+          simulator.handleScroll(deltaY);
         }}
         onTouchScroll={(touchY: number) => {
-          onTouchScroll(touchY);
+          simulator.handleTouchScroll(touchY);
         }}
       />
     </div>

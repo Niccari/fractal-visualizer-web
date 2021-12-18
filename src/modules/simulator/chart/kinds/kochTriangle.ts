@@ -1,12 +1,12 @@
-import { ChartType, MutableChart } from "../chart";
+import { ChartType, MutableChart } from "../models";
 import KochCurve from "./kochCurve";
 
 class KochTriangle extends KochCurve {
   private isInner = false;
 
-  public constructor(_chart: MutableChart) {
-    super(_chart);
-    this.isInner = _chart.kind === ChartType.KOCH_TRIANGLE_INNER;
+  public constructor(chart: MutableChart) {
+    super(chart);
+    this.isInner = chart.kind === ChartType.KOCH_TRIANGLE_INNER;
   }
 
   public pointLength(): number {

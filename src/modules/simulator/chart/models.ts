@@ -31,15 +31,6 @@ interface Chart {
 
 type DefaultComplexity = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 100;
 
-interface IChartSimulator {
-  reset(): void;
-  getChart(): Chart;
-  pointLength(): number;
-  setBasePoints(): void;
-  setOrders(): void;
-  simulate(): void;
-}
-
 interface Scale {
   w: number;
   h: number;
@@ -96,4 +87,4 @@ interface MutableChart extends Chart {
   randomizer?: Randomizer;
 }
 
-export type { Chart, DefaultComplexity, IChartSimulator, MutableChart, Point, Style };
+export type { Chart, DefaultComplexity, MutableChart, Point, Style };

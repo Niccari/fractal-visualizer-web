@@ -1,6 +1,6 @@
 import ChartSimulator from "..";
 import RandomGenerator from "../../../randomizer";
-import { ChartType, MutableChart } from "../chart";
+import { ChartType, MutableChart } from "../models";
 
 export const TriCurveType = {
   CIS: "cis",
@@ -13,10 +13,10 @@ class TriCurve extends ChartSimulator {
   private readonly lengthRandom: RandomGenerator;
   private readonly angleRandom: RandomGenerator;
 
-  public constructor(_chart: MutableChart) {
-    super(_chart);
-    this.lengthRandom = new RandomGenerator(_chart.randomizer?.size?.seed || -1);
-    this.angleRandom = new RandomGenerator(_chart.randomizer?.angle?.seed || -1);
+  public constructor(chart: MutableChart) {
+    super(chart);
+    this.lengthRandom = new RandomGenerator(chart.randomizer?.size?.seed || -1);
+    this.angleRandom = new RandomGenerator(chart.randomizer?.angle?.seed || -1);
     this.curveType = (() => {
       switch (this.chart.kind) {
         case ChartType.TRI_CIS:
@@ -28,10 +28,10 @@ class TriCurve extends ChartSimulator {
       }
     })();
     this.chart.complexity = (() => {
-      if (_chart.complexity > 7) {
+      if (chart.complexity > 7) {
         return 7;
       }
-      return _chart.complexity;
+      return chart.complexity;
     })();
   }
 
