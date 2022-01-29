@@ -1,6 +1,6 @@
 {
   "name": "fractal-visualizer",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "This app visualize fractal shape, running on modern browsers.",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.9.1",
