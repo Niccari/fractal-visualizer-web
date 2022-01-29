@@ -1,34 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta property="description" content="フラクタル図形などを使い、様々な図形を描画するツール" />
-    <meta property="keyword" content="グラフ,描画,フラクタル,Graph,Draw,Fractal" />
-    <meta
-      name="Fractal Visualizer for Web"
-      content="Visualize fractal shapes on web."
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <title>Fractal Visualizer for web</title>
-
-    <!-- ogp -->
-    <meta property="og:url" content="https://niccari.net/fv" />
-    <meta property="og:site_name" content="niccari.net" />
-    <meta property="og:title" content="Fractal Visualizer for web" />
-    <meta property="og:image" content="https://niccari.net/fv/logo192.png" />
-    <meta property="og:description" content="フラクタル図形などを使い、様々な図形を描画するツール" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="niccari1" />
-    <meta name="twitter:title" content="Fractal Visualizer for web" />
-    <meta name="twitter:description" content="フラクタル図形などを使い、様々な図形を描画するツール" />
-    <meta name="twitter:image" content="https://niccari.net/fv/logo192.png" />
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-  </body>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Fractal Visualizer for Web</title>
+  <meta http-equiv="Content-Type" content="text/html"; charset="utf-8"/>
+  <link rel="icon" href="./favicon.ico">
+  <style>
+    body {
+      overflow: hidden;
+      background: #000000;
+      margin: 0px;
+    }
+    #canvas {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" class="canvas" ></canvas>
+</body>
 </html>

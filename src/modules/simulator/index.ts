@@ -1,4 +1,4 @@
-import IVisualizer from "../visualizer/interface";
+import IVisualizer from "../../visualizer/interface";
 import ChartSimulator from "./chart";
 import { Chart } from "./chart/models";
 import ISimulator from "./interface";

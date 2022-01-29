@@ -1,13 +1,24 @@
-import React, { useEffect } from "react";
+import IViewEvent from "../viewEvent/interface";
+import IView from "./interface";
 
-interface Props {
-  onCanvasReady: (_: CanvasRenderingContext2D) => void;
-  onScroll: (_: number) => void;
-  onTouchScroll: (_: number) => void;
-}
+export const HtmlDefines = {
+  UPLOADED_ID_GIF: "gif_uploaded",
+  UPLOADED_ID_MAP: "dat_uploaded",
+  INPUT_ID_GIF: "gif_file",
+  INPUT_ID_MAP: "dat_file",
+  GIF_SRC_PREVIEW: "gif_src_preview",
 
-const Canvas: React.FC<Props> = ({ onCanvasReady, onScroll, onTouchScroll }: Props) => {
-  const adjustCanvas = (canvas: HTMLCanvasElement): void => {
+  IS_LOADING: "is_loading",
+  ERROR_MESSAGE: "error_message",
+
+  CANVAS_GIF_MAP_PREVIEW: "gif_map_preview",
+  GIF_MAP_DOWNLOAD: "gif_map_download",
+  GIF_MAP_DOWNLOAD_BUTTON: "git_map_download_button",
+} as const;
+export type HtmlDefines = typeof HtmlDefines[keyof typeof HtmlDefines];
+
+export class View implements IView {
+  private adjustCanvas = (canvas: HTMLCanvasElement): void => {
     const scale = window.devicePixelRatio;
     // eslint-disable-next-line no-param-reassign
     canvas.width = window.innerWidth * scale * 2;
@@ -15,7 +26,7 @@ const Canvas: React.FC<Props> = ({ onCanvasReady, onScroll, onTouchScroll }: Pro
     canvas.height = window.innerHeight * scale * 2;
   };
 
-  useEffect(() => {
+  public constructor(viewEvent: IViewEvent) {
     const canvas = document.getElementById("canvas");
     if (canvas instanceof HTMLCanvasElement) {
       if ("ontouchstart" in window) {
@@ -24,7 +35,7 @@ const Canvas: React.FC<Props> = ({ onCanvasReady, onScroll, onTouchScroll }: Pro
         }) as EventListener;
         const onTouchMoveEvent = ((e: TouchEvent) => {
           e.preventDefault();
-          onTouchScroll(e.touches[0].pageY);
+          viewEvent.onTouchScroll(e.touches[0].pageY);
         }) as EventListener;
         canvas.addEventListener("touchstart", onTouchStartEvent, { passive: false });
         canvas.addEventListener("touchend", onTouchStartEvent, { passive: false });
@@ -32,21 +43,17 @@ const Canvas: React.FC<Props> = ({ onCanvasReady, onScroll, onTouchScroll }: Pro
         canvas.addEventListener("touchmove", onTouchMoveEvent, { passive: false });
       } else {
         canvas.onwheel = (e: WheelEvent) => {
-          onScroll(e.deltaY);
+          viewEvent.onScroll(e.deltaY);
         };
       }
       window.onresize = () => {
-        adjustCanvas(canvas);
+        this.adjustCanvas(canvas);
       };
       const context = canvas.getContext("2d");
       if (context instanceof CanvasRenderingContext2D) {
-        adjustCanvas(canvas);
-        onCanvasReady(context);
+        this.adjustCanvas(canvas);
+        viewEvent.onCanvasReady(context);
       }
     }
-  }, []);
-
-  return <canvas className="canvas" id="canvas" style={{ width: "100%", height: "100%" }} />;
-};
-
-export default Canvas;
+  }
+}
