@@ -1,4 +1,5 @@
 import ChartSimulator from "..";
+import { degree2radian } from "../../../../libs/math";
 import RandomGenerator from "../../../randomizer";
 import { MutableChart } from "../models";
 
@@ -30,7 +31,7 @@ class BinaryTree extends ChartSimulator {
     const { chart } = this;
     chart.basePoints[0] = { x: 0.0, y: -0.1 };
     chart.basePoints[1] = { x: 0.0, y: 0.0 };
-    this.divideBasePoints(1, 0.85, (45 * Math.PI) / 180);
+    this.divideBasePoints(1, 0.85, degree2radian(45));
   }
 
   protected divideBasePoints(depth: number, parentLength: number, parentAngle: number): void {

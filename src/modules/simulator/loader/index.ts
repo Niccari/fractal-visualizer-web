@@ -1,4 +1,5 @@
 import newCharts from "../../../charts.json";
+import { degree2radian } from "../../../libs/math";
 import ChartSimulator from "../chart";
 import BinaryTree from "../chart/kinds/binaryTree";
 import Circle from "../chart/kinds/circle";
@@ -65,8 +66,8 @@ class ChartLoader implements IChartLoader {
           type: chart.color.type as ColorType,
         },
         rotation: {
-          angle: (chart.rotation.angle * Math.PI) / 180,
-          speed: (chart.rotation.speed * Math.PI) / 180,
+          angle: degree2radian(chart.rotation.angle),
+          speed: degree2radian(chart.rotation.speed),
         },
         complexity: chart.complexity as DefaultComplexity,
         basePoints: [],

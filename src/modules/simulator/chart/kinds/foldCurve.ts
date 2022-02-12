@@ -1,4 +1,5 @@
 import ChartSimulator from "..";
+import { degree2radian } from "../../../../libs/math";
 import RandomGenerator from "../../../randomizer";
 import { ChartType, MutableChart } from "../models";
 
@@ -12,7 +13,7 @@ export type FoldCurveType = typeof FoldCurveType[keyof typeof FoldCurveType];
 // noinspection DuplicatedCode
 class FoldCurve extends ChartSimulator {
   private readonly arm0 = Math.sqrt(2) / 2;
-  private readonly angle0 = (45 * Math.PI) / 180;
+  private readonly angle0 = degree2radian(45);
   private readonly curveType: FoldCurveType;
   private readonly lengthRandom: RandomGenerator;
   private readonly angleRandom: RandomGenerator;
