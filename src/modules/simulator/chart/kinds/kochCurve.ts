@@ -1,10 +1,11 @@
 import ChartSimulator from "..";
+import { degree2radian } from "../../../../libs/math";
 import RandomGenerator from "../../../randomizer";
 import { MutableChart } from "../models";
 
 class KochCurve extends ChartSimulator {
   protected readonly length0 = 1.0;
-  protected readonly angle0 = (60 * Math.PI) / 180;
+  protected readonly angle0 = degree2radian(60);
   private readonly lengthRandom: RandomGenerator;
   private readonly angleRandom: RandomGenerator;
 

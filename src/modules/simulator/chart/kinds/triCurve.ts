@@ -1,4 +1,5 @@
 import ChartSimulator from "..";
+import { degree2radian } from "../../../../libs/math";
 import RandomGenerator from "../../../randomizer";
 import { ChartType, MutableChart } from "../models";
 
@@ -45,7 +46,7 @@ class TriCurve extends ChartSimulator {
     chart.basePoints = [];
     chart.basePoints.push({ x: -0.1, y: 0.0 });
     chart.basePoints.push({ x: 0.1, y: 0.0 });
-    this.divideBasePoints(1, 1.0, (90 * Math.PI) / 180);
+    this.divideBasePoints(1, 1.0, degree2radian(90));
   }
 
   protected divideBasePoints(depth: number, parentLength: number, parentAngle: number): void {

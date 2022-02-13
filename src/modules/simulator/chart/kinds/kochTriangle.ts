@@ -1,3 +1,4 @@
+import { degree2radian } from "../../../../libs/math";
 import { ChartType, MutableChart } from "../models";
 import KochCurve from "./kochCurve";
 
@@ -20,8 +21,8 @@ class KochTriangle extends KochCurve {
     this.chart.basePoints.push({ x: 0.1, y: 0.0 });
     this.divideBasePoints(1, this.length0, this.angle0);
 
-    const sin120 = -Math.sin((120 * Math.PI) / 180);
-    const cos120 = Math.cos((120 * Math.PI) / 180);
+    const sin120 = -Math.sin(degree2radian(120));
+    const cos120 = Math.cos(degree2radian(120));
 
     const pointLength = this.pointLength();
     if (this.isInner) {
