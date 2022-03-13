@@ -1,26 +1,24 @@
 import Clover from "../../../../../src/modules/simulator/chart/kinds/clover";
 import { ChartType, Point } from "../../../../../src/modules/simulator/chart/models";
-import { baseChart, defaultRadius, zip } from "../chartSimulator.test";
+import ChartSimulator from "../../../../../src/modules/simulator/chart";
+import { baseChart, zip } from "../testCommon";
 
 describe("Clover test", () => {
   test("init test", () => {
-    const clover = new Clover({
+    const chart = new Clover();
+    const simulator = new ChartSimulator(chart, {
       ...baseChart,
       kind: ChartType.SUNRISE,
-      basePoints: [],
-      points: [],
-      orders: [],
       complexity: 4,
     });
-    clover.reset();
-    clover.simulate();
 
-    const { points } = clover.getChart();
+    simulator.reset();
+    const { points } = simulator.simulate();
     const length = 4 * 40;
     const items = zip<Point>(
       points,
       Array.from({ length }, (_, k) => k).map((index) => {
-        const amplify = defaultRadius * Math.sin((2 * Math.PI * 4 * index) / length);
+        const amplify = 0.1 * Math.sin((2 * Math.PI * 4 * index) / length);
         const angle = (2 * Math.PI * index) / length - Math.PI;
         return {
           x: amplify * Math.cos(angle),

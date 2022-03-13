@@ -67,7 +67,6 @@ export const ChartType = {
   KOCH_TRIANGLE_INNER: "koch_triangle_inner",
   KOCH_TRIANGLE_OUTER: "koch_triangle_outer",
   FOLD_DRAGON: "fold_dragon",
-  FOLD_TRIANGLE: "fold_triangle",
   FOLD_CCURVE: "fold_ccurve",
   TRI_CIS: "tri_cis",
   TRI_TRANS: "tri_trans",
@@ -75,9 +74,9 @@ export const ChartType = {
 } as const;
 export type ChartType = typeof ChartType[keyof typeof ChartType];
 
-interface MutableChart extends Chart {
+interface ChartConfig {
   kind: ChartType;
-  basePoints: Point[];
+  style: Style;
   complexity: DefaultComplexity;
   center: Point;
   scale: Scale;
@@ -87,4 +86,4 @@ interface MutableChart extends Chart {
   randomizer?: Randomizer;
 }
 
-export type { Chart, DefaultComplexity, MutableChart, Point, Style };
+export type { Chart, DefaultComplexity, ChartConfig, Point, Order, Style, Randomizer };

@@ -1,75 +1,68 @@
-import { Chart, MutableChart } from "./models";
+import { Chart, ChartConfig, ChartType, Order, Point } from "./models";
 import ColorGenerator from "../color";
 import IChartSimulator from "./interface";
+import IChartShaper from "./kinds/interface";
+import { IColorGenerator } from "../color/interface";
+
+interface ChartIdentity {
+  basePoints: Point[];
+  orders: Order[];
+  config: ChartConfig;
+  colorGenerator: IColorGenerator;
+  timestamp: number;
+}
 
 class ChartSimulator implements IChartSimulator {
-  protected chart: MutableChart;
-  private readonly colorGenerator;
-  public constructor(chart: MutableChart) {
-    this.chart = chart;
-    this.colorGenerator = new ColorGenerator(this.chart.color);
+  private shaper: IChartShaper;
+  private config: ChartConfig;
+  private identity?: ChartIdentity;
+
+  public constructor(shaper: IChartShaper, config: ChartConfig) {
+    this.shaper = shaper;
+    this.config = config;
   }
 
   public reset(): void {
-    this.setBasePoints();
-    this.setOrders();
+    const { shaper, config } = this;
+    this.identity = {
+      basePoints: shaper.configureBasePoints(config),
+      orders: shaper.configureOrders(config.complexity),
+      config,
+      colorGenerator: new ColorGenerator(config.color),
+      timestamp: 0,
+    };
   }
 
-  public getChart(): Chart {
-    return this.chart;
-  }
-
-  public pointLength(): number {
-    return this.chart.complexity;
-  }
-
-  public setBasePoints(): void {
-    const { chart } = this;
-    chart.basePoints = [];
-    const pointLength = this.pointLength();
-    for (let i = 0; i < pointLength; i += 1) {
-      const radian = (2 * Math.PI * i) / pointLength;
-      const x = 0.1 * Math.sin(radian);
-      const y = 0.1 * Math.cos(radian);
-      chart.basePoints[i] = { x, y };
+  public simulate(): Chart {
+    const { identity } = this;
+    if (!identity) {
+      throw new Error("shape not reset");
     }
-  }
-
-  public setOrders(): void {
-    const { chart } = this;
-    const pointLength = this.pointLength();
-    for (let i = 0; i < pointLength; i += 1) {
-      chart.orders.push({
-        link: [i, (i + 1) % pointLength],
-      });
+    const { config, orders, timestamp } = identity;
+    const { rotation, scale, center } = config;
+    if (identity.config.kind === ChartType.RANDOM) {
+      this.reset();
     }
-  }
-
-  public simulate(): void {
-    const { chart } = this;
-    const pointLength = this.pointLength();
-    for (let i = 0; i < pointLength; i += 1) {
-      const translateX = chart.basePoints[i].x * chart.scale.w;
-      const translateY = chart.basePoints[i].y * chart.scale.h;
-      const sin = Math.sin(chart.rotation.angle);
-      const cos = Math.cos(chart.rotation.angle);
-      chart.points[i] = {
-        x: chart.center.x + translateX * cos - translateY * sin,
-        y: chart.center.y + translateX * sin + translateY * cos,
+    const currentAngle = rotation.angle + rotation.speed * timestamp;
+    const sin = Math.sin(currentAngle);
+    const cos = Math.cos(currentAngle);
+    const points = identity.basePoints.map((point) => {
+      const translateX = point.x * scale.w;
+      const translateY = point.y * scale.h;
+      return {
+        x: center.x + translateX * cos - translateY * sin,
+        y: center.y + translateX * sin + translateY * cos,
       };
-    }
-    chart.rotation.angle += chart.rotation.speed;
-    if (chart.rotation.angle > Math.PI) {
-      chart.rotation.angle -= 2 * Math.PI;
-    }
-    if (chart.rotation.angle < -Math.PI) {
-      chart.rotation.angle += 2 * Math.PI;
-    }
-
-    for (let index = 0; index < chart.orders.length; index += 1) {
-      chart.colors[index] = this.colorGenerator.next();
-    }
-    this.colorGenerator.endIteration();
+    });
+    const colors = points.map(() => identity.colorGenerator.next());
+    identity.colorGenerator.endIteration();
+    identity.timestamp += 1;
+    return {
+      points,
+      style: config.style,
+      colors,
+      orders,
+    };
   }
 }
 

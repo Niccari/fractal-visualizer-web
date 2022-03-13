@@ -1,18 +1,34 @@
-import ChartSimulator from "..";
+import IChartShaper from "./interface";
+import { ChartConfig, Order, Point } from "../models";
+import { range } from "../../../../libs/collection";
+import OrderGenerator from "../orders";
+import { OrderType } from "../orders/interface";
 
-class Clover extends ChartSimulator {
-  public pointLength(): number {
-    return this.chart.complexity * 40;
+class Clover implements IChartShaper {
+  private static pointCounts(complexity: number): number {
+    return complexity * 40;
   }
 
-  public setBasePoints(): void {
-    for (let i = 0; i < this.pointLength(); i += 1) {
-      const sinA = Math.sin((2 * Math.PI * this.chart.complexity * i) / this.pointLength());
-      this.chart.basePoints[i] = {
-        x: 0.1 * sinA * Math.cos((2 * Math.PI * i) / this.pointLength() - Math.PI),
-        y: 0.1 * sinA * Math.sin((2 * Math.PI * i) / this.pointLength() - Math.PI),
+  // eslint-disable-next-line class-methods-use-this
+  public configureBasePoints(chart: ChartConfig): Point[] {
+    const length = Clover.pointCounts(chart.complexity);
+    return range(length).map((i) => {
+      const baseRadian = (2 * Math.PI * i) / length;
+      const amplitude = 0.1 * Math.sin(chart.complexity * baseRadian);
+      return {
+        x: amplitude * Math.cos(baseRadian - Math.PI),
+        y: amplitude * Math.sin(baseRadian - Math.PI),
       };
-    }
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  public configureOrders(complexity: number): Order[] {
+    const length = Clover.pointCounts(complexity);
+    return new OrderGenerator().generate({
+      type: OrderType.LOOP,
+      pointCount: length,
+    });
   }
 }
 

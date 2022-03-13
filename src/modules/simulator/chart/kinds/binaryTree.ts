@@ -1,87 +1,99 @@
-import ChartSimulator from "..";
 import { degree2radian } from "../../../../libs/math";
 import RandomGenerator from "../../../randomizer";
-import { MutableChart } from "../models";
+import { ChartConfig, Order, Point } from "../models";
+import IChartShaper from "./interface";
 
-class BinaryTree extends ChartSimulator {
-  private readonly lengthRandom: RandomGenerator;
-  private readonly angleRandom: RandomGenerator;
+interface PointWithIndex extends Point {
+  index: number;
+}
 
-  public constructor(chart: MutableChart) {
-    super(chart);
-    this.lengthRandom = new RandomGenerator(chart.randomizer?.size?.seed || -1);
-    this.angleRandom = new RandomGenerator(chart.randomizer?.angle?.seed || -1);
-    this.chart.complexity = (() => {
-      if (chart.complexity < 2) {
-        return 2;
-      }
-      if (chart.complexity > 10) {
-        return 10;
-      }
-      return chart.complexity;
-    })();
+class BinaryTree implements IChartShaper {
+  private static pointCounts(complexity: number): number {
+    const newComplexity = Math.max(Math.min(complexity, 10), 2);
+    return 2 ** (newComplexity + 1);
   }
 
-  public pointLength(): number {
-    const { complexity } = this.chart;
-    return 2 ** (complexity + 1);
+  public configureBasePoints(config: ChartConfig): Point[] {
+    const lengthRandom = new RandomGenerator(config.randomizer?.size?.seed || -1);
+    const angleRandom = new RandomGenerator(config.randomizer?.angle?.seed || -1);
+    const basePoints: PointWithIndex[] = [
+      { x: 0.0, y: -0.1, index: 0 },
+      { x: 0.0, y: 0.0, index: 1 },
+    ];
+    const result = this.divideBasePoints(
+      config,
+      basePoints[0],
+      basePoints[1],
+      1,
+      0.85,
+      degree2radian(45),
+      lengthRandom,
+      angleRandom
+    );
+    return [basePoints[0], basePoints[1], ...result];
   }
 
-  public setBasePoints(): void {
-    const { chart } = this;
-    chart.basePoints[0] = { x: 0.0, y: -0.1 };
-    chart.basePoints[1] = { x: 0.0, y: 0.0 };
-    this.divideBasePoints(1, 0.85, degree2radian(45));
-  }
-
-  protected divideBasePoints(depth: number, parentLength: number, parentAngle: number): void {
-    const lengthRandom = (this.chart.randomizer?.size?.amplify || 0.0) * this.lengthRandom.generate();
-    const angleRandom = (this.chart.randomizer?.angle?.amplify || 0.0) * this.angleRandom.generate();
-    const length = parentLength * (lengthRandom + (this.chart.mutation?.size || 1.0));
-    const angle = parentAngle * (angleRandom + (this.chart.mutation?.angle || 1.0));
-    if (depth >= Math.floor(this.pointLength() / 2)) {
-      return;
+  private divideBasePoints(
+    config: ChartConfig,
+    start: PointWithIndex,
+    end: PointWithIndex,
+    depth: number,
+    parentLength: number,
+    parentAngle: number,
+    lengthRandomizer: RandomGenerator,
+    angleRandomizer: RandomGenerator
+  ): PointWithIndex[] {
+    const { complexity, randomizer, mutation } = config;
+    const lengthRandom = (randomizer?.size?.amplify || 0.0) * lengthRandomizer.generate();
+    const angleRandom = (randomizer?.angle?.amplify || 0.0) * angleRandomizer.generate();
+    const length = parentLength * (lengthRandom + (mutation?.size || 1.0));
+    const angle = parentAngle * (angleRandom + (mutation?.angle || 1.0));
+    if (depth >= Math.floor(BinaryTree.pointCounts(complexity) / 2)) {
+      return [];
     }
-    const start = this.chart.basePoints[Math.floor(depth / 2)];
-    const end = this.chart.basePoints[depth];
     const vectorX = end.x - start.x;
     const vectorY = end.y - start.y;
-
     const sin = Math.sin(angle);
     const cos = Math.cos(angle);
-    this.chart.basePoints[2 * depth] = {
+    const leftDepth = 2 * depth;
+    const rightDepth = 2 * depth + 1;
+    const leftPoint = {
       x: end.x + length * (cos * vectorX - sin * vectorY),
       y: end.y + length * (sin * vectorX + cos * vectorY),
+      index: leftDepth,
     };
-    this.chart.basePoints[2 * depth + 1] = {
+    const rightPoint = {
       x: end.x + length * (cos * vectorX + sin * vectorY),
       y: end.y + length * (-sin * vectorX + cos * vectorY),
+      index: rightDepth,
     };
-    this.divideBasePoints(2 * depth, length, angle);
-    this.divideBasePoints(2 * depth + 1, length, angle);
+    const result: PointWithIndex[] = [];
+    result.push(
+      ...this.divideBasePoints(config, end, leftPoint, leftDepth, length, angle, lengthRandomizer, angleRandomizer)
+    );
+    result.push(
+      ...this.divideBasePoints(config, end, rightPoint, rightDepth, length, angle, lengthRandomizer, angleRandomizer)
+    );
+    return [leftPoint, rightPoint, ...result.sort((a, b) => a.index - b.index)];
   }
 
-  public setOrders(): void {
-    this.chart.orders[0] = {
-      link: [0, 1],
-    };
-    this.setOrdersRecursive(1, 1);
+  // eslint-disable-next-line class-methods-use-this
+  public configureOrders(complexity: number): Order[] {
+    const maxDepth = BinaryTree.pointCounts(complexity) / 2;
+    return [{ link: [0, 1] }, ...this.setOrdersRecursive(maxDepth, 1).sort((a, b) => a.link[1] - b.link[1])];
   }
 
-  public setOrdersRecursive(base: number, src: number): void {
-    if (base >= this.pointLength() / 2) {
-      return;
+  public setOrdersRecursive(maxDepth: number, base: number): Order[] {
+    if (base >= maxDepth) {
+      return [];
     }
     const dstLeft = 2 * base;
     const dstRight = 2 * base + 1;
-    this.chart.orders[dstLeft - 1] = {
-      link: [src, dstLeft],
-    };
-    this.chart.orders[dstRight - 1] = {
-      link: [src, dstRight],
-    };
-    this.setOrdersRecursive(dstLeft, dstLeft);
-    this.setOrdersRecursive(dstRight, dstRight);
+    const leftOrder = { link: [base, dstLeft] };
+    const rightOrder = { link: [base, dstRight] };
+    const leftOrders = this.setOrdersRecursive(maxDepth, dstLeft);
+    const rightOrders = this.setOrdersRecursive(maxDepth, dstRight);
+    return [leftOrder, rightOrder, ...leftOrders, ...rightOrders];
   }
 }
 

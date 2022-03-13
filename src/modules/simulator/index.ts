@@ -55,16 +55,17 @@ class Simulator implements ISimulator {
       const url = `${window.location.pathname}?depth=${this.scrollY}`;
       window.history.replaceState(null, "Fractal-Visualizer depth: + scrollY", url);
     }
-    this.simulators.forEach((s) => s.simulate());
-    return this.simulators.map((s) => {
-      const chart = s.getChart();
-      chart.points = chart.points.map((point) => {
-        return {
-          ...point,
-          y: point.y - this.scrollY / 300,
-        };
-      });
-      return chart;
+    const charts = this.simulators.map((s) => s.simulate());
+    return charts.map((c) => {
+      return {
+        ...c,
+        points: c.points.map((point) => {
+          return {
+            ...point,
+            y: point.y - this.scrollY / 300,
+          };
+        }),
+      };
     });
   };
 }

@@ -1,15 +1,31 @@
-import ChartSimulator from "..";
+import { ChartConfig, Order, Point } from "../models";
+import PointsGenerator from "../points";
+import { PointsType } from "../points/interface";
+import OrderGenerator from "../orders";
+import { OrderType } from "../orders/interface";
+import IChartShaper from "./interface";
 
-class Random extends ChartSimulator {
-  public simulate(): void {
-    const { chart } = this;
-    const pointLength = this.pointLength();
-    for (let i = 0; i < pointLength; i += 1) {
-      const x = 0.1 * (Math.random() - 0.5);
-      const y = 0.1 * (Math.random() - 0.5);
-      chart.basePoints[i] = { x, y };
-    }
-    super.simulate();
+class Random implements IChartShaper {
+  private static pointCounts(complexity: number): number {
+    return complexity;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  public configureBasePoints(config: ChartConfig): Point[] {
+    const length = Random.pointCounts(config.complexity);
+    return new PointsGenerator().generate({
+      type: PointsType.RANDOM,
+      length,
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  public configureOrders(complexity: number): Order[] {
+    const length = Random.pointCounts(complexity);
+    return new OrderGenerator().generate({
+      type: OrderType.LOOP,
+      pointCount: length,
+    });
   }
 }
 

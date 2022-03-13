@@ -1,12 +1,8 @@
-import { Chart } from "./models";
+import { Chart, ChartConfig } from "./models";
 
 interface IChartSimulator {
-  reset(): void;
-  getChart(): Chart;
-  pointLength(): number;
-  setBasePoints(): void;
-  setOrders(): void;
-  simulate(): void;
+  reset(chartConfig: ChartConfig): void;
+  simulate(): Chart;
 }
 
 export default IChartSimulator;

@@ -1,21 +1,18 @@
-import KochTriangle from "../../../../../src/modules/simulator/chart/kinds/kochTriangle";
 import { ChartType, Point } from "../../../../../src/modules/simulator/chart/models";
-import { baseChart, zip } from "../chartSimulator.test";
+import { baseChart, zip } from "../testCommon";
+import ChartSimulator from "../../../../../src/modules/simulator/chart";
+import KochTriangle from "../../../../../src/modules/simulator/chart/kinds/fold/kochTriangle";
 
 describe("Koch Triangle Inner Curve test", () => {
   test("init test", () => {
-    const kochTriangleInnerCurve = new KochTriangle({
+    const curve = new KochTriangle();
+    const simulator = new ChartSimulator(curve, {
       ...baseChart,
       kind: ChartType.KOCH_TRIANGLE_INNER,
-      basePoints: [],
-      points: [],
-      orders: [],
       complexity: 3,
     });
-    kochTriangleInnerCurve.reset();
-    kochTriangleInnerCurve.simulate();
-
-    const { points } = kochTriangleInnerCurve.getChart();
+    simulator.reset();
+    const { points } = simulator.simulate();
     const items = zip<Point>(points, [
       { x: -0.1, y: 0.05773502691896258 },
       { x: -0.07777777777777778, y: 0.05773502691896258 },

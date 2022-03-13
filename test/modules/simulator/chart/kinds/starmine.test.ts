@@ -1,22 +1,19 @@
 import { degree2radian } from "../../../../../src/libs/math";
 import Starmine from "../../../../../src/modules/simulator/chart/kinds/starmine";
 import { ChartType, Point } from "../../../../../src/modules/simulator/chart/models";
-import { baseChart, zip, defaultRadius } from "../chartSimulator.test";
+import { baseChart, defaultRadius, zip } from "../testCommon";
+import ChartSimulator from "../../../../../src/modules/simulator/chart";
 
 describe("Starmine test", () => {
   test("init test", () => {
-    const star = new Starmine({
+    const chart = new Starmine();
+    const simulator = new ChartSimulator(chart, {
       ...baseChart,
       kind: ChartType.STARMINE,
-      basePoints: [],
-      points: [],
-      orders: [],
       complexity: 3,
     });
-    star.reset();
-    star.simulate();
-
-    const { points } = star.getChart();
+    simulator.reset();
+    const { points } = simulator.simulate();
     const items = zip<Point>(points, [
       {
         x: defaultRadius * Math.cos(degree2radian(-180)),

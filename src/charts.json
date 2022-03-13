@@ -8,8 +8,8 @@
                 "y": 0.3
             },
             "scale": {
-                "w": 2.0,
-                "h": 2.0
+                "w": 1.0,
+                "h": 1.0
             },
             "rotation": {
                 "angle": 30,
@@ -47,16 +47,16 @@
                 "y": 1.2
             },
             "scale": {
-                "w": 3.0,
-                "h": 3.0
+                "w": 0.4,
+                "h": 0.4
             },
             "rotation": {
                 "angle": 30,
-                "speed": 1
+                "speed": -0.9
             },
             "mutation": {
-                "size": 1.0,
-                "angle": 5.0
+                "size": -1.0,
+                "angle": 1.0
             },
             "randomizer": {
                 "size": {
@@ -125,24 +125,24 @@
                 "y": 3.3
             },
             "scale": {
-                "w": 3.0,
-                "h": 2.0
+                "w": 1.0,
+                "h": 1.0
             },
             "rotation": {
-                "angle": 70,
+                "angle": 80,
                 "speed": 0
             },
             "mutation": {
-                "size": 1.05,
-                "angle": 0.75
+                "size": 1.2,
+                "angle": 1.7
             },
             "randomizer": {
                 "size": {
-                    "amplify": 1.0,
+                    "amplify": 0.0,
                     "seed": 90129041
                 },
                 "angle": {
-                    "amplify": 0.1,
+                    "amplify": 0.0,
                     "seed": 124818419
                 }
             },
@@ -289,8 +289,8 @@
                 "y": 6.0
             },
             "scale": {
-                "w": 1.5,
-                "h": 1.5
+                "w": 0.4,
+                "h": 0.4
             },
             "rotation": {
                 "angle": 30,
@@ -302,11 +302,11 @@
             },
             "randomizer": {
                 "size": {
-                    "amplify": 0.1,
+                    "amplify": 3.0,
                     "seed": 90129041
                 },
                 "angle": {
-                    "amplify": 0.1,
+                    "amplify": -0.6,
                     "seed": 124818419
                 }
             },
@@ -316,7 +316,7 @@
             },
             "color": {
                 "type": "pastel",
-                "alpha": 0.9,
+                "alpha": 0.6,
                 "speed": 0.5
             }
         },
@@ -406,16 +406,16 @@
                 "y": 11.2
             },
             "scale": {
-                "w": 1.6,
-                "h": 2.2
+                "w": 0.7,
+                "h": 1.2
             },
             "rotation": {
-                "angle": 30,
-                "speed": 0.1
+                "angle": 90,
+                "speed": 0.02
             },
             "mutation": {
-                "size": 1.0,
-                "angle": 3.0
+                "size": 0.6,
+                "angle": -3.4
             },
             "randomizer": {
                 "size": {
