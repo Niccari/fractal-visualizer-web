@@ -1,21 +1,18 @@
-import TriCurve from "../../../../../src/modules/simulator/chart/kinds/triCurve";
 import { ChartType, Point } from "../../../../../src/modules/simulator/chart/models";
-import { baseChart, zip } from "../chartSimulator.test";
+import { baseChart, zip } from "../testCommon";
+import TriCurve from "../../../../../src/modules/simulator/chart/kinds/fold/triCurve";
+import ChartSimulator from "../../../../../src/modules/simulator/chart";
 
 describe("Tri Cis Curve test", () => {
   test("init test", () => {
-    const triCisCurve = new TriCurve({
+    const triCisCurve = new TriCurve();
+    const simulator = new ChartSimulator(triCisCurve, {
       ...baseChart,
       kind: ChartType.TRI_CIS,
-      basePoints: [],
-      points: [],
-      orders: [],
-      complexity: 3,
+      complexity: 4,
     });
-    triCisCurve.reset();
-    triCisCurve.simulate();
-
-    const { points } = triCisCurve.getChart();
+    simulator.reset();
+    const { points } = simulator.simulate();
     const items = zip<Point>(points, [
       { x: -0.1, y: 0 },
       { x: -0.1, y: -0.025 },

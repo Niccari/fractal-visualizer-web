@@ -1,21 +1,19 @@
-import FoldCurve from "../../../../../src/modules/simulator/chart/kinds/foldCurve";
-import { ChartType, Point } from "../../../../../src/modules/simulator/chart/models";
-import { baseChart, zip } from "../chartSimulator.test";
+import FoldCurve from "../../../../../src/modules/simulator/chart/kinds/fold/foldCurve";
+import { ChartConfig, ChartType, Point } from "../../../../../src/modules/simulator/chart/models";
+import { baseChart, zip } from "../testCommon";
+import ChartSimulator from "../../../../../src/modules/simulator/chart";
 
 describe("FoldCurve(C-Curve) test", () => {
   test(" init test", () => {
-    const foldCCurve = new FoldCurve({
+    const foldCCurve = new FoldCurve();
+    const config: ChartConfig = {
       ...baseChart,
       kind: ChartType.FOLD_CCURVE,
-      basePoints: [],
-      points: [],
-      orders: [],
       complexity: 4,
-    });
-    foldCCurve.reset();
-    foldCCurve.simulate();
-
-    const { points } = foldCCurve.getChart();
+    };
+    const simulator = new ChartSimulator(foldCCurve, config);
+    simulator.reset();
+    const { points } = simulator.simulate();
     const items = zip<Point>(points, [
       { x: -0.1, y: 0 },
       { x: -0.15, y: -0.05 },

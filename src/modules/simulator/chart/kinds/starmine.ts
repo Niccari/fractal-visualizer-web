@@ -1,25 +1,35 @@
-import ChartSimulator from "..";
+import { ChartConfig, Order, Point } from "../models";
+import IChartShaper from "./interface";
+import OrderGenerator from "../orders";
+import { OrderType } from "../orders/interface";
+import { range } from "../../../../libs/collection";
+import { Constants } from "../../../../constants";
 
-class Starmine extends ChartSimulator {
-  public pointLength(): number {
-    return this.chart.complexity * 2;
+class Starmine implements IChartShaper {
+  private static pointCounts(complexity: number): number {
+    return complexity * 2;
   }
 
-  public setBasePoints(): void {
-    for (let i = 0; i < this.pointLength(); i += 1) {
-      const angle = (2 * Math.PI * i) / this.pointLength() - Math.PI;
-      if (i % 2 === 0) {
-        this.chart.basePoints[i] = {
-          x: 0.1 * Math.cos(angle),
-          y: 0.1 * Math.sin(angle),
-        };
-      } else {
-        this.chart.basePoints[i] = {
-          x: (0.1 * Math.cos(angle)) / 4,
-          y: (0.1 * Math.sin(angle)) / 4,
-        };
-      }
-    }
+  // eslint-disable-next-line class-methods-use-this
+  public configureBasePoints(config: ChartConfig): Point[] {
+    const length = Starmine.pointCounts(config.complexity);
+    const { baseAmplitude } = Constants;
+    return range(length).map((i) => {
+      const angle = (2 * Math.PI * i) / length - Math.PI;
+      const amplitude = i % 2 === 0 ? baseAmplitude : baseAmplitude / 4;
+      return {
+        x: amplitude * Math.cos(angle),
+        y: amplitude * Math.sin(angle),
+      };
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  public configureOrders(complexity: number): Order[] {
+    return new OrderGenerator().generate({
+      type: OrderType.LOOP,
+      pointCount: Starmine.pointCounts(complexity),
+    });
   }
 }
 

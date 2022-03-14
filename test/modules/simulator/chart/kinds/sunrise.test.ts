@@ -1,21 +1,19 @@
 import Sunrise from "../../../../../src/modules/simulator/chart/kinds/sunrise";
 import { ChartType } from "../../../../../src/modules/simulator/chart/models";
-import { baseChart } from "../chartSimulator.test";
+import { baseChart } from "../testCommon";
+import ChartSimulator from "../../../../../src/modules/simulator/chart";
 
 describe("Sunrise test", () => {
   test("init test", () => {
-    const sunrise = new Sunrise({
+    const chart = new Sunrise();
+    const simulator = new ChartSimulator(chart, {
       ...baseChart,
       kind: ChartType.SUNRISE,
-      basePoints: [],
-      points: [],
-      orders: [],
       complexity: 5,
     });
-    sunrise.reset();
-    sunrise.simulate();
+    simulator.reset();
 
-    const { orders } = sunrise.getChart();
+    const { orders } = simulator.simulate();
     expect(orders).toStrictEqual([
       { link: [0, 2] },
       { link: [1, 4] },

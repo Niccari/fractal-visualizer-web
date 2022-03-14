@@ -1,6 +1,6 @@
-import { MutableChart } from "./models";
+import { ChartConfig } from "./models";
 
 declare module "charts.json" {
-  const charts: MutableChart[];
+  const charts: ChartConfig[];
   export = charts;
 }

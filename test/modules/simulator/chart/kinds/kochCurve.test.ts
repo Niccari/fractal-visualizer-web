@@ -1,21 +1,19 @@
-import KochCurve from "../../../../../src/modules/simulator/chart/kinds/kochCurve";
 import { ChartType, Point } from "../../../../../src/modules/simulator/chart/models";
-import { baseChart, zip } from "../chartSimulator.test";
+import { baseChart, zip } from "../testCommon";
+import KochCurve from "../../../../../src/modules/simulator/chart/kinds/fold/kochCurve";
+import ChartSimulator from "../../../../../src/modules/simulator/chart";
 
 describe("Koch Curve test", () => {
   test("init test", () => {
-    const kochCurve = new KochCurve({
+    const curve = new KochCurve();
+    const simulator = new ChartSimulator(curve, {
       ...baseChart,
       kind: ChartType.KOCH_CURVE,
-      basePoints: [],
-      points: [],
-      orders: [],
       complexity: 3,
     });
-    kochCurve.reset();
-    kochCurve.simulate();
+    simulator.reset();
+    const { points } = simulator.simulate();
 
-    const { points } = kochCurve.getChart();
     const items = zip<Point>(points, [
       { x: -0.1, y: 0 },
       { x: -0.07777777777777778, y: 0 },
