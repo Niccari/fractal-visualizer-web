@@ -1,12 +1,13 @@
 import { IPointsGenerator, PointsConfig, PointsType } from "./interface";
 import { Point } from "../models";
 import { range } from "../../../../libs/collection";
+import { Constants } from "../../../../constants";
 
 class PointsGenerator implements IPointsGenerator {
   // eslint-disable-next-line class-methods-use-this
   public generate(config: PointsConfig): Point[] {
     const { type, length } = config;
-    const baseAmplitude = 0.1;
+    const { baseAmplitude } = Constants;
     switch (type) {
       case PointsType.CIRCLE: {
         const radians = range(length).map((i) => (2 * Math.PI * i) / length);

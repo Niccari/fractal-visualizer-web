@@ -2,6 +2,7 @@ import { degree2radian } from "../../../../libs/math";
 import RandomGenerator from "../../../randomizer";
 import { ChartConfig, Order, Point } from "../models";
 import IChartShaper from "./interface";
+import { Constants } from "../../../../constants";
 
 interface PointWithIndex extends Point {
   index: number;
@@ -16,8 +17,9 @@ class BinaryTree implements IChartShaper {
   public configureBasePoints(config: ChartConfig): Point[] {
     const lengthRandom = new RandomGenerator(config.randomizer?.size?.seed || -1);
     const angleRandom = new RandomGenerator(config.randomizer?.angle?.seed || -1);
+    const { baseAmplitude } = Constants;
     const basePoints: PointWithIndex[] = [
-      { x: 0.0, y: -0.1, index: 0 },
+      { x: 0.0, y: -baseAmplitude, index: 0 },
       { x: 0.0, y: 0.0, index: 1 },
     ];
     const result = this.divideBasePoints(

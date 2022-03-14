@@ -40,6 +40,7 @@ class ChartSimulator implements IChartSimulator {
     }
     const { config, orders, timestamp } = identity;
     const { rotation, scale, center } = config;
+    // TODO(Niccari): specify reset timing by ChartConfig.
     if (identity.config.kind === ChartType.RANDOM) {
       this.reset();
     }
