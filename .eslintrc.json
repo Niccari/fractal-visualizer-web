@@ -4,7 +4,6 @@
     "airbnb-base",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:import/typescript",
@@ -59,9 +58,6 @@
       "code": 120,
       "ignoreUrls": true,
       "ignoreComments": true
-    }],
-    "prettier/prettier": ["error", {
-      "printWidth": 120
     }],
     "indent": [ "error", 2, { "SwitchCase": 1 } ],
     "linebreak-style": [ "error", "unix" ],
