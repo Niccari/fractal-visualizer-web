@@ -18,7 +18,7 @@ export const HtmlDefines = {
 export type HtmlDefines = typeof HtmlDefines[keyof typeof HtmlDefines];
 
 export class View implements IView {
-  private adjustCanvas = (canvas: HTMLCanvasElement): void => {
+  private static adjustCanvas = (canvas: HTMLCanvasElement): void => {
     const scale = window.devicePixelRatio;
     // eslint-disable-next-line no-param-reassign
     canvas.width = window.innerWidth * scale * 2;
@@ -37,21 +37,29 @@ export class View implements IView {
           e.preventDefault();
           viewEvent.onTouchScroll(e.touches[0].pageY);
         }) as EventListener;
-        canvas.addEventListener("touchstart", onTouchStartEvent, { passive: false });
-        canvas.addEventListener("touchend", onTouchStartEvent, { passive: false });
-        canvas.addEventListener("touchcancel", onTouchStartEvent, { passive: false });
-        canvas.addEventListener("touchmove", onTouchMoveEvent, { passive: false });
+        canvas.addEventListener("touchstart", onTouchStartEvent, {
+          passive: false,
+        });
+        canvas.addEventListener("touchend", onTouchStartEvent, {
+          passive: false,
+        });
+        canvas.addEventListener("touchcancel", onTouchStartEvent, {
+          passive: false,
+        });
+        canvas.addEventListener("touchmove", onTouchMoveEvent, {
+          passive: false,
+        });
       } else {
         canvas.onwheel = (e: WheelEvent) => {
           viewEvent.onScroll(e.deltaY);
         };
       }
       window.onresize = () => {
-        this.adjustCanvas(canvas);
+        View.adjustCanvas(canvas);
       };
       const context = canvas.getContext("2d");
       if (context instanceof CanvasRenderingContext2D) {
-        this.adjustCanvas(canvas);
+        View.adjustCanvas(canvas);
         viewEvent.onCanvasReady(context);
       }
     }

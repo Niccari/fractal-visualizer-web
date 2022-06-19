@@ -30,9 +30,12 @@ class FoldCurveEngine implements IFoldCurveEngine {
       })();
       const sign = fold.fromEnd ? -1 : 1;
       const { length, radian } = fold;
-      const lengthRandom = (randomizer?.size?.amplify ?? 0.0) * lengthRandomizer.generate();
-      const angleRandom = (randomizer?.angle?.amplify ?? 0.0) * angleRandomizer.generate();
-      const newLength = sign * length * (lengthRandom + (mutation?.size ?? 1.0));
+      const lengthRandom =
+        (randomizer?.size?.amplify ?? 0.0) * lengthRandomizer.generate();
+      const angleRandom =
+        (randomizer?.angle?.amplify ?? 0.0) * angleRandomizer.generate();
+      const newLength =
+        sign * length * (lengthRandom + (mutation?.size ?? 1.0));
       const newRadian = radian * (angleRandom + (mutation?.angle ?? 1.0));
 
       const sin = Math.sin(newRadian);
@@ -53,7 +56,10 @@ class FoldCurveEngine implements IFoldCurveEngine {
     }
     const points = [start, ...divPoints, end];
     const range = Array.from({ length: points.length - 1 }, (_, v) => v);
-    const pointPairs: [Point, Point][] = range.map((i) => [points[i], points[i + 1]]);
+    const pointPairs: [Point, Point][] = range.map((i) => [
+      points[i],
+      points[i + 1],
+    ]);
     return [
       ...pointPairs
         .map((pair, i) => {
@@ -75,12 +81,25 @@ class FoldCurveEngine implements IFoldCurveEngine {
   }
 
   public createPoints(config: ChartConfig, rules: FoldRule[]): Point[] {
-    const lengthRandomizer = new RandomGenerator(config.randomizer?.size?.seed || -1);
-    const angleRandomizer = new RandomGenerator(config.randomizer?.angle?.seed || -1);
+    const lengthRandomizer = new RandomGenerator(
+      config.randomizer?.size?.seed || -1
+    );
+    const angleRandomizer = new RandomGenerator(
+      config.randomizer?.angle?.seed || -1
+    );
     const start: Point = { x: -0.1, y: 0 };
     const end: Point = { x: 0.1, y: 0 };
 
-    const points = this.recursive(config, 0, 2, start, end, rules, lengthRandomizer, angleRandomizer);
+    const points = this.recursive(
+      config,
+      0,
+      2,
+      start,
+      end,
+      rules,
+      lengthRandomizer,
+      angleRandomizer
+    );
     return points;
   }
 }

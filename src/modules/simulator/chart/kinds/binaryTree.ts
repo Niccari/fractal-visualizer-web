@@ -15,8 +15,12 @@ class BinaryTree implements IChartShaper {
   }
 
   public configureBasePoints(config: ChartConfig): Point[] {
-    const lengthRandom = new RandomGenerator(config.randomizer?.size?.seed || -1);
-    const angleRandom = new RandomGenerator(config.randomizer?.angle?.seed || -1);
+    const lengthRandom = new RandomGenerator(
+      config.randomizer?.size?.seed || -1
+    );
+    const angleRandom = new RandomGenerator(
+      config.randomizer?.angle?.seed || -1
+    );
     const { baseAmplitude } = Constants;
     const basePoints: PointWithIndex[] = [
       { x: 0.0, y: -baseAmplitude, index: 0 },
@@ -46,8 +50,10 @@ class BinaryTree implements IChartShaper {
     angleRandomizer: RandomGenerator
   ): PointWithIndex[] {
     const { complexity, randomizer, mutation } = config;
-    const lengthRandom = (randomizer?.size?.amplify || 0.0) * lengthRandomizer.generate();
-    const angleRandom = (randomizer?.angle?.amplify || 0.0) * angleRandomizer.generate();
+    const lengthRandom =
+      (randomizer?.size?.amplify || 0.0) * lengthRandomizer.generate();
+    const angleRandom =
+      (randomizer?.angle?.amplify || 0.0) * angleRandomizer.generate();
     const length = parentLength * (lengthRandom + (mutation?.size || 1.0));
     const angle = parentAngle * (angleRandom + (mutation?.angle || 1.0));
     if (depth >= Math.floor(BinaryTree.pointCounts(complexity) / 2)) {
@@ -71,10 +77,28 @@ class BinaryTree implements IChartShaper {
     };
     const result: PointWithIndex[] = [];
     result.push(
-      ...this.divideBasePoints(config, end, leftPoint, leftDepth, length, angle, lengthRandomizer, angleRandomizer)
+      ...this.divideBasePoints(
+        config,
+        end,
+        leftPoint,
+        leftDepth,
+        length,
+        angle,
+        lengthRandomizer,
+        angleRandomizer
+      )
     );
     result.push(
-      ...this.divideBasePoints(config, end, rightPoint, rightDepth, length, angle, lengthRandomizer, angleRandomizer)
+      ...this.divideBasePoints(
+        config,
+        end,
+        rightPoint,
+        rightDepth,
+        length,
+        angle,
+        lengthRandomizer,
+        angleRandomizer
+      )
     );
     return [leftPoint, rightPoint, ...result.sort((a, b) => a.index - b.index)];
   }
@@ -82,7 +106,12 @@ class BinaryTree implements IChartShaper {
   // eslint-disable-next-line class-methods-use-this
   public configureOrders(complexity: number): Order[] {
     const maxDepth = BinaryTree.pointCounts(complexity) / 2;
-    return [{ link: [0, 1] }, ...this.setOrdersRecursive(maxDepth, 1).sort((a, b) => a.link[1] - b.link[1])];
+    return [
+      { link: [0, 1] },
+      ...this.setOrdersRecursive(maxDepth, 1).sort(
+        (a, b) => a.link[1] - b.link[1]
+      ),
+    ];
   }
 
   public setOrdersRecursive(maxDepth: number, base: number): Order[] {

@@ -23,7 +23,10 @@ class KochTriangle implements IChartShaper {
     if (isInner) {
       kochCurvePoints = kochCurvePoints.map((p) => ({ ...p, y: -p.y }));
     }
-    kochCurvePoints = kochCurvePoints.map((p) => ({ ...p, y: p.y + 0.1 / Math.sqrt(3) }));
+    kochCurvePoints = kochCurvePoints.map((p) => ({
+      ...p,
+      y: p.y + 0.1 / Math.sqrt(3),
+    }));
     const points120 = kochCurvePoints.map((p) => ({
       x: p.x * cos120 - p.y * sin120,
       y: p.x * sin120 + p.y * cos120,

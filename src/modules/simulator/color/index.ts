@@ -1,4 +1,9 @@
-import { ColorConfig, ColorGradientItem, ColorType, IColorGenerator } from "./interface";
+import {
+  ColorConfig,
+  ColorGradientItem,
+  ColorType,
+  IColorGenerator,
+} from "./interface";
 
 class ColorGenerator implements IColorGenerator {
   private readonly config: ColorConfig;
@@ -67,7 +72,9 @@ class ColorGenerator implements IColorGenerator {
     this.config = config;
     this.colorStartIndex = 0;
     this.colorIterateIndex = 0;
-    this.alphaHex = ColorGenerator.colorToHex(Math.floor(255 * this.config.alpha));
+    this.alphaHex = ColorGenerator.colorToHex(
+      Math.floor(255 * this.config.alpha)
+    );
     const gradient: ColorGradientItem[] = (() => {
       switch (config.type.toString()) {
         case ColorType.RAINBOW:
@@ -98,9 +105,9 @@ class ColorGenerator implements IColorGenerator {
       const green = start.green + ratio * (end.green - start.green);
       const blue = start.blue + ratio * (end.blue - start.blue);
       this.colorTable.push(
-        `#${ColorGenerator.colorToHex(red)}${ColorGenerator.colorToHex(green)}${ColorGenerator.colorToHex(blue)}${
-          this.alphaHex
-        }`
+        `#${ColorGenerator.colorToHex(red)}${ColorGenerator.colorToHex(
+          green
+        )}${ColorGenerator.colorToHex(blue)}${this.alphaHex}`
       );
       if (end.position === i) {
         start = end;
