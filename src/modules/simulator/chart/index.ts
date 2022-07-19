@@ -3,6 +3,7 @@ import ColorGenerator from "../color";
 import IChartSimulator from "./interface";
 import IChartShaper from "./kinds/interface";
 import { IColorGenerator } from "../color/interface";
+import { rotateBy } from "../matrix";
 
 interface ChartIdentity {
   basePoints: Point[];
@@ -45,15 +46,12 @@ class ChartSimulator implements IChartSimulator {
       this.reset();
     }
     const currentAngle = rotation.angle + rotation.speed * timestamp;
-    const sin = Math.sin(currentAngle);
-    const cos = Math.cos(currentAngle);
     const points = identity.basePoints.map((point) => {
-      const translateX = point.x * scale.w;
-      const translateY = point.y * scale.h;
-      return {
-        x: center.x + translateX * cos - translateY * sin,
-        y: center.y + translateX * sin + translateY * cos,
+      const translate = {
+        x: point.x * scale.w,
+        y: point.y * scale.h
       };
+      return rotateBy(center, translate, currentAngle);
     });
     const colors = points.map(() => identity.colorGenerator.next());
     identity.colorGenerator.endIteration();

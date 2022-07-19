@@ -1,6 +1,7 @@
 import { ChartConfig, Point } from "../../models";
 import { FoldRule, IFoldCurveEngine } from "./interface";
 import RandomGenerator from "../../../../randomizer";
+import { rotateBy } from "../../../matrix";
 
 class FoldCurveEngine implements IFoldCurveEngine {
   private recursive(
@@ -15,8 +16,10 @@ class FoldCurveEngine implements IFoldCurveEngine {
   ): Point[] {
     const { randomizer, mutation, complexity } = config;
     const rule = rules[div % rules.length];
-    const vectorX = end.x - start.x;
-    const vectorY = end.y - start.y;
+    const vector = {
+      x: end.x - start.x,
+      y: end.y - start.y
+    };
     const divPoints: Point[] = [];
     rule.folds.forEach((fold, i) => {
       const src = (() => {
@@ -37,13 +40,11 @@ class FoldCurveEngine implements IFoldCurveEngine {
       const newLength =
         sign * length * (lengthRandom + (mutation?.size ?? 1.0));
       const newRadian = radian * (angleRandom + (mutation?.angle ?? 1.0));
-
-      const sin = Math.sin(newRadian);
-      const cos = Math.cos(newRadian);
-      divPoints.push({
-        x: src.x + newLength * (cos * vectorX - sin * vectorY),
-        y: src.y + newLength * (sin * vectorX + cos * vectorY),
-      });
+      const newVector = {
+        x: vector.x * newLength,
+        y: vector.y * newLength,
+      };
+      divPoints.push(rotateBy(src, newVector, newRadian));
     });
     if (depth === complexity) {
       if (div === 0) {

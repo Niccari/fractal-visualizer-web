@@ -3,6 +3,7 @@ import RandomGenerator from "../../../randomizer";
 import { ChartConfig, Order, Point } from "../models";
 import IChartShaper from "./interface";
 import { Constants } from "../../../../constants";
+import { rotateBy } from "../../matrix";
 
 interface PointWithIndex extends Point {
   index: number;
@@ -59,21 +60,19 @@ class BinaryTree implements IChartShaper {
     if (depth >= Math.floor(BinaryTree.pointCounts(complexity) / 2)) {
       return [];
     }
-    const vectorX = end.x - start.x;
-    const vectorY = end.y - start.y;
-    const sin = Math.sin(angle);
-    const cos = Math.cos(angle);
+    const vector = {
+      x: length * (end.x - start.x),
+      y: length * (end.y - start.y)
+    };
     const leftDepth = 2 * depth;
     const rightDepth = 2 * depth + 1;
     const leftPoint = {
-      x: end.x + length * (cos * vectorX - sin * vectorY),
-      y: end.y + length * (sin * vectorX + cos * vectorY),
-      index: leftDepth,
+      ...rotateBy(end, vector, angle),
+      index: leftDepth
     };
     const rightPoint = {
-      x: end.x + length * (cos * vectorX + sin * vectorY),
-      y: end.y + length * (-sin * vectorX + cos * vectorY),
-      index: rightDepth,
+      ...rotateBy(end, vector, -angle),
+      index: rightDepth
     };
     const result: PointWithIndex[] = [];
     result.push(

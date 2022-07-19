@@ -4,6 +4,7 @@ import OrderGenerator from "../../orders";
 import { OrderType } from "../../orders/interface";
 import { FoldRule, IFoldCurveEngine } from "./interface";
 import FoldCurveEngine from "./index";
+import { degree2radian } from "../../../../../libs/math";
 
 class TriCurve implements IChartShaper {
   private readonly engine: IFoldCurveEngine;
@@ -18,7 +19,7 @@ class TriCurve implements IChartShaper {
         folds: [
           {
             length: 1 / 2,
-            radian: (90 * Math.PI) / 180,
+            radian: degree2radian(90),
           },
           {
             length: 1 / 2,
@@ -27,7 +28,7 @@ class TriCurve implements IChartShaper {
           },
           {
             length: 1 / 2,
-            radian: (90 * Math.PI) / 180,
+            radian: degree2radian(90),
             fromEnd: true,
           },
         ],
@@ -39,7 +40,7 @@ class TriCurve implements IChartShaper {
         folds: [
           {
             length: 1 / 2,
-            radian: (90 * Math.PI) / 180,
+            radian: degree2radian(90),
           },
           {
             length: 1 / 2,
@@ -48,7 +49,7 @@ class TriCurve implements IChartShaper {
           },
           {
             length: 1 / 2,
-            radian: (-90 * Math.PI) / 180,
+            radian: degree2radian(-90),
             fromEnd: true,
           },
         ],

@@ -4,6 +4,7 @@ import OrderGenerator from "../../orders";
 import { OrderType } from "../../orders/interface";
 import { FoldRule, IFoldCurveEngine } from "./interface";
 import FoldCurveEngine from "./index";
+import { degree2radian } from "../../../../../libs/math";
 
 class FoldCurve implements IChartShaper {
   private readonly engine: IFoldCurveEngine;
@@ -15,11 +16,11 @@ class FoldCurve implements IChartShaper {
   private static selectFoldRules(kind: ChartType): FoldRule[] {
     const leftFold = {
       length: Math.SQRT1_2,
-      radian: (45 * Math.PI) / 180,
+      radian: degree2radian(45),
     };
     const rightFold = {
       length: Math.SQRT1_2,
-      radian: (-45 * Math.PI) / 180,
+      radian: degree2radian(-45),
     };
     switch (kind) {
       case ChartType.FOLD_CCURVE:
