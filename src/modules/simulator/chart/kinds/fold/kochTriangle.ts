@@ -3,6 +3,7 @@ import IChartShaper from "../interface";
 import OrderGenerator from "../../orders";
 import { OrderType } from "../../orders/interface";
 import KochCurve from "./kochCurve";
+import { rotateBy } from "../../../matrix";
 import { degree2radian } from "../../../../../libs/math";
 
 class KochTriangle implements IChartShaper {
@@ -17,8 +18,7 @@ class KochTriangle implements IChartShaper {
 
     let kochCurvePoints = this.kochCurve.configureBasePoints(config);
 
-    const sin120 = Math.sin(degree2radian(120));
-    const cos120 = Math.cos(degree2radian(120));
+    const radian120deg = degree2radian(120);
 
     if (isInner) {
       kochCurvePoints = kochCurvePoints.map((p) => ({ ...p, y: -p.y }));
@@ -27,14 +27,12 @@ class KochTriangle implements IChartShaper {
       ...p,
       y: p.y + 0.1 / Math.sqrt(3),
     }));
-    const points120 = kochCurvePoints.map((p) => ({
-      x: p.x * cos120 - p.y * sin120,
-      y: p.x * sin120 + p.y * cos120,
-    }));
-    const points240 = points120.map((p) => ({
-      x: p.x * cos120 - p.y * sin120,
-      y: p.x * sin120 + p.y * cos120,
-    }));
+    const points120 = kochCurvePoints.map((p) =>
+      rotateBy({ x: 0, y: 0 }, p, radian120deg)
+    );
+    const points240 = points120.map((p) =>
+      rotateBy({ x: 0, y: 0 }, p, radian120deg)
+    );
     return [...kochCurvePoints, ...points240, ...points120];
   }
 

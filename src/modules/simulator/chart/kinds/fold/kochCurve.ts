@@ -4,6 +4,7 @@ import OrderGenerator from "../../orders";
 import { OrderType } from "../../orders/interface";
 import { FoldRule, IFoldCurveEngine } from "./interface";
 import FoldCurveEngine from "./index";
+import { degree2radian } from "../../../../../libs/math";
 
 class KochCurve implements IChartShaper {
   private readonly engine: IFoldCurveEngine;
@@ -22,11 +23,11 @@ class KochCurve implements IChartShaper {
           },
           {
             length: 1 / 3,
-            radian: (60 * Math.PI) / 180,
+            radian: degree2radian(60),
           },
           {
             length: 1 / 3,
-            radian: (-60 * Math.PI) / 180,
+            radian: degree2radian(-60),
           },
         ],
       },

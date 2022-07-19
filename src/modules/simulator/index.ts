@@ -29,11 +29,19 @@ class Simulator implements ISimulator {
     }, refreshMs);
   };
 
-  public handleScroll = (deltaY: number): void => {
-    this.scrollY += deltaY;
+  private restrictScroll = () => {
     if (this.scrollY < 0) {
       this.scrollY = 0;
     }
+    if (this.scrollY > 3400) {
+      this.scrollY = 3400;
+    }
+  };
+
+  public handleScroll = (deltaY: number): void => {
+    this.scrollY += deltaY;
+    this.restrictScroll();
+
     this.scrollEndCount = 6;
   };
 
@@ -42,9 +50,7 @@ class Simulator implements ISimulator {
       this.scrollY -= 2 * (touchY - this.touchScrollPrevY);
     }
     this.touchScrollPrevY = touchY;
-    if (this.scrollY < 0) {
-      this.scrollY = 0;
-    }
+    this.restrictScroll();
     this.scrollEndCount = 6;
   };
 

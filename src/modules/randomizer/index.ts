@@ -1,5 +1,3 @@
-type Generate = () => number;
-
 // noinspection JSSuspiciousNameCombination
 class RandomGenerator {
   private x = 123456789;
@@ -11,7 +9,7 @@ class RandomGenerator {
     this.seed = seed;
   }
 
-  public generate: Generate = () => {
+  public generate = (): number => {
     // eslint-disable-next-line no-bitwise
     const t = this.x ^ (this.x << 11);
     this.x = this.y;
