@@ -18,7 +18,7 @@ class FoldCurveEngine implements IFoldCurveEngine {
     const rule = rules[div % rules.length];
     const vector = {
       x: end.x - start.x,
-      y: end.y - start.y
+      y: end.y - start.y,
     };
     const divPoints: Point[] = [];
     rule.folds.forEach((fold, i) => {

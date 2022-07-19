@@ -62,17 +62,17 @@ class BinaryTree implements IChartShaper {
     }
     const vector = {
       x: length * (end.x - start.x),
-      y: length * (end.y - start.y)
+      y: length * (end.y - start.y),
     };
     const leftDepth = 2 * depth;
     const rightDepth = 2 * depth + 1;
     const leftPoint = {
       ...rotateBy(end, vector, angle),
-      index: leftDepth
+      index: leftDepth,
     };
     const rightPoint = {
       ...rotateBy(end, vector, -angle),
-      index: rightDepth
+      index: rightDepth,
     };
     const result: PointWithIndex[] = [];
     result.push(

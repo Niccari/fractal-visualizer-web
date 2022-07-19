@@ -49,7 +49,7 @@ class ChartSimulator implements IChartSimulator {
     const points = identity.basePoints.map((point) => {
       const translate = {
         x: point.x * scale.w,
-        y: point.y * scale.h
+        y: point.y * scale.h,
       };
       return rotateBy(center, translate, currentAngle);
     });
