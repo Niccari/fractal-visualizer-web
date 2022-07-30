@@ -10,9 +10,6 @@
     "prettier"
   ],
   "plugins": [
-    "import",
-    "jsx-a11y",
-    "@typescript-eslint",
     "prefer-arrow"
   ],
   "env": { "node": true, "es6": true },
@@ -49,27 +46,10 @@
       "ignorePackages",
       {
         "js": "never",
-        "jsx": "never",
-        "ts": "never",
-        "tsx": "never"
+        "ts": "never"
       }
     ],
-    "max-len": ["warn", {
-      "code": 120,
-      "ignoreUrls": true,
-      "ignoreComments": true
-    }],
-    "indent": [ "error", 2, { "SwitchCase": 1 } ],
-    "linebreak-style": [ "error", "unix" ],
-    "quotes": [ "error", "double" ],
-    "semi": [ "error", "always" ],
     "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": ["error"],
-    "jsx-a11y/label-has-associated-control": ["error", {
-      "controlComponents": ["Field"],
-      "required": {
-        "some": [ "nesting" ]
-      }
-    }]
+    "@typescript-eslint/no-use-before-define": ["error"]
   }
 }
