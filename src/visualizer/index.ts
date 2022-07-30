@@ -1,13 +1,7 @@
 import { Chart, Point, StyleType } from "../modules/simulator/chart/models";
 import IVisualizer from "./interface";
 
-type Draw = (
-  context: CanvasRenderingContext2D,
-  start: Point,
-  end: Point,
-  thickness: number,
-  color: string
-) => void;
+type Draw = (context: CanvasRenderingContext2D, start: Point, end: Point, thickness: number, color: string) => void;
 
 class Visualizer implements IVisualizer {
   private nullableContext: CanvasRenderingContext2D | null = null;
@@ -43,7 +37,7 @@ class Visualizer implements IVisualizer {
     start: Point,
     end: Point,
     thickness: number,
-    color: string
+    color: string,
   ) => {
     context.lineWidth = thickness;
     context.strokeStyle = color;
@@ -60,7 +54,7 @@ class Visualizer implements IVisualizer {
     start: Point,
     end: Point,
     thickness: number,
-    color: string
+    color: string,
   ) => {
     const diffX = end.x - start.x;
     const diffY = end.y - start.y;
@@ -84,7 +78,7 @@ class Visualizer implements IVisualizer {
     start: Point,
     end: Point,
     thickness: number,
-    color: string
+    color: string,
   ) => {
     const width = Math.log(thickness || 1 + 10);
     const vectorX = end.x - start.x;
@@ -96,22 +90,10 @@ class Visualizer implements IVisualizer {
     context.fillStyle = color;
 
     context.beginPath();
-    context.arc(
-      start.x + vectorX * 0.3,
-      start.y + vectorY * 0.3,
-      baseRadius * 0.3,
-      0,
-      angle
-    );
+    context.arc(start.x + vectorX * 0.3, start.y + vectorY * 0.3, baseRadius * 0.3, 0, angle);
     context.fill();
     context.beginPath();
-    context.arc(
-      start.x + vectorX * 0.6,
-      start.y + vectorY * 0.6,
-      baseRadius * 0.15,
-      0,
-      angle
-    );
+    context.arc(start.x + vectorX * 0.6, start.y + vectorY * 0.6, baseRadius * 0.15, 0, angle);
     context.fill();
   };
 
@@ -120,7 +102,7 @@ class Visualizer implements IVisualizer {
     start: Point,
     end: Point,
     thickness: number,
-    color: string
+    color: string,
   ) => {
     const width = 1.5 * (thickness || 1);
     const diffX = end.x - start.x;
@@ -143,7 +125,7 @@ class Visualizer implements IVisualizer {
       midBaseX + 1.5 * baseWidthX,
       midBaseY - 1.5 * baseWidthY,
       end.x,
-      end.y
+      end.y,
     );
     context.bezierCurveTo(
       midBaseX + 2.0 * baseWidthX,
@@ -151,7 +133,7 @@ class Visualizer implements IVisualizer {
       midBaseX + 2.0 * baseWidthX,
       midBaseY - 2.0 * baseWidthY,
       start.x,
-      start.y
+      start.y,
     );
     context.closePath();
     context.fill();
@@ -168,7 +150,7 @@ class Visualizer implements IVisualizer {
     context: CanvasRenderingContext2D,
     chart: Chart,
     screenWidth: number,
-    screenHeight: number
+    screenHeight: number,
   ) => {
     const points = chart.points.map((point) => ({
       x: point.x * screenWidth,

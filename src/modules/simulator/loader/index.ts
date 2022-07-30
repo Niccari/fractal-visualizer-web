@@ -9,12 +9,7 @@ import Random from "../chart/kinds/random";
 import Star from "../chart/kinds/star";
 import Starmine from "../chart/kinds/starmine";
 import Sunrise from "../chart/kinds/sunrise";
-import {
-  ChartConfig,
-  ChartType,
-  DefaultComplexity,
-  StyleType,
-} from "../chart/models";
+import { ChartConfig, ChartType, DefaultComplexity, StyleType } from "../chart/models";
 import { ColorType } from "../color/interface";
 
 import IChartLoader from "./interface";
@@ -81,9 +76,7 @@ class ChartLoader implements IChartLoader {
         config,
       };
     });
-    const simulators = shapes.map(
-      (shape) => new ChartSimulator(shape.chart, shape.config)
-    );
+    const simulators = shapes.map((shape) => new ChartSimulator(shape.chart, shape.config));
     simulators.map((s) => s.reset());
     return simulators;
   };
