@@ -59,11 +59,7 @@ class Simulator implements ISimulator {
     if (this.scrollEndCount === 0) {
       this.touchScrollPrevY = undefined;
       const url = `${window.location.pathname}?depth=${this.scrollY}`;
-      window.history.replaceState(
-        null,
-        "Fractal-Visualizer depth: + scrollY",
-        url
-      );
+      window.history.replaceState(null, "Fractal-Visualizer depth: + scrollY", url);
     }
     const charts = this.simulators.map((s) => s.simulate());
     return charts.map((c) => ({

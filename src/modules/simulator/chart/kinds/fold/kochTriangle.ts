@@ -27,12 +27,8 @@ class KochTriangle implements IChartShaper {
       ...p,
       y: p.y + 0.1 / Math.sqrt(3),
     }));
-    const points120 = kochCurvePoints.map((p) =>
-      rotateBy({ x: 0, y: 0 }, p, radian120deg)
-    );
-    const points240 = points120.map((p) =>
-      rotateBy({ x: 0, y: 0 }, p, radian120deg)
-    );
+    const points120 = kochCurvePoints.map((p) => rotateBy({ x: 0, y: 0 }, p, radian120deg));
+    const points240 = points120.map((p) => rotateBy({ x: 0, y: 0 }, p, radian120deg));
     return [...kochCurvePoints, ...points240, ...points120];
   }
 
