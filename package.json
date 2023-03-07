@@ -1,6 +1,6 @@
 {
   "name": "fractal-visualizer",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "This app visualize fractal shape, running on modern browsers.",
   "devDependencies": {
     "@types/jest": "^29.4.0",
