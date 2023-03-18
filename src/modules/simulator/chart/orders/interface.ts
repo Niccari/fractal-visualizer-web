@@ -6,7 +6,7 @@ export const OrderType = {
   END_2X_FASTER: "end_2x_faster",
   LINEAR: "linear",
 } as const;
-export type OrderType = typeof OrderType[keyof typeof OrderType];
+export type OrderType = (typeof OrderType)[keyof typeof OrderType];
 
 export type OrderConfig = {
   type: OrderType;

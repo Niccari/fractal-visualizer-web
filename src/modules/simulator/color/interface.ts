@@ -7,7 +7,7 @@ export const ColorType = {
   MONOCHROME: "monochrome",
   PASTEL: "pastel",
 } as const;
-export type ColorType = typeof ColorType[keyof typeof ColorType];
+export type ColorType = (typeof ColorType)[keyof typeof ColorType];
 
 type ColorConfig = {
   type: ColorType;

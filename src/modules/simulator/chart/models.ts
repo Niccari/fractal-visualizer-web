@@ -15,7 +15,7 @@ export const StyleType = {
   CIRCLES: "circles",
   CURVE: "curve",
 } as const;
-export type StyleType = typeof StyleType[keyof typeof StyleType];
+export type StyleType = (typeof StyleType)[keyof typeof StyleType];
 
 type Style = {
   type: StyleType;
@@ -72,7 +72,7 @@ export const ChartType = {
   TRI_TRANS: "tri_trans",
   BINARY_TREE: "binary_tree",
 } as const;
-export type ChartType = typeof ChartType[keyof typeof ChartType];
+export type ChartType = (typeof ChartType)[keyof typeof ChartType];
 
 interface ChartConfig {
   kind: ChartType;

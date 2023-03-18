@@ -15,7 +15,7 @@ export const HtmlDefines = {
   GIF_MAP_DOWNLOAD: "gif_map_download",
   GIF_MAP_DOWNLOAD_BUTTON: "git_map_download_button",
 } as const;
-export type HtmlDefines = typeof HtmlDefines[keyof typeof HtmlDefines];
+export type HtmlDefines = (typeof HtmlDefines)[keyof typeof HtmlDefines];
 
 export class View implements IView {
   private static adjustCanvas = (canvas: HTMLCanvasElement): void => {
