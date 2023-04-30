@@ -19,7 +19,7 @@
     "vite": "^4.2.0"
   },
   "engines": {
-    "node": ">= 16"
+    "node": ">= 18"
   },
   "scripts": {
     "dev": "vite",
