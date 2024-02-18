@@ -66,11 +66,11 @@ describe("Koch Triangle Outer Curve test", () => {
       { x: -0.0888888888888889, y: 0.03849001794597501 },
       { x: -0.10000000000000003, y: 0.05773502691896253 },
     ]);
-    items.forEach((item) => {
+    for (const item of items) {
       const actualValue = item[0];
       const expectValue = item[1];
       expect(actualValue.x).toBeCloseTo(expectValue.x, 12);
       expect(actualValue.y).toBeCloseTo(expectValue.y, 12);
-    });
+    }
   });
 });

@@ -24,11 +24,11 @@ class Visualizer implements IVisualizer {
       context.fillStyle = "rgba(0, 0, 0, 0.05)";
       context.fillRect(0, 0, screenWidth, screenHeight);
 
-      charts.forEach((chart) => {
+      for (const chart of charts) {
         if (Visualizer.shouldDrawChart(chart)) {
           Visualizer.drawChart(context, chart, screenWidth, screenHeight);
         }
-      });
+      }
     }
   };
 

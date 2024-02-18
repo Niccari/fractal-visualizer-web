@@ -32,11 +32,11 @@ describe("Binarytree test", () => {
       { x: 0.17577927160047538, y: 0.10352927160047541 },
       { x: 0.17577927160047538, y: 0.016678881201237727 },
     ]);
-    items.forEach((item) => {
+    for (const item of items) {
       const actualValue = item[0];
       const expectValue = item[1];
       expect(actualValue.x).toBeCloseTo(expectValue.x, 12);
       expect(actualValue.y).toBeCloseTo(expectValue.y, 12);
-    });
+    }
   });
 });
