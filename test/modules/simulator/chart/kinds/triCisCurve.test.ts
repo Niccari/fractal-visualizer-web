@@ -80,11 +80,11 @@ describe("Tri Cis Curve test", () => {
       { x: 0.1, y: -0.025 },
       { x: 0.1, y: 0 },
     ]);
-    items.forEach((item) => {
+    for (const item of items) {
       const actualValue = item[0];
       const expectValue = item[1];
       expect(actualValue.x).toBeCloseTo(expectValue.x, 12);
       expect(actualValue.y).toBeCloseTo(expectValue.y, 12);
-    });
+    }
   });
 });

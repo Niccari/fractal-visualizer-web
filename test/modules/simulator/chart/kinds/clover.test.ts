@@ -24,13 +24,13 @@ describe("Clover test", () => {
           x: amplify * Math.cos(angle),
           y: amplify * Math.sin(angle),
         };
-      })
+      }),
     );
-    items.forEach((item) => {
+    for (const item of items) {
       const actualValue = item[0];
       const expectValue = item[1];
       expect(actualValue.x).toBeCloseTo(expectValue.x, 12);
       expect(actualValue.y).toBeCloseTo(expectValue.y, 12);
-    });
+    }
   });
 });
