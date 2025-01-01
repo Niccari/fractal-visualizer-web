@@ -17,7 +17,7 @@ class Simulator implements ISimulator {
     this.scrollEndCount = 0;
     this.scrollY = (() => {
       const query = new URL(document.location.href).searchParams;
-      return parseInt(query.get("depth") || "0", 10);
+      return Number.parseInt(query.get("depth") || "0", 10);
     })();
   }
 

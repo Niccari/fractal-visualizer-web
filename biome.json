@@ -22,10 +22,11 @@
       "recommended": true,
       "correctness": {
         "noUndeclaredVariables": "error",
-        "noUnusedVariables": "error"
-      },
-      "nursery": {
+        "noUnusedVariables": "error",
         "noUnusedImports": "error"
+      },
+      "style": {
+        "useImportType": "off"
       }
     }
   }
