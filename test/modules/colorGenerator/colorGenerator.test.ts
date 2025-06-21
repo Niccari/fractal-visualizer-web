@@ -1,4 +1,4 @@
-import ColorGenerator from "../../../src/modules/simulator/color/index";
+import ColorGenerator from "../../../src/modules/simulator/color";
 
 describe("colorGenerator next test", () => {
   test("Rainbow gradation test", () => {

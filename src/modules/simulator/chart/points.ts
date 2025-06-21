@@ -1,6 +1,6 @@
-import { Point } from "../models";
-import { range } from "../../../../libs/collection";
-import { Constants } from "../../../../constants";
+import { Point } from "./models";
+import { range } from "../../../libs/collection";
+import { Constants } from "../../../constants";
 
 export const PointsType = {
   CIRCLE: "circle",

@@ -1,4 +1,4 @@
-import ViewEvent from "../viewEvent";
+import ViewEvent from "./viewEvent";
 
 export const HtmlDefines = {
   UPLOADED_ID_GIF: "gif_uploaded",

@@ -1,4 +1,4 @@
-import { Point } from "../chart/models";
+import { Point } from "./chart/models";
 
 export const rotateBy = (point: Point, vector: Point, radian: number): Point => {
   const sin = Math.sin(radian);

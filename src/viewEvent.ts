@@ -1,5 +1,5 @@
-import Simulator from "../modules/simulator";
-import Visualizer from "../visualizer";
+import Simulator from "./modules/simulator";
+import Visualizer from "./visualizer";
 
 class ViewEvent {
   private visualizer: Visualizer;

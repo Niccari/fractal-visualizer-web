@@ -1,5 +1,5 @@
-import { Order } from "../models";
-import { range } from "../../../../libs/collection";
+import { Order } from "./models";
+import { range } from "../../../libs/collection";
 
 export const OrderType = {
   LOOP: "loop",

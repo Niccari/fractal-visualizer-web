@@ -1,4 +1,4 @@
-import { Chart, Point, StyleType } from "../modules/simulator/chart/models";
+import { Chart, Point, StyleType } from "./modules/simulator/chart/models";
 
 type Draw = (context: CanvasRenderingContext2D, start: Point, end: Point, thickness: number, color: string) => void;
 

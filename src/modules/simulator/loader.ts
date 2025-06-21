@@ -1,20 +1,20 @@
-import newCharts from "../../../charts.json";
-import { degree2radian } from "../../../libs/math";
-import ChartSimulator from "../chart";
-import BinaryTree from "../chart/kinds/binaryTree";
-import Circle from "../chart/kinds/circle";
-import Clover from "../chart/kinds/clover";
-import FoldCurve from "../chart/kinds/fold/foldCurve";
-import Random from "../chart/kinds/random";
-import Star from "../chart/kinds/star";
-import Starmine from "../chart/kinds/starmine";
-import Sunrise from "../chart/kinds/sunrise";
-import { ChartConfig, ChartType, DefaultComplexity, StyleType } from "../chart/models";
-import { ColorType } from "../color";
-import { ChartShaper } from "../chart";
-import KochCurve from "../chart/kinds/fold/kochCurve";
-import TriCurve from "../chart/kinds/fold/triCurve";
-import KochTriangle from "../chart/kinds/fold/kochTriangle";
+import newCharts from "../../charts.json";
+import { degree2radian } from "../../libs/math";
+import ChartSimulator from "./chart";
+import BinaryTree from "./chart/kinds/binaryTree";
+import Circle from "./chart/kinds/circle";
+import Clover from "./chart/kinds/clover";
+import FoldCurve from "./chart/kinds/fold/foldCurve";
+import Random from "./chart/kinds/random";
+import Star from "./chart/kinds/star";
+import Starmine from "./chart/kinds/starmine";
+import Sunrise from "./chart/kinds/sunrise";
+import { ChartConfig, ChartType, DefaultComplexity, StyleType } from "./chart/models";
+import { ColorType } from "./color";
+import { ChartShaper } from "./chart";
+import KochCurve from "./chart/kinds/fold/kochCurve";
+import TriCurve from "./chart/kinds/fold/triCurve";
+import KochTriangle from "./chart/kinds/fold/kochTriangle";
 
 class ChartLoader {
   private static instantiateChart = (kind: ChartType): ChartShaper => {
