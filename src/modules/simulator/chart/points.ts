@@ -1,10 +1,19 @@
-import { IPointsGenerator, PointsConfig, PointsType } from "./interface";
-import { Point } from "../models";
-import { range } from "../../../../libs/collection";
-import { Constants } from "../../../../constants";
+import { Point } from "./models";
+import { range } from "../../../libs/collection";
+import { Constants } from "../../../constants";
 
-class PointsGenerator implements IPointsGenerator {
-  // eslint-disable-next-line class-methods-use-this
+export const PointsType = {
+  CIRCLE: "circle",
+  RANDOM: "random",
+} as const;
+export type PointsType = (typeof PointsType)[keyof typeof PointsType];
+
+export type PointsConfig = {
+  type: PointsType;
+  length: number;
+};
+
+class PointsGenerator {
   public generate(config: PointsConfig): Point[] {
     const { type, length } = config;
     const { baseAmplitude } = Constants;

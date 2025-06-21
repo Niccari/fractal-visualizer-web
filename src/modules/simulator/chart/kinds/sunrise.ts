@@ -1,16 +1,14 @@
 import { ChartConfig, Order, Point } from "../models";
-import IChartShaper from "./interface";
 import PointsGenerator from "../points";
-import { PointsType } from "../points/interface";
+import { PointsType } from "../points";
 import OrderGenerator from "../orders";
-import { OrderType } from "../orders/interface";
+import { OrderType } from "../orders";
 
-class Sunrise implements IChartShaper {
+class Sunrise {
   private static pointCounts(complexity: number): number {
     return complexity;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureBasePoints(config: ChartConfig): Point[] {
     return new PointsGenerator().generate({
       type: PointsType.CIRCLE,
@@ -18,7 +16,6 @@ class Sunrise implements IChartShaper {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureOrders(complexity: number): Order[] {
     return new OrderGenerator().generate({
       type: OrderType.END_2X_FASTER,

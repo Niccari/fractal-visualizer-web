@@ -1,12 +1,11 @@
 import { ChartConfig, ChartType, Order, Point } from "../../models";
-import IChartShaper from "../interface";
 import OrderGenerator from "../../orders";
-import { OrderType } from "../../orders/interface";
+import { OrderType } from "../../orders";
 import KochCurve from "./kochCurve";
 import { rotateBy } from "../../../matrix";
 import { degree2radian } from "../../../../../libs/math";
 
-class KochTriangle implements IChartShaper {
+class KochTriangle {
   private readonly kochCurve: KochCurve;
 
   public constructor() {
@@ -32,7 +31,6 @@ class KochTriangle implements IChartShaper {
     return [...kochCurvePoints, ...points240, ...points120];
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureOrders(complexity: number): Order[] {
     const pointCount = 3 * (2 ** (2 * (complexity - 1)) + 1);
     return new OrderGenerator().generate({

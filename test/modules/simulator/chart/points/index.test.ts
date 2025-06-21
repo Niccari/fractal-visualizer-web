@@ -1,5 +1,5 @@
 import PointsGenerator from "../../../../../src/modules/simulator/chart/points";
-import { PointsType } from "../../../../../src/modules/simulator/chart/points/interface";
+import { PointsType } from "../../../../../src/modules/simulator/chart/points";
 import { zip } from "../testCommon";
 import { Point } from "../../../../../src/modules/simulator/chart/models";
 

@@ -1,5 +1,4 @@
-import IViewEvent from "../viewEvent/interface";
-import IView from "./interface";
+import ViewEvent from "./viewEvent";
 
 export const HtmlDefines = {
   UPLOADED_ID_GIF: "gif_uploaded",
@@ -17,16 +16,14 @@ export const HtmlDefines = {
 } as const;
 export type HtmlDefines = (typeof HtmlDefines)[keyof typeof HtmlDefines];
 
-export class View implements IView {
+export class View {
   private static adjustCanvas = (canvas: HTMLCanvasElement): void => {
     const scale = window.devicePixelRatio;
-    // eslint-disable-next-line no-param-reassign
     canvas.width = window.innerWidth * scale * 2;
-    // eslint-disable-next-line no-param-reassign
     canvas.height = window.innerHeight * scale * 2;
   };
 
-  public constructor(viewEvent: IViewEvent) {
+  public constructor(viewEvent: ViewEvent) {
     const canvas = document.getElementById("canvas");
     if (canvas instanceof HTMLCanvasElement) {
       if ("ontouchstart" in window) {

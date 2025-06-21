@@ -1,16 +1,14 @@
-import IChartShaper from "./interface";
 import { ChartConfig, Order, Point } from "../models";
 import { range } from "../../../../libs/collection";
 import OrderGenerator from "../orders";
-import { OrderType } from "../orders/interface";
+import { OrderType } from "../orders";
 import { Constants } from "../../../../constants";
 
-class Clover implements IChartShaper {
+class Clover {
   private static pointCounts(complexity: number): number {
     return complexity * 40;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureBasePoints(chart: ChartConfig): Point[] {
     const length = Clover.pointCounts(chart.complexity);
     const { baseAmplitude } = Constants;
@@ -24,7 +22,6 @@ class Clover implements IChartShaper {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureOrders(complexity: number): Order[] {
     const length = Clover.pointCounts(complexity);
     return new OrderGenerator().generate({

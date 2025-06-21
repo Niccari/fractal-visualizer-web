@@ -1,16 +1,12 @@
-import IChartShaper from "./interface";
 import { ChartConfig, Order, Point } from "../models";
-import OrderGenerator from "../orders";
-import { OrderType } from "../orders/interface";
-import PointsGenerator from "../points";
-import { PointsType } from "../points/interface";
+import OrderGenerator, { OrderType } from "../orders";
+import PointsGenerator, { PointsType } from "../points";
 
-class Circle implements IChartShaper {
+class Circle {
   private static pointCounts(complexity: number): number {
     return complexity;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureBasePoints(config: ChartConfig): Point[] {
     const length = Circle.pointCounts(config.complexity);
     return new PointsGenerator().generate({
@@ -19,7 +15,6 @@ class Circle implements IChartShaper {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureOrders(complexity: number): Order[] {
     const length = Circle.pointCounts(complexity);
     return new OrderGenerator().generate({

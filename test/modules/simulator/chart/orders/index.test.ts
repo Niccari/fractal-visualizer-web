@@ -1,5 +1,5 @@
 import OrderGenerator from "../../../../../src/modules/simulator/chart/orders";
-import { OrderType } from "../../../../../src/modules/simulator/chart/orders/interface";
+import { OrderType } from "../../../../../src/modules/simulator/chart/orders";
 
 describe("OrdersGenerator test", () => {
   test("loop test", () => {

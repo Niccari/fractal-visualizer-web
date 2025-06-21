@@ -1,24 +1,26 @@
 import { Chart, ChartConfig, ChartType, Order, Point } from "./models";
 import ColorGenerator from "../color";
-import IChartSimulator from "./interface";
-import IChartShaper from "./kinds/interface";
-import { IColorGenerator } from "../color/interface";
 import { rotateBy } from "../matrix";
+
+export interface ChartShaper {
+  configureBasePoints(chart: ChartConfig): Point[];
+  configureOrders(complexity: number): Order[];
+}
 
 interface ChartIdentity {
   basePoints: Point[];
   orders: Order[];
   config: ChartConfig;
-  colorGenerator: IColorGenerator;
+  colorGenerator: ColorGenerator;
   timestamp: number;
 }
 
-class ChartSimulator implements IChartSimulator {
-  private shaper: IChartShaper;
+class ChartSimulator {
+  private shaper: ChartShaper;
   private config: ChartConfig;
   private identity?: ChartIdentity;
 
-  public constructor(shaper: IChartShaper, config: ChartConfig) {
+  public constructor(shaper: ChartShaper, config: ChartConfig) {
     this.shaper = shaper;
     this.config = config;
   }

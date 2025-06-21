@@ -1,9 +1,8 @@
-import { Chart, Point, StyleType } from "../modules/simulator/chart/models";
-import IVisualizer from "./interface";
+import { Chart, Point, StyleType } from "./modules/simulator/chart/models";
 
 type Draw = (context: CanvasRenderingContext2D, start: Point, end: Point, thickness: number, color: string) => void;
 
-class Visualizer implements IVisualizer {
+class Visualizer {
   private nullableContext: CanvasRenderingContext2D | null = null;
 
   public setContext = (context: CanvasRenderingContext2D) => {
