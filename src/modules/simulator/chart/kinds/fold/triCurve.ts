@@ -1,13 +1,11 @@
 import { ChartConfig, ChartType, Order, Point } from "../../models";
-import IChartShaper from "../interface";
 import OrderGenerator from "../../orders";
-import { OrderType } from "../../orders/interface";
-import { FoldRule, IFoldCurveEngine } from "./interface";
-import FoldCurveEngine from "./index";
+import { OrderType } from "../../orders";
+import FoldCurveEngine, { FoldRule } from "./index";
 import { degree2radian } from "../../../../../libs/math";
 
-class TriCurve implements IChartShaper {
-  private readonly engine: IFoldCurveEngine;
+class TriCurve {
+  private readonly engine: FoldCurveEngine;
 
   public constructor() {
     this.engine = new FoldCurveEngine();

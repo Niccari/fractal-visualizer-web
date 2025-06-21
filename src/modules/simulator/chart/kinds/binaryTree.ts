@@ -1,7 +1,6 @@
 import { degree2radian } from "../../../../libs/math";
 import RandomGenerator from "../../../randomizer";
 import { ChartConfig, Order, Point } from "../models";
-import IChartShaper from "./interface";
 import { Constants } from "../../../../constants";
 import { rotateBy } from "../../matrix";
 
@@ -9,7 +8,7 @@ interface PointWithIndex extends Point {
   index: number;
 }
 
-class BinaryTree implements IChartShaper {
+class BinaryTree {
   private static pointCounts(complexity: number): number {
     const newComplexity = Math.max(Math.min(complexity, 10), 2);
     return 2 ** (newComplexity + 1);

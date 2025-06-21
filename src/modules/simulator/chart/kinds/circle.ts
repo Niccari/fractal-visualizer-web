@@ -1,11 +1,8 @@
-import IChartShaper from "./interface";
 import { ChartConfig, Order, Point } from "../models";
-import OrderGenerator from "../orders";
-import { OrderType } from "../orders/interface";
-import PointsGenerator from "../points";
-import { PointsType } from "../points/interface";
+import OrderGenerator, { OrderType } from "../orders";
+import PointsGenerator, { PointsType } from "../points";
 
-class Circle implements IChartShaper {
+class Circle {
   private static pointCounts(complexity: number): number {
     return complexity;
   }

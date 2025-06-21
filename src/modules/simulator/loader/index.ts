@@ -10,16 +10,14 @@ import Star from "../chart/kinds/star";
 import Starmine from "../chart/kinds/starmine";
 import Sunrise from "../chart/kinds/sunrise";
 import { ChartConfig, ChartType, DefaultComplexity, StyleType } from "../chart/models";
-import { ColorType } from "../color/interface";
-
-import IChartLoader from "./interface";
-import IChartShaper from "../chart/kinds/interface";
+import { ColorType } from "../color";
+import { ChartShaper } from "../chart";
 import KochCurve from "../chart/kinds/fold/kochCurve";
 import TriCurve from "../chart/kinds/fold/triCurve";
 import KochTriangle from "../chart/kinds/fold/kochTriangle";
 
-class ChartLoader implements IChartLoader {
-  private static instantiateChart = (kind: ChartType): IChartShaper => {
+class ChartLoader {
+  private static instantiateChart = (kind: ChartType): ChartShaper => {
     switch (kind) {
       case ChartType.STAR:
         return new Star();

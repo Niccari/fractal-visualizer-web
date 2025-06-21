@@ -1,6 +1,28 @@
-import { ColorConfig, ColorGradientItem, ColorType, IColorGenerator } from "./interface";
+export const ColorType = {
+  RAINBOW: "rainbow",
+  WARM: "warm",
+  FOREST: "forest",
+  COOL: "cool",
+  HEAT: "heat",
+  MONOCHROME: "monochrome",
+  PASTEL: "pastel",
+} as const;
+export type ColorType = (typeof ColorType)[keyof typeof ColorType];
 
-class ColorGenerator implements IColorGenerator {
+export type ColorConfig = {
+  type: ColorType;
+  alpha: number;
+  speed: number;
+};
+
+type ColorGradientItem = {
+  position: number;
+  red: number;
+  green: number;
+  blue: number;
+};
+
+class ColorGenerator {
   private readonly config: ColorConfig;
   private colorStartIndex: number;
   private colorIterateIndex: number;

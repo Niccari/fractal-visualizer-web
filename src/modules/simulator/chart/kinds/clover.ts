@@ -1,11 +1,10 @@
-import IChartShaper from "./interface";
 import { ChartConfig, Order, Point } from "../models";
 import { range } from "../../../../libs/collection";
 import OrderGenerator from "../orders";
-import { OrderType } from "../orders/interface";
+import { OrderType } from "../orders";
 import { Constants } from "../../../../constants";
 
-class Clover implements IChartShaper {
+class Clover {
   private static pointCounts(complexity: number): number {
     return complexity * 40;
   }

@@ -1,11 +1,10 @@
 import { ChartConfig, Order, Point } from "../models";
-import IChartShaper from "./interface";
 import OrderGenerator from "../orders";
-import { OrderType } from "../orders/interface";
+import { OrderType } from "../orders";
 import { range } from "../../../../libs/collection";
 import { Constants } from "../../../../constants";
 
-class Starmine implements IChartShaper {
+class Starmine {
   private static pointCounts(complexity: number): number {
     return complexity * 2;
   }

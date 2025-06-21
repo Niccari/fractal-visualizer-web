@@ -1,11 +1,10 @@
 import { ChartConfig, Order, Point } from "../models";
-import IChartShaper from "./interface";
 import OrderGenerator from "../orders";
-import { OrderType } from "../orders/interface";
+import { OrderType } from "../orders";
 import PointsGenerator from "../points";
-import { PointsType } from "../points/interface";
+import { PointsType } from "../points";
 
-class Star implements IChartShaper {
+class Star {
   private static pointCounts(complexity: number): number {
     return complexity;
   }

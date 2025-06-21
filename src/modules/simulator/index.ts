@@ -1,17 +1,16 @@
-import IVisualizer from "../../visualizer/interface";
+import Visualizer from "../../visualizer";
 import ChartSimulator from "./chart";
 import { Chart } from "./chart/models";
-import ISimulator from "./interface";
 import ChartLoader from "./loader";
 
-class Simulator implements ISimulator {
-  private visualizer: IVisualizer;
+class Simulator {
+  private visualizer: Visualizer;
   private simulators: ChartSimulator[];
   private scrollEndCount: number;
   private touchScrollPrevY?: number;
   private scrollY: number;
 
-  public constructor(visualizer: IVisualizer) {
+  public constructor(visualizer: Visualizer) {
     this.visualizer = visualizer;
     this.simulators = new ChartLoader().load();
     this.scrollEndCount = 0;

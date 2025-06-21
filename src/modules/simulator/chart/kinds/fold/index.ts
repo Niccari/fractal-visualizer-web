@@ -1,9 +1,19 @@
 import { ChartConfig, Point } from "../../models";
-import { FoldRule, IFoldCurveEngine } from "./interface";
 import RandomGenerator from "../../../../randomizer";
 import { rotateBy } from "../../../matrix";
 
-class FoldCurveEngine implements IFoldCurveEngine {
+export interface Fold {
+  length: number;
+  radian: number;
+  fromStart?: boolean;
+  fromEnd?: boolean;
+}
+
+export interface FoldRule {
+  folds: Fold[];
+}
+
+class FoldCurveEngine {
   private recursive(
     config: ChartConfig,
     div: number,
