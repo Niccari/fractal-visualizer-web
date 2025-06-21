@@ -14,7 +14,6 @@ export type PointsConfig = {
 };
 
 class PointsGenerator {
-  // eslint-disable-next-line class-methods-use-this
   public generate(config: PointsConfig): Point[] {
     const { type, length } = config;
     const { baseAmplitude } = Constants;

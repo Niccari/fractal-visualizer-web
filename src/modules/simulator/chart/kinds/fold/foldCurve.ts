@@ -46,7 +46,6 @@ class FoldCurve {
     return this.engine.createPoints(config, rules);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureOrders(complexity: number): Order[] {
     const length = 2 ** (complexity - 1) + 1;
     return new OrderGenerator().generate({

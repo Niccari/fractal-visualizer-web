@@ -49,7 +49,6 @@ class ChartLoader {
     }
   };
 
-  // eslint-disable-next-line class-methods-use-this
   public load = (): ChartSimulator[] => {
     const shapes = newCharts.charts.map((chart) => {
       const config: ChartConfig = {

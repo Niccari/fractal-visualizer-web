@@ -37,7 +37,6 @@ class KochCurve {
     return this.engine.createPoints(config, rules);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureOrders(complexity: number): Order[] {
     const pointCount = 2 ** (2 * (complexity - 1)) + 1;
     return new OrderGenerator().generate({

@@ -15,7 +15,6 @@ export type OrderConfig = {
 };
 
 class OrderGenerator {
-  // eslint-disable-next-line class-methods-use-this
   public generate(config: OrderConfig): Order[] {
     const { type, pointCount } = config;
     switch (type) {

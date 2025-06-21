@@ -9,7 +9,6 @@ class Star {
     return complexity;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureBasePoints(config: ChartConfig): Point[] {
     const length = Star.pointCounts(config.complexity);
     return new PointsGenerator().generate({
@@ -18,7 +17,6 @@ class Star {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureOrders(complexity: number): Order[] {
     const length = Star.pointCounts(complexity);
     return new OrderGenerator().generate({

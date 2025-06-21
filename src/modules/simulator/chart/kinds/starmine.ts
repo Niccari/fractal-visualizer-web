@@ -9,7 +9,6 @@ class Starmine {
     return complexity * 2;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureBasePoints(config: ChartConfig): Point[] {
     const length = Starmine.pointCounts(config.complexity);
     const { baseAmplitude } = Constants;
@@ -23,7 +22,6 @@ class Starmine {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureOrders(complexity: number): Order[] {
     return new OrderGenerator().generate({
       type: OrderType.LOOP,

@@ -9,7 +9,6 @@ class Container {
     const visualizer = new Visualizer();
     const simulator = new Simulator(visualizer);
     const viewEvent = new ViewEvent(visualizer, simulator);
-    // eslint-disable-next-line no-new
     new View(viewEvent);
   }
 }

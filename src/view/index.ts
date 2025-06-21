@@ -19,9 +19,7 @@ export type HtmlDefines = (typeof HtmlDefines)[keyof typeof HtmlDefines];
 export class View {
   private static adjustCanvas = (canvas: HTMLCanvasElement): void => {
     const scale = window.devicePixelRatio;
-    // eslint-disable-next-line no-param-reassign
     canvas.width = window.innerWidth * scale * 2;
-    // eslint-disable-next-line no-param-reassign
     canvas.height = window.innerHeight * scale * 2;
   };
 

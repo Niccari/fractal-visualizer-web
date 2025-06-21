@@ -31,7 +31,6 @@ class KochTriangle {
     return [...kochCurvePoints, ...points240, ...points120];
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureOrders(complexity: number): Order[] {
     const pointCount = 3 * (2 ** (2 * (complexity - 1)) + 1);
     return new OrderGenerator().generate({

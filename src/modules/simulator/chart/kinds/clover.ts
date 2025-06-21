@@ -9,7 +9,6 @@ class Clover {
     return complexity * 40;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureBasePoints(chart: ChartConfig): Point[] {
     const length = Clover.pointCounts(chart.complexity);
     const { baseAmplitude } = Constants;
@@ -23,7 +22,6 @@ class Clover {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureOrders(complexity: number): Order[] {
     const length = Clover.pointCounts(complexity);
     return new OrderGenerator().generate({

@@ -77,7 +77,6 @@ class BinaryTree {
     return [leftPoint, rightPoint, ...result.sort((a, b) => a.index - b.index)];
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureOrders(complexity: number): Order[] {
     const maxDepth = BinaryTree.pointCounts(complexity) / 2;
     return [{ link: [0, 1] }, ...this.setOrdersRecursive(maxDepth, 1).sort((a, b) => a.link[1] - b.link[1])];

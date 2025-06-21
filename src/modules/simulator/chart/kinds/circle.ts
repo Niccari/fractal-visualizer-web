@@ -7,7 +7,6 @@ class Circle {
     return complexity;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureBasePoints(config: ChartConfig): Point[] {
     const length = Circle.pointCounts(config.complexity);
     return new PointsGenerator().generate({
@@ -16,7 +15,6 @@ class Circle {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureOrders(complexity: number): Order[] {
     const length = Circle.pointCounts(complexity);
     return new OrderGenerator().generate({

@@ -9,7 +9,6 @@ class Random {
     return complexity;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureBasePoints(config: ChartConfig): Point[] {
     const length = Random.pointCounts(config.complexity);
     return new PointsGenerator().generate({
@@ -18,7 +17,6 @@ class Random {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureOrders(complexity: number): Order[] {
     const length = Random.pointCounts(complexity);
     return new OrderGenerator().generate({
