@@ -12,7 +12,9 @@ interface ChartIdentity {
   orders: Order[];
   config: ChartConfig;
   colorGenerator: ColorGenerator;
+  // TODO(Niccari): split below variables, they are dynamic by timestamp
   timestamp: number;
+  points: Point[];
 }
 
 class ChartSimulator {
@@ -27,12 +29,14 @@ class ChartSimulator {
 
   public reset(): void {
     const { shaper, config } = this;
+    const basePoints = shaper.configureBasePoints(config);
     this.identity = {
-      basePoints: shaper.configureBasePoints(config),
+      basePoints,
       orders: shaper.configureOrders(config.complexity),
       config,
       colorGenerator: new ColorGenerator(config.color),
       timestamp: 0,
+      points: new Array(basePoints.length),
     };
   }
 
@@ -41,22 +45,22 @@ class ChartSimulator {
     if (!identity) {
       throw new Error("shape not reset");
     }
-    const { config, orders, timestamp } = identity;
+    const { config, orders, timestamp, points } = identity;
     const { rotation, scale, center } = config;
     // TODO(Niccari): specify reset timing by ChartConfig.
     if (identity.config.kind === ChartType.RANDOM) {
       this.reset();
     }
     const currentAngle = rotation.angle + rotation.speed * timestamp;
-    const points = identity.basePoints.map((point) => {
+    const colors = identity.colorGenerator.get(timestamp, identity.basePoints.length);
+    for (let i = 0; i < identity.basePoints.length; i++) {
+      const point = identity.basePoints[i];
       const translate = {
         x: point.x * scale.w,
         y: point.y * scale.h,
       };
-      return rotateBy(center, translate, currentAngle);
-    });
-    const colors = points.map(() => identity.colorGenerator.next());
-    identity.colorGenerator.endIteration();
+      points[i] = rotateBy(center, translate, currentAngle);
+    }
     identity.timestamp += 1;
     return {
       points,
