@@ -108,13 +108,13 @@ class Simulator {
       window.history.replaceState(null, "Fractal-Visualizer depth: + scrollY", url);
     }
     const charts = this.simulators.map((s) => s.simulate());
-    return charts.map((c) => ({
-      ...c,
-      points: c.points.map((point) => ({
-        ...point,
-        y: point.y - this.scrollY / 300,
-      })),
-    }));
+    const scrollOffset = this.scrollY / 300;
+    for (const chart of charts) {
+      for (const point of chart.points) {
+        point.y -= scrollOffset;
+      }
+    }
+    return charts;
   };
 }
 
