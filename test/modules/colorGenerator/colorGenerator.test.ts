@@ -1,13 +1,13 @@
 import ColorGenerator from "../../../src/modules/simulator/color";
 
-describe("colorGenerator next test", () => {
+describe("colorGenerator get test", () => {
   test("Rainbow gradation test", () => {
     const rainbowGenerator = new ColorGenerator({
       type: "rainbow",
       alpha: 1,
       speed: 1,
     });
-    const colors = Array.from(Array(256), () => rainbowGenerator.next());
+    const colors = rainbowGenerator.get(0, 256);
     expect([colors[0], colors[43], colors[85], colors[128], colors[171], colors[223], colors[255]]).toStrictEqual([
       "#ff0000ff",
       "#ffff00ff",
@@ -25,7 +25,7 @@ describe("colorGenerator next test", () => {
       alpha: 1,
       speed: 1,
     });
-    const colors = Array.from(Array(256), () => warmGradation.next());
+    const colors = warmGradation.get(0, 256);
     expect([colors[0], colors[64], colors[128], colors[192], colors[255]]).toStrictEqual([
       "#ff0000ff",
       "#ff8000ff",
@@ -41,7 +41,7 @@ describe("colorGenerator next test", () => {
       alpha: 1,
       speed: 1,
     });
-    const colors = Array.from(Array(256), () => forestGradation.next());
+    const colors = forestGradation.get(0, 256);
     expect([colors[0], colors[64], colors[128], colors[192], colors[255]]).toStrictEqual([
       "#ffff00ff",
       "#80ff00ff",
@@ -57,7 +57,7 @@ describe("colorGenerator next test", () => {
       alpha: 1,
       speed: 1,
     });
-    const colors = Array.from(Array(256), () => coolGradation.next());
+    const colors = coolGradation.get(0, 256);
     expect([colors[0], colors[64], colors[128], colors[192], colors[255]]).toStrictEqual([
       "#0000ffff",
       "#0080ffff",
@@ -73,7 +73,7 @@ describe("colorGenerator next test", () => {
       alpha: 1,
       speed: 1,
     });
-    const colors = Array.from(Array(256), () => heatGradation.next());
+    const colors = heatGradation.get(0, 256);
     expect([colors[0], colors[43], colors[85], colors[128], colors[171], colors[223], colors[255]]).toStrictEqual([
       "#ffff00ff",
       "#ff0000ff",
@@ -91,7 +91,7 @@ describe("colorGenerator next test", () => {
       alpha: 1,
       speed: 1,
     });
-    const colors = Array.from(Array(256), () => monochromeGradation.next());
+    const colors = monochromeGradation.get(0, 256);
     expect([colors[0], colors[128], colors[255]]).toStrictEqual(["#000000ff", "#ffffffff", "#000000ff"]);
   });
 
@@ -101,7 +101,7 @@ describe("colorGenerator next test", () => {
       alpha: 1,
       speed: 1,
     });
-    const colors = Array.from(Array(256), () => pastelGradation.next());
+    const colors = pastelGradation.get(0, 256);
     expect([colors[0], colors[85], colors[170], colors[255]]).toStrictEqual([
       "#ff9a9aff",
       "#ffff9aff",
@@ -118,7 +118,7 @@ describe("colorGenerator alpha", () => {
       alpha: 0.75,
       speed: 1,
     });
-    const colors = Array.from(Array(256), () => rainbowGenerator.next());
+    const colors = rainbowGenerator.get(0, 256);
     expect([colors[0], colors[43], colors[85], colors[128], colors[171], colors[223], colors[255]]).toStrictEqual([
       "#ff0000bf",
       "#ffff00bf",
@@ -138,7 +138,7 @@ describe("colorGenerator speed test", () => {
       alpha: 1,
       speed: 2,
     });
-    const colors = Array.from(Array(256), () => rainbowGenerator.next());
+    const colors = rainbowGenerator.get(0, 256);
     expect([colors[0], colors[43], colors[86], colors[128]]).toStrictEqual([
       "#ff0000ff",
       "#00ff06ff",
