@@ -1,25 +1,23 @@
-import newCharts from "../../../charts.json";
-import { degree2radian } from "../../../libs/math";
-import ChartSimulator from "../chart";
-import BinaryTree from "../chart/kinds/binaryTree";
-import Circle from "../chart/kinds/circle";
-import Clover from "../chart/kinds/clover";
-import FoldCurve from "../chart/kinds/fold/foldCurve";
-import Random from "../chart/kinds/random";
-import Star from "../chart/kinds/star";
-import Starmine from "../chart/kinds/starmine";
-import Sunrise from "../chart/kinds/sunrise";
-import { ChartConfig, ChartType, DefaultComplexity, StyleType } from "../chart/models";
-import { ColorType } from "../color/interface";
+import newCharts from "../../charts.json";
+import { degree2radian } from "../../libs/math";
+import ChartSimulator from "./chart";
+import BinaryTree from "./chart/kinds/binaryTree";
+import Circle from "./chart/kinds/circle";
+import Clover from "./chart/kinds/clover";
+import FoldCurve from "./chart/kinds/fold/foldCurve";
+import Random from "./chart/kinds/random";
+import Star from "./chart/kinds/star";
+import Starmine from "./chart/kinds/starmine";
+import Sunrise from "./chart/kinds/sunrise";
+import { ChartConfig, ChartType, DefaultComplexity, StyleType } from "./chart/models";
+import { ColorType } from "./color";
+import { ChartShaper } from "./chart";
+import KochCurve from "./chart/kinds/fold/kochCurve";
+import TriCurve from "./chart/kinds/fold/triCurve";
+import KochTriangle from "./chart/kinds/fold/kochTriangle";
 
-import IChartLoader from "./interface";
-import IChartShaper from "../chart/kinds/interface";
-import KochCurve from "../chart/kinds/fold/kochCurve";
-import TriCurve from "../chart/kinds/fold/triCurve";
-import KochTriangle from "../chart/kinds/fold/kochTriangle";
-
-class ChartLoader implements IChartLoader {
-  private static instantiateChart = (kind: ChartType): IChartShaper => {
+class ChartLoader {
+  private static instantiateChart = (kind: ChartType): ChartShaper => {
     switch (kind) {
       case ChartType.STAR:
         return new Star();
@@ -51,7 +49,6 @@ class ChartLoader implements IChartLoader {
     }
   };
 
-  // eslint-disable-next-line class-methods-use-this
   public load = (): ChartSimulator[] => {
     const shapes = newCharts.charts.map((chart) => {
       const config: ChartConfig = {

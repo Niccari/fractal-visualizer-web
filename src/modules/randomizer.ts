@@ -10,12 +10,10 @@ class RandomGenerator {
   }
 
   public generate = (): number => {
-    // eslint-disable-next-line no-bitwise
     const t = this.x ^ (this.x << 11);
     this.x = this.y;
     this.y = this.z;
     this.z = this.seed;
-    // eslint-disable-next-line no-bitwise
     this.seed = this.seed ^ (this.seed >>> 19) ^ (t ^ (t >>> 8));
     return this.seed / 2 ** 32;
   };

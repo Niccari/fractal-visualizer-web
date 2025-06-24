@@ -1,7 +1,6 @@
 import { degree2radian } from "../../../../libs/math";
 import RandomGenerator from "../../../randomizer";
 import { ChartConfig, Order, Point } from "../models";
-import IChartShaper from "./interface";
 import { Constants } from "../../../../constants";
 import { rotateBy } from "../../matrix";
 
@@ -9,7 +8,7 @@ interface PointWithIndex extends Point {
   index: number;
 }
 
-class BinaryTree implements IChartShaper {
+class BinaryTree {
   private static pointCounts(complexity: number): number {
     const newComplexity = Math.max(Math.min(complexity, 10), 2);
     return 2 ** (newComplexity + 1);
@@ -78,7 +77,6 @@ class BinaryTree implements IChartShaper {
     return [leftPoint, rightPoint, ...result.sort((a, b) => a.index - b.index)];
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureOrders(complexity: number): Order[] {
     const maxDepth = BinaryTree.pointCounts(complexity) / 2;
     return [{ link: [0, 1] }, ...this.setOrdersRecursive(maxDepth, 1).sort((a, b) => a.link[1] - b.link[1])];

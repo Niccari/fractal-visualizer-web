@@ -1,17 +1,21 @@
-import IVisualizer from "../../visualizer/interface";
+import Visualizer from "../../visualizer";
 import ChartSimulator from "./chart";
 import { Chart } from "./chart/models";
-import ISimulator from "./interface";
 import ChartLoader from "./loader";
 
-class Simulator implements ISimulator {
-  private visualizer: IVisualizer;
+class Simulator {
+  private visualizer: Visualizer;
   private simulators: ChartSimulator[];
   private scrollEndCount: number;
   private touchScrollPrevY?: number;
   private scrollY: number;
+  private animationId?: number;
+  private lastFrameTime = 0;
+  private targetFrameRate = 60;
+  private isVisible = true;
+  private isPaused = false;
 
-  public constructor(visualizer: IVisualizer) {
+  public constructor(visualizer: Visualizer) {
     this.visualizer = visualizer;
     this.simulators = new ChartLoader().load();
     this.scrollEndCount = 0;
@@ -19,14 +23,56 @@ class Simulator implements ISimulator {
       const query = new URL(document.location.href).searchParams;
       return Number.parseInt(query.get("depth") || "0", 10);
     })();
+
+    document.addEventListener("visibilitychange", this.handleVisibilityChange);
   }
 
-  public start = (framerate: number): void => {
-    const refreshMs = 1000 / framerate;
-    setInterval(() => {
+  public start = (framerate = 60): void => {
+    this.targetFrameRate = framerate;
+    this.animate();
+  };
+
+  private animate = (currentTime: number = performance.now()): void => {
+    if (!this.isVisible || this.isPaused) {
+      this.animationId = requestAnimationFrame(this.animate);
+      return;
+    }
+
+    const deltaTime = currentTime - this.lastFrameTime;
+    const targetInterval = 1000 / this.targetFrameRate;
+
+    if (deltaTime >= targetInterval) {
       const calcResult = this.simulate();
       this.visualizer.draw(calcResult);
-    }, refreshMs);
+      this.lastFrameTime = currentTime;
+    }
+
+    this.animationId = requestAnimationFrame(this.animate);
+  };
+
+  public stop = (): void => {
+    if (this.animationId) {
+      cancelAnimationFrame(this.animationId);
+      this.animationId = undefined;
+    }
+  };
+
+  public pause = (): void => {
+    this.isPaused = true;
+  };
+
+  public resume = (): void => {
+    this.isPaused = false;
+    if (!this.animationId) {
+      this.animate();
+    }
+  };
+
+  private handleVisibilityChange = (): void => {
+    this.isVisible = !document.hidden;
+    if (this.isVisible && !this.animationId) {
+      this.animate();
+    }
   };
 
   private restrictScroll = () => {
@@ -62,13 +108,13 @@ class Simulator implements ISimulator {
       window.history.replaceState(null, "Fractal-Visualizer depth: + scrollY", url);
     }
     const charts = this.simulators.map((s) => s.simulate());
-    return charts.map((c) => ({
-      ...c,
-      points: c.points.map((point) => ({
-        ...point,
-        y: point.y - this.scrollY / 300,
-      })),
-    }));
+    const scrollOffset = this.scrollY / 300;
+    for (const chart of charts) {
+      for (const point of chart.points) {
+        point.y -= scrollOffset;
+      }
+    }
+    return charts;
   };
 }
 

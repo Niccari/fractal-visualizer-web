@@ -1,9 +1,8 @@
-import { Chart, Point, StyleType } from "../modules/simulator/chart/models";
-import IVisualizer from "./interface";
+import { Chart, Point, StyleType } from "./modules/simulator/chart/models";
 
 type Draw = (context: CanvasRenderingContext2D, start: Point, end: Point, thickness: number, color: string) => void;
 
-class Visualizer implements IVisualizer {
+class Visualizer {
   private nullableContext: CanvasRenderingContext2D | null = null;
 
   public setContext = (context: CanvasRenderingContext2D) => {
@@ -25,7 +24,7 @@ class Visualizer implements IVisualizer {
       context.fillRect(0, 0, screenWidth, screenHeight);
 
       for (const chart of charts) {
-        if (Visualizer.shouldDrawChart(chart)) {
+        if (Visualizer.shouldDrawChart(chart.points)) {
           Visualizer.drawChart(context, chart, screenWidth, screenHeight);
         }
       }
@@ -139,11 +138,13 @@ class Visualizer implements IVisualizer {
     context.fill();
   };
 
-  private static shouldDrawChart = (chart: Chart) => {
-    const ys = chart.points.map((point) => point.y).sort();
-    const lower = Math.floor((ys.length * 2) / 10);
-    const upper = Math.floor((ys.length * 8) / 10);
-    return ys[lower] > -1.0 && ys[upper] < 2.0;
+  private static shouldDrawChart = (points: Point[]) => {
+    const ys = points.map((point) => point.y);
+    // max point count is less than 10000, not run out call stack
+    const lower = Math.min(...ys);
+    const upper = Math.max(...ys);
+
+    return upper > -1.0 && lower < 1.0;
   };
 
   private static drawChart = (

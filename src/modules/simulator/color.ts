@@ -1,11 +1,33 @@
-import { ColorConfig, ColorGradientItem, ColorType, IColorGenerator } from "./interface";
+export const ColorType = {
+  RAINBOW: "rainbow",
+  WARM: "warm",
+  FOREST: "forest",
+  COOL: "cool",
+  HEAT: "heat",
+  MONOCHROME: "monochrome",
+  PASTEL: "pastel",
+} as const;
+export type ColorType = (typeof ColorType)[keyof typeof ColorType];
 
-class ColorGenerator implements IColorGenerator {
+export type ColorConfig = {
+  type: ColorType;
+  alpha: number;
+  speed: number;
+};
+
+type ColorGradientItem = {
+  position: number;
+  red: number;
+  green: number;
+  blue: number;
+};
+
+class ColorGenerator {
   private readonly config: ColorConfig;
-  private colorStartIndex: number;
-  private colorIterateIndex: number;
   private colorTable: string[] = [];
   private readonly alphaHex: string;
+  private colors: string[] = [];
+  private prevStart: number | null = null;
 
   private readonly gradientRainbows: ColorGradientItem[] = [
     { position: 0, red: 255, green: 0, blue: 0 },
@@ -65,8 +87,6 @@ class ColorGenerator implements IColorGenerator {
 
   public constructor(config: ColorConfig) {
     this.config = config;
-    this.colorStartIndex = 0;
-    this.colorIterateIndex = 0;
     this.alphaHex = ColorGenerator.colorToHex(Math.floor(255 * this.config.alpha));
     const gradient: ColorGradientItem[] = (() => {
       switch (config.type.toString()) {
@@ -110,15 +130,23 @@ class ColorGenerator implements IColorGenerator {
     }
   }
 
-  public next(): string {
-    const color = this.colorTable[this.colorIterateIndex];
-    this.colorIterateIndex = (this.colorIterateIndex + this.config.speed) % 256;
-    return color;
-  }
-
-  public endIteration(): void {
-    this.colorStartIndex = (this.colorStartIndex + this.config.speed) % 256;
-    this.colorIterateIndex = this.colorStartIndex;
+  public get(start: number, length: number): string[] {
+    let delta: number;
+    if (this.colors.length !== length || this.prevStart === null) {
+      this.colors = [];
+      delta = length;
+    } else {
+      delta = Math.abs(start - this.prevStart);
+      for (let i = 0; i < delta; i++) {
+        this.colors.shift();
+      }
+    }
+    for (let i = 0; i < delta; i++) {
+      const index = (start + this.config.speed * i) % 256;
+      this.colors.push(this.colorTable[index]);
+    }
+    this.prevStart = start;
+    return this.colors;
   }
 }
 

@@ -1,16 +1,14 @@
 import { ChartConfig, Order, Point } from "../models";
-import IChartShaper from "./interface";
 import OrderGenerator from "../orders";
-import { OrderType } from "../orders/interface";
+import { OrderType } from "../orders";
 import { range } from "../../../../libs/collection";
 import { Constants } from "../../../../constants";
 
-class Starmine implements IChartShaper {
+class Starmine {
   private static pointCounts(complexity: number): number {
     return complexity * 2;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureBasePoints(config: ChartConfig): Point[] {
     const length = Starmine.pointCounts(config.complexity);
     const { baseAmplitude } = Constants;
@@ -24,7 +22,6 @@ class Starmine implements IChartShaper {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public configureOrders(complexity: number): Order[] {
     return new OrderGenerator().generate({
       type: OrderType.LOOP,

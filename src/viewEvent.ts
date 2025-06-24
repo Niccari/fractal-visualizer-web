@@ -1,12 +1,11 @@
-import ISimulator from "../modules/simulator/interface";
-import IVisualizer from "../visualizer/interface";
-import IViewEvent from "./interface";
+import Simulator from "./modules/simulator";
+import Visualizer from "./visualizer";
 
-class ViewEvent implements IViewEvent {
-  private visualizer: IVisualizer;
-  private simulator: ISimulator;
+class ViewEvent {
+  private visualizer: Visualizer;
+  private simulator: Simulator;
 
-  public constructor(visualizer: IVisualizer, simulator: ISimulator) {
+  public constructor(visualizer: Visualizer, simulator: Simulator) {
     this.visualizer = visualizer;
     this.simulator = simulator;
   }
