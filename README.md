@@ -18,7 +18,20 @@ Open the page in a browser. Fractal figures are rendered and animated on the can
 
 To explore different fractal figures, **scroll along the Y-axis** (mouse wheel or touch drag). This shifts the displayed fractal figures vertically, revealing different shapes as you scroll.
 
-You can also share a specific scroll position via URL: the current depth is saved as a `?depth=<value>` query parameter in the address bar after scrolling stops.
+#### URL Parameters
+
+The fractal visualizer supports URL parameters to customize the visualization:
+
+- `depth` - Scroll position (integer, default: 0)
+- `seed` - Sets the random seed for reproducible fractal patterns (up to 16 digits positive integer, default: null)
+
+**Examples**
+
+```
+https://niccari.net/fv/?depth=5
+https://niccari.net/fv/?seed=12345
+https://niccari.net/fv/?depth=3&seed=98765
+```
 
 ### Development
 
