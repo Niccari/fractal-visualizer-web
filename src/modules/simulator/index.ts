@@ -2,6 +2,7 @@ import Visualizer from "../../visualizer";
 import ChartSimulator from "./chart";
 import { Chart } from "./chart/models";
 import ChartLoader from "./loader";
+import { getUrlConfig } from "../../urlConfig";
 
 class Simulator {
   private visualizer: Visualizer;
@@ -19,10 +20,7 @@ class Simulator {
     this.visualizer = visualizer;
     this.simulators = new ChartLoader().load();
     this.scrollEndCount = 0;
-    this.scrollY = (() => {
-      const query = new URL(document.location.href).searchParams;
-      return Number.parseInt(query.get("depth") || "0", 10);
-    })();
+    this.scrollY = getUrlConfig().depth;
 
     document.addEventListener("visibilitychange", this.handleVisibilityChange);
   }
@@ -104,7 +102,11 @@ class Simulator {
     this.scrollEndCount -= 1;
     if (this.scrollEndCount === 0) {
       this.touchScrollPrevY = undefined;
-      const url = `${window.location.pathname}?depth=${this.scrollY}`;
+      const urlConfig = getUrlConfig();
+      const url =
+        urlConfig.seed !== null
+          ? `${window.location.pathname}?seed=${urlConfig.seed}&depth=${this.scrollY}`
+          : `${window.location.pathname}?depth=${this.scrollY}`;
       window.history.replaceState(null, "Fractal-Visualizer depth: + scrollY", url);
     }
     const charts = this.simulators.map((s) => s.simulate());

@@ -15,6 +15,8 @@ import { ChartShaper } from "./chart";
 import KochCurve from "./chart/kinds/fold/kochCurve";
 import TriCurve from "./chart/kinds/fold/triCurve";
 import KochTriangle from "./chart/kinds/fold/kochTriangle";
+import { ChartGenerator } from "./chartGenerator";
+import { getUrlConfig } from "../../urlConfig";
 
 class ChartLoader {
   private static instantiateChart = (kind: ChartType): ChartShaper => {
@@ -50,8 +52,15 @@ class ChartLoader {
   };
 
   public load = (): ChartSimulator[] => {
-    const shapes = newCharts.charts.map((chart) => {
-      const config: ChartConfig = {
+    const { seed } = getUrlConfig();
+
+    let charts: ChartConfig[];
+
+    if (seed !== null) {
+      const generator = new ChartGenerator(seed);
+      charts = generator.generateCharts();
+    } else {
+      charts = newCharts.charts.map((chart) => ({
         ...chart,
         kind: chart.kind as ChartType,
         style: {
@@ -67,12 +76,23 @@ class ChartLoader {
           speed: degree2radian(chart.rotation.speed),
         },
         complexity: chart.complexity as DefaultComplexity,
-      };
-      return {
-        chart: ChartLoader.instantiateChart(config.kind),
-        config,
-      };
-    });
+      }));
+    }
+
+    const shapes = charts.map((config) => ({
+      chart: ChartLoader.instantiateChart(config.kind),
+      config:
+        seed !== null
+          ? {
+              ...config,
+              rotation: {
+                angle: degree2radian(config.rotation.angle),
+                speed: degree2radian(config.rotation.speed),
+              },
+            }
+          : config,
+    }));
+
     const simulators = shapes.map((shape) => new ChartSimulator(shape.chart, shape.config));
     simulators.map((s) => s.reset());
     return simulators;
