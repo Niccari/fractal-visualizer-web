@@ -1,17 +1,17 @@
 {
   "name": "fractal-visualizer",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "This app visualize fractal shape, running on modern browsers.",
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "@types/jest": "^29.5.14",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.3.2",
-    "typescript": "^5.8.3",
-    "vite": "^6.3.4"
+    "@biomejs/biome": "^2.3.10",
+    "@types/jest": "^30.0.0",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.6",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.0"
   },
   "engines": {
-    "node": ">= 20"
+    "node": ">= 22"
   },
   "scripts": {
     "dev": "vite",
