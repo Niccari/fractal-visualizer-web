@@ -51,5 +51,12 @@ export class View {
         this.simulator.start(50);
       }
     }
+    const shuffleBtn = document.getElementById("shuffle-btn");
+    if (shuffleBtn instanceof HTMLButtonElement) {
+      shuffleBtn.addEventListener("click", () => {
+        const newSeed = Date.now();
+        window.location.search = `?seed=${newSeed}`;
+      });
+    }
   }
 }
