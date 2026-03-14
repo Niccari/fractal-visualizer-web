@@ -28,40 +28,38 @@ class ChartSimulator {
   }
 
   public reset(): void {
-    const { shaper, config } = this;
-    const basePoints = shaper.configureBasePoints(config);
+    const basePoints = this.shaper.configureBasePoints(this.config);
     this.identity = {
       basePoints,
-      orders: shaper.configureOrders(config.complexity),
-      config,
-      colorGenerator: new ColorGenerator(config.color),
+      orders: this.shaper.configureOrders(this.config.complexity),
+      config: this.config,
+      colorGenerator: new ColorGenerator(this.config.color),
       timestamp: 0,
       points: new Array(basePoints.length),
     };
   }
 
   public simulate(): Chart {
-    const { identity } = this;
-    if (!identity) {
+    if (!this.identity) {
       throw new Error("shape not reset");
     }
-    const { config, orders, timestamp, points } = identity;
+    const { config, orders, timestamp, points } = this.identity;
     const { rotation, scale, center } = config;
     // TODO(Niccari): specify reset timing by ChartConfig.
-    if (identity.config.kind === ChartType.RANDOM) {
+    if (this.identity.config.kind === ChartType.RANDOM) {
       this.reset();
     }
     const currentAngle = rotation.angle + rotation.speed * timestamp;
-    const colors = identity.colorGenerator.get(timestamp, identity.basePoints.length);
-    for (let i = 0; i < identity.basePoints.length; i++) {
-      const point = identity.basePoints[i];
+    const colors = this.identity.colorGenerator.get(timestamp, this.identity.basePoints.length);
+    for (let i = 0; i < this.identity.basePoints.length; i++) {
+      const point = this.identity.basePoints[i];
       const translate = {
         x: point.x * scale.w,
         y: point.y * scale.h,
       };
       points[i] = rotateBy(center, translate, currentAngle);
     }
-    identity.timestamp += 1;
+    this.identity.timestamp += 1;
     return {
       points,
       style: config.style,
