@@ -8,3 +8,21 @@ body {
   width: 100%;
   height: 100%;
 }
+#shuffle-btn {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: background 0.2s;
+}
+#shuffle-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
