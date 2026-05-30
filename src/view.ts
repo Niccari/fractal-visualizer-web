@@ -6,9 +6,11 @@ export class View {
   private simulator: Simulator;
 
   private static adjustCanvas = (canvas: HTMLCanvasElement): void => {
-    const scale = window.devicePixelRatio;
-    canvas.width = window.innerWidth * scale * 2;
-    canvas.height = window.innerHeight * scale * 2;
+    // Keep 2x supersampling on low-DPI displays for anti-aliasing, but cap the
+    // total scale at 2 so high-DPI devices don't allocate an oversized buffer.
+    const scale = Math.min(window.devicePixelRatio * 2, 2);
+    canvas.width = window.innerWidth * scale;
+    canvas.height = window.innerHeight * scale;
   };
 
   public constructor(visualizer: Visualizer, simulator: Simulator) {
@@ -44,7 +46,7 @@ export class View {
       window.onresize = () => {
         View.adjustCanvas(canvas);
       };
-      const context = canvas.getContext("2d");
+      const context = canvas.getContext("2d", { alpha: false });
       if (context instanceof CanvasRenderingContext2D) {
         View.adjustCanvas(canvas);
         this.visualizer.setContext(context);
