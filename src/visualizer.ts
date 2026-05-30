@@ -4,6 +4,9 @@ type Draw = (context: CanvasRenderingContext2D, start: Point, end: Point, thickn
 
 class Visualizer {
   private nullableContext: CanvasRenderingContext2D | null = null;
+  // Reusable buffer for screen-space points, grown on demand and reused across
+  // frames to avoid allocating a new array every draw call.
+  private scaledPoints: Point[] = [];
 
   public setContext = (context: CanvasRenderingContext2D) => {
     this.nullableContext = context;
@@ -25,7 +28,7 @@ class Visualizer {
 
       for (const chart of charts) {
         if (Visualizer.shouldDrawChart(chart.points)) {
-          Visualizer.drawChart(context, chart, screenWidth, screenHeight);
+          this.drawChart(context, chart, screenWidth, screenHeight);
         }
       }
     }
@@ -44,7 +47,6 @@ class Visualizer {
     context.beginPath();
     context.moveTo(start.x, start.y);
     context.lineTo(end.x, end.y);
-    context.closePath();
     context.stroke();
   };
 
@@ -139,24 +141,34 @@ class Visualizer {
   };
 
   private static shouldDrawChart = (points: Point[]) => {
-    const ys = points.map((point) => point.y);
-    // max point count is less than 10000, not run out call stack
-    const lower = Math.min(...ys);
-    const upper = Math.max(...ys);
+    let lower = Number.POSITIVE_INFINITY;
+    let upper = Number.NEGATIVE_INFINITY;
+    for (let i = 0; i < points.length; i += 1) {
+      const { y } = points[i];
+      if (y < lower) {
+        lower = y;
+      }
+      if (y > upper) {
+        upper = y;
+      }
+    }
 
     return upper > -1.0 && lower < 1.0;
   };
 
-  private static drawChart = (
-    context: CanvasRenderingContext2D,
-    chart: Chart,
-    screenWidth: number,
-    screenHeight: number,
-  ) => {
-    const points = chart.points.map((point) => ({
-      x: point.x * screenWidth,
-      y: point.y * screenHeight,
-    }));
+  private drawChart = (context: CanvasRenderingContext2D, chart: Chart, screenWidth: number, screenHeight: number) => {
+    const sourcePoints = chart.points;
+    const points = this.scaledPoints;
+    for (let i = 0; i < sourcePoints.length; i += 1) {
+      const source = sourcePoints[i];
+      const scaled = points[i];
+      if (scaled === undefined) {
+        points[i] = { x: source.x * screenWidth, y: source.y * screenHeight };
+      } else {
+        scaled.x = source.x * screenWidth;
+        scaled.y = source.y * screenHeight;
+      }
+    }
     const { style } = chart;
     const drawMethod: Draw = (() => {
       switch (style.type) {
