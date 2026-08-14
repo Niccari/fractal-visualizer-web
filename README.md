@@ -35,6 +35,8 @@ https://niccari.net/fv/?depth=3&seed=98765
 
 ### Development
 
+Requires Node.js 24 or later.
+
 ```bash
 # Install dependencies
 npm install

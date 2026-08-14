@@ -1,15 +1,16 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
-    "module": "commonjs",
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "noEmit": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "strict": true,
     "target": "esnext",
-    "moduleResolution": "node",
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "types": ["vitest/globals"]
   },
   "include": ["src", "test"]
 }

@@ -3,15 +3,13 @@
   "version": "0.4.2",
   "description": "This app visualize fractal shape, running on modern browsers.",
   "devDependencies": {
-    "@biomejs/biome": "^2.4.6",
-    "@types/jest": "^30.0.0",
-    "jest": "^30.3.0",
-    "ts-jest": "^29.4.6",
-    "typescript": "^5.9.3",
-    "vite": "^8.0.0"
+    "@biomejs/biome": "^2.5.8",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.1",
+    "vitest": "^4.1.10"
   },
   "engines": {
-    "node": ">= 22"
+    "node": ">= 24"
   },
   "scripts": {
     "dev": "vite",
@@ -19,7 +17,7 @@
     "preview": "vite preview",
     "lint": "npx @biomejs/biome lint .",
     "lint:fix": "npx @biomejs/biome check --write .",
-    "test": "npx jest"
+    "test": "npx vitest run"
   },
   "keywords": [
     "Fractal",

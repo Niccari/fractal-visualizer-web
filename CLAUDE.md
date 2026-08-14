@@ -4,6 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Development Commands
 
+### Requirements
+- Node.js >= 24 (see `.nvmrc` / `engines`)
+
 ### Building and Development
 - `npm run dev` - Start development server with Vite
 - `npm run build` - Build production bundle (runs TypeScript check then Vite build)
@@ -12,11 +15,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Code Quality
 - `npm run lint` - Run Biome linter
 - `npm run lint:fix` - Run Biome linter with auto-fix and formatting
-- `npm test` - Run Jest tests
+- `npm test` - Run Vitest tests
 
 ### Testing
 - `npm test` - Run all tests
-- `npx jest path/to/test.test.ts` - Run specific test file
+- `npx vitest run path/to/test.test.ts` - Run specific test file
 - Test files are located in `test/` directory with `.test.ts` extension
 
 ## Architecture Overview
@@ -112,7 +115,7 @@ All chart types are exported as default exports from their respective files:
   - Centralized exports through `index.ts` files
   - No interface prefixes in current implementation
 - **Architecture**: Clear separation between rendering (Visualizer), simulation (Simulator), and UI (View/ViewEvent)
-- **Testing**: Jest with `ts-jest` preset, test files mirror source structure
+- **Testing**: Vitest (globals enabled, configured in `vite.config.mjs`), test files mirror source structure
 - **Rendering**: HTML5 Canvas for fractal visualization
 - **File Structure**: Organized by feature/module with index file exports
 
